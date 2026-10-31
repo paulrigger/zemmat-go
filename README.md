@@ -1,6 +1,6 @@
 # 🏔️ zemmat go
 
-**Mitanand an d'Luft.** Statt zwölf WhatsApp-Gruppa für Bika, Rennvelo, Gravla, Jogga, Wandra, Klettra und Schitoura gibt's eine Seite:
+Statt zwölf WhatsApp-Gruppa für Bika, Rennvelo, Gravla, Jogga, Wandra, Klettra und Schitoura gibt's eine Seite:
 du tragst ii, wenn du gosch, und wer will, kunnt mit.
 
 > *I gang morn um 14:00 für a Stund jogga. Wer kunnt mit?*

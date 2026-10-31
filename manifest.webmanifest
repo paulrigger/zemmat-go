@@ -1,7 +1,7 @@
 {
   "name": "zemmat go",
   "short_name": "zemmat go",
-  "description": "Mitanand an d'Luft – Bika, Jogga, Wandra, Klettra, Schitoura",
+  "description": "Statt zwölf WhatsApp-Gruppa: gmeinsam Sport macha",
   "scope": "./",
   "display": "standalone",
   "background_color": "#008080",

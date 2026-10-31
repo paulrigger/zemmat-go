@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>zemmat go ~ mitanand an d'Luft</title>
+<title>zemmat go</title>
 <meta name="description" content="zemmat go: Statt zwölf WhatsApp-Gruppa – iitraga wenn du gosch, und wer will, kunnt mit.">
 <meta name="theme-color" content="#000080">
 <link rel="manifest" href="manifest.webmanifest">
@@ -334,6 +334,27 @@ html[data-theme=modern]{background:var(--g-bg)}
 .ios-dot{display:inline-block; width:9px; height:9px; border-radius:50%; background:var(--g-tint); vertical-align:middle}
 .frow.link .v{color:var(--g-sec)}
 
+/* Dialog: 90er = Windows-95-Meldung, Langweilig = iOS-Hinweis */
+.dlg-ov{align-items:center !important; background:rgba(0,40,40,.55)}
+.dlg{max-width:340px; padding:3px}
+.dlg-body{display:flex; gap:12px; align-items:flex-start; padding:16px 14px 6px; font:14px/1.45 var(--ui)}
+.dlg-ico{font-size:32px; line-height:1; flex:none}
+.dlg-msg{padding-top:2px}
+.dlg-btns{display:flex; justify-content:center; gap:10px; padding:10px 12px 12px}
+.dlg-btns .b95{min-width:84px}
+[data-theme=modern] .dlg-ov{background:rgba(0,0,0,.3)}
+[data-theme=modern] .dlg{max-width:290px; padding:0; border-radius:22px; overflow:hidden; background:var(--g-glass2);
+  -webkit-backdrop-filter:blur(40px) saturate(180%); backdrop-filter:blur(40px) saturate(180%); box-shadow:inset 0 0 0 .5px var(--g-edge), 0 20px 50px rgba(0,0,0,.25)}
+[data-theme=modern] .dlg .tb{display:none}
+[data-theme=modern] .dlg-body{flex-direction:column; align-items:center; text-align:center; padding:20px 18px 14px; font:15px/1.35 var(--m-font); color:var(--g-ink); gap:8px}
+[data-theme=modern] .dlg-ico{display:none}
+[data-theme=modern] .dlg-msg{font-weight:500}
+[data-theme=modern] .dlg-btns{padding:0; gap:0; border-top:.5px solid var(--g-hair); flex-direction:row-reverse}
+[data-theme=modern] .dlg-btns .b95{all:unset; flex:1; text-align:center; padding:12px; cursor:pointer; font:17px var(--m-font); color:var(--g-tint)}
+[data-theme=modern] .dlg-btns .b95 + .b95{border-right:.5px solid var(--g-hair)}
+[data-theme=modern] #dlgOk{font-weight:600}
+[data-theme=modern] .dlg-btns .b95[hidden]{display:none}
+
 .themes{display:grid; grid-template-columns:repeat(2,1fr); gap:6px; margin-top:4px}
 .themes .b95{display:flex; flex-direction:column; align-items:center; gap:2px; font-size:13px; padding:8px 4px}
 .themes .b95 span{font-size:24px}
@@ -349,7 +370,6 @@ html[data-theme=modern]{background:var(--g-bg)}
 <div id="page">
   <header>
     <div class="wordart">zemmat go</div>
-    <p class="sub"><span class="d90">~ </span><span data-hd="Gemeinsam raus">mitanand an d'Luft</span><span class="d90"> ~</span></p>
     <div class="sports">🚵 Bika · 🚴 Rennvelo · 🚲 Gravla · 🏃 Jogga · 🥾 Wandra · 🧗 Klettra · ⛷️ Schitoura</div>
   </header>
   <marquee class="d90" scrollamount="5">+++ Hoi zemma! +++ Kei zwölf WhatsApp-Gruppa meh +++ Iitraga wenn du gosch – wer will, kunnt mit +++ Kei Login, kei Schmarra +++ Lustenauer usdrücklich willkomma +++</marquee>
@@ -452,6 +472,15 @@ html[data-theme=modern]{background:var(--g-bg)}
   </div>
 </div>
 
+<!-- Dialog (ersetzt confirm/alert) -->
+<div class="ov dlg-ov" id="ovDlg" hidden>
+  <div class="win dlg" role="alertdialog" aria-modal="true" aria-labelledby="dlgT" aria-describedby="dlgM">
+    <div class="tb"><span id="dlgT">zemmat go</span><button class="b95 x" data-dlg="0" aria-label="Zuamacha">✕</button></div>
+    <div class="dlg-body"><span class="dlg-ico" id="dlgI">⚠️</span><div class="dlg-msg" id="dlgM"></div></div>
+    <div class="dlg-btns"><button class="b95 big" data-dlg="1" id="dlgOk">Jo</button><button class="b95" data-dlg="0" id="dlgNo">Na</button></div>
+  </div>
+</div>
+
 <!-- Chat -->
 <div class="ov" id="ovChat" hidden>
   <div class="win chatwin" role="dialog" aria-modal="true" aria-labelledby="cTitle">
@@ -505,7 +534,7 @@ html[data-theme=modern]{background:var(--g-bg)}
    API_URL = Apps-Script-Web-App (…/exec). Leer → Demo-Modus (localStorage).
    ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbz4xf-IjvvDWh2qYNFIw7fqRttaO1khWAzOT44ZKT8AsNx1l9ad6CIJeIroiMzmIew/exec';
-const VERSION = '1.9.1';
+const VERSION = '1.9.2';
 // Begrüßungs-GIF im Intro (z. B. Giphy-Link „…/giphy.gif“). Leer = ohne GIF.
 const INTRO_GIF = '';
 
@@ -694,6 +723,30 @@ document.addEventListener('visibilitychange', () => {
   else if (hiddenAt && Date.now() - hiddenAt > 5 * 60e3) { VISIT_FROM = hiddenAt; localStorage.setItem('zg_visit', Date.now()); }
 });
 
+/* ---------- Eigene Dialoge statt confirm()/alert() ---------- */
+let dlgRes = null;
+/** ask(text, {title, icon, ok, no}) → Promise<boolean>; no:null = nur OK-Knopf */
+function ask(msg, o = {}) {
+  return new Promise(res => {
+    if (dlgRes) dlgRes(false);
+    dlgRes = res;
+    $('#dlgT').textContent = o.title || (HD() ? 'zemmat go' : 'zemmat go – Achtung!');
+    $('#dlgI').textContent = o.icon || '⚠️';
+    $('#dlgM').innerHTML = esc(msg).replace(/\n/g, '<br>');
+    $('#dlgOk').textContent = o.ok || T('Jo', 'OK');
+    const no = o.no === undefined ? T('Na', 'Abbrechen') : o.no;
+    $('#dlgNo').hidden = no === null; if (no !== null) $('#dlgNo').textContent = no;
+    openOv('#ovDlg'); setTimeout(() => $('#dlgOk').focus(), 30);
+  });
+}
+const tell = (msg, o = {}) => ask(msg, {icon: '❌', title: T('Hoppla!', 'Fehler'), ok: 'OK', no: null, ...o});
+function dlgDone(v) { if ($('#ovDlg').hidden) return; const r = dlgRes; dlgRes = null; closeOv('#ovDlg'); if (r) r(v); }
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-dlg]'); if (b) return dlgDone(b.dataset.dlg === '1');
+  if (e.target.id === 'ovDlg') dlgDone(false);
+}, true);
+document.addEventListener('keydown', e => { if ($('#ovDlg').hidden) return; if (e.key === 'Enter') { e.preventDefault(); dlgDone(true); } }, true);
+
 /* ---------- Status ---------- */
 function status(t, bad) { $('#st').textContent = t; $('#st').style.color = bad ? '#c00000' : ''; }
 
@@ -765,15 +818,15 @@ async function doAct(a, e, b) {
   if (a === 'ics') return ics(e);
   const name = myName() || await askName(); if (!name) return;
   if (a === 'leave' && goers(e).filter(x => !same(x, name)).length === 0) {
-    if (!confirm(T('Niemert sus isch dabei. 🤷\nTermin glei löscha?', 'Sonst ist niemand dabei.\nTermin gleich löschen?'))) return;
+    if (!await ask(T('Niemert sus isch dabei. 🤷\nTermin glei löscha?', 'Sonst ist niemand dabei.\nTermin gleich löschen?'), {icon: '🤷', ok: T('Jo, löscha', 'Löschen')})) return;
     a = 'cancel';
   }
   if (a === 'cancel' && b.dataset.a !== 'leave' && b.dataset.d !== 'leave') {
     const was = sportOf(e).t + ' ' + dayLabel(e.datum) + ' um ' + e.zeit;
-    if (HD()) { if (!confirm('Termin „' + sportName(e) + '“ wirklich für alle absagen?')) return; }
+    if (HD()) { if (!await ask('Termin „' + sportName(e) + '“ wirklich für alle absagen?', {ok: 'Absagen'})) return; }
     else {
-      if (!confirm('Würklich absaga? 😢\n\n' + was + (same(e.von, name) ? '' : '\n(iitraga vo ' + e.von + ')'))) return;
-      if (!confirm('Ganz sicher? 🤔\nDenn isch dä Termin für alli weg und die andra kriagand Bscheid.')) return;
+      if (!await ask('Würklich absaga?\n\n' + was + (same(e.von, name) ? '' : '\n(iitraga vo ' + e.von + ')'), {icon: '😢', title: 'Absaga.exe'})) return;
+      if (!await ask('Ganz sicher?\nDenn isch dä Termin für alli weg und die andra kriagand Bscheid.', {icon: '🤔', title: 'Absaga.exe – Letschte Warnung', ok: 'Jo, weg damit', no: 'Na, doch ned'})) return;
     }
   }
   b.disabled = true; status(T('Schick …', 'Sende …'));
@@ -783,7 +836,7 @@ async function doAct(a, e, b) {
     render(); status(a === 'join' ? T('Super, du bisch dabei! 🎉', 'Du bist dabei.') : a === 'leave' ? T('Schad – vlicht s\'nögscht Mol.', 'Abgemeldet.') : T('Abgsagt.', 'Abgesagt.'));
     if (!$('#ovDetail').hidden) { if (a === 'cancel') closeOv('#ovDetail'); else drawDetail(e); }
     return true;
-  } catch (x) { status('Fehler: ' + x.message, true); b.disabled = false; alert(T('Hoppla: ', 'Fehler: ') + x.message); }
+  } catch (x) { status('Fehler: ' + x.message, true); b.disabled = false; tell(x.message); }
 }
 
 function link(e) { return location.origin + location.pathname + (KEY ? '?k=' + encodeURIComponent(KEY) : DEMO && qs.has('demo') ? '?demo' : '') + '#e' + e.id; }
@@ -832,13 +885,14 @@ function openOv(s) { const o = $(s); o.style.zIndex = ++ovZ; o.hidden = false; d
 function closeOv(s) {
   $(s).hidden = true; if (document.querySelectorAll('.ov:not([hidden])').length === 0) document.body.style.overflow = '';
   if (s === '#ovIntro') localStorage.setItem('zg_intro', '1');
+  if (s === '#ovDlg' && dlgRes) { const r = dlgRes; dlgRes = null; r(false); }
   if (s === '#ovChat') { clearInterval(chatTimer); render(); if (!$('#ovDetail').hidden) { const e = EVENTS.find(x => x.id === detailId); if (e) drawDetail(e); } }
   if (s === '#ovName' && nameResolve) { nameResolve(''); nameResolve = null; }
 }
 document.querySelectorAll('.ov').forEach(o => {
   o.addEventListener('click', e => { if (e.target === o || e.target.closest('[data-close]')) closeOv('#' + o.id); });
 });
-document.addEventListener('keydown', e => { if (e.key !== 'Escape') return; const top = [...document.querySelectorAll('.ov:not([hidden])')].sort((a, b) => (+b.style.zIndex || 0) - (+a.style.zIndex || 0))[0]; if (top) closeOv('#' + top.id); });
+document.addEventListener('keydown', e => { if (e.key !== 'Escape') return; if (!$('#ovDlg').hidden) return dlgDone(false); const top = [...document.querySelectorAll('.ov:not([hidden])')].sort((a, b) => (+b.style.zIndex || 0) - (+a.style.zIndex || 0))[0]; if (top) closeOv('#' + top.id); });
 
 /* ---------- Neuer Termin: Lückentext ---------- */
 let draft = null, sel = null, editId = null;
@@ -1012,7 +1066,7 @@ $('#cForm').addEventListener('submit', async ev => {
   try {
     const j = await store.call('chat', {id: e.id, name: myName(), text: t});
     e.chat = j.chat; $('#cText').value = ''; drawChat(true); render();
-  } catch (x) { alert(T('Hoppla: ', 'Fehler: ') + x.message); }
+  } catch (x) { tell(x.message); }
   finally { b.disabled = false; $('#cText').focus(); }
 });
 
@@ -1217,7 +1271,7 @@ $('#pushOn').onclick = async () => {
     step('Speichern …');
     await within(store.call('subscribe', {sub: sub.toJSON(), name: myName(), sports: mySports(), lang: HD() ? 'de' : 'dia'}), 30000, 'Server');
     status('Benachrichtigungen aktiviert ✔');
-  } catch (e) { status('Fehler: ' + e.message, true); alert('Fehler: ' + e.message); }
+  } catch (e) { status('Fehler: ' + e.message, true); tell(e.message, {title: 'Fehler'}); }
   finally { b.disabled = false; b.textContent = '🔔 Benachrichtigungen aktivieren'; pushDraw(); }
 };
 $('#pushOff').onclick = async () => {
@@ -1231,7 +1285,7 @@ $('#pushOff').onclick = async () => {
 $('#pushTest').onclick = async () => {
   const b = $('#pushTest'); b.disabled = true; status('Sende Testnachricht …');
   try { const sub = await getSub(); await store.call('test', {endpoint: sub.endpoint, lang: HD() ? 'de' : 'dia'}); status('Testnachricht gesendet'); }
-  catch (e) { status('Fehler: ' + e.message, true); alert('Fehler: ' + e.message); }
+  catch (e) { status('Fehler: ' + e.message, true); tell(e.message, {title: 'Fehler'}); }
   finally { b.disabled = false; }
 };
 function hashChat() { if (location.hash.startsWith('#c')) { const id = location.hash.slice(2); if (EVENTS.some(e => e.id === id)) { openChat(id); history.replaceState(null, '', location.pathname + location.search); } } }
