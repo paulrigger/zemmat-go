@@ -506,7 +506,7 @@ html[data-theme=modern]{background:var(--g-bg)}
    API_URL = Apps-Script-Web-App (…/exec). Leer → Demo-Modus (localStorage).
    ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbz4xf-IjvvDWh2qYNFIw7fqRttaO1khWAzOT44ZKT8AsNx1l9ad6CIJeIroiMzmIew/exec';
-const VERSION = '1.6';
+const VERSION = '1.6.1';
 // Begrüßungs-GIF im Intro (z. B. Giphy-Link „…/giphy.gif“). Leer = ohne GIF.
 const INTRO_GIF = '';
 
@@ -1075,7 +1075,7 @@ $('#fSave').onclick = async () => {
 const IS_IOS = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 const STANDALONE = matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
 const CAN_PUSH = 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
-const SW = CAN_PUSH && location.protocol === 'https:' ? navigator.serviceWorker.register('sw.js').catch(e => { console.warn('SW', e); return null; }) : Promise.resolve(null);
+const SW = CAN_PUSH && window.isSecureContext ? navigator.serviceWorker.register('sw.js').catch(e => { console.warn('SW', e); return null; }) : Promise.resolve(null);
 function mySports() { try { const v = JSON.parse(localStorage.getItem('zg_sports')); if (Array.isArray(v)) return v; } catch (e) {} return Object.keys(SPORT); }
 function b64uBytes(s) { s = s.replace(/-/g, '+').replace(/_/g, '/'); s += '='.repeat((4 - s.length % 4) % 4); return Uint8Array.from(atob(s), c => c.charCodeAt(0)); }
 async function getSub() { const reg = await SW; return reg && reg.pushManager ? reg.pushManager.getSubscription() : null; }
@@ -1121,21 +1121,40 @@ $('#pushSports').addEventListener('change', () => {
   syncT = setTimeout(async () => { try { if (await getSub()) { await pushSync(); status('Gespeichert'); } } catch (e) { status('Fehler: ' + e.message, true); } }, 600);
 });
 
+/** Promise mit Zeitlimit – damit nichts endlos bei „Moment …“ hängt */
+function within(p, ms, what) { return Promise.race([p, new Promise((_, rej) => setTimeout(() => rej(new Error(what + ' (Zeitüberschreitung)')), ms))]); }
+/** Service Worker registrieren und warten, bis er aktiv ist */
+async function activeReg() {
+  let reg = await navigator.serviceWorker.getRegistration('./');
+  if (!reg) reg = await navigator.serviceWorker.register('sw.js');
+  if (reg.active) return reg;
+  const w = reg.installing || reg.waiting;
+  if (w) await new Promise(res => { if (w.state === 'activated') return res(); w.addEventListener('statechange', () => { if (w.state === 'activated') res(); }); });
+  return reg.active ? reg : await navigator.serviceWorker.ready;
+}
 $('#pushOn').onclick = async () => {
-  const b = $('#pushOn'); b.disabled = true; b.textContent = 'Moment …';
+  const b = $('#pushOn'); b.disabled = true;
+  const step = t => { b.textContent = '⏳ ' + t; status(t); };
   try {
     if (!myName() && !await askName()) return;
     if (!mySports().length) throw new Error('Bitte mindestens eine Sportart wählen.');
-    const perm = await Notification.requestPermission();
-    if (perm !== 'granted') throw new Error('Benachrichtigungen nicht erlaubt.');
-    const reg = (await SW) || await navigator.serviceWorker.register('sw.js');
-    await navigator.serviceWorker.ready;
-    let sub = await reg.pushManager.getSubscription();
-    sub = sub || await reg.pushManager.subscribe({userVisibleOnly: true, applicationServerKey: b64uBytes(PUSH_KEY)});
-    await store.call('subscribe', {sub: sub.toJSON(), name: myName(), sports: mySports(), lang: HD() ? 'de' : 'dia'});
-    status('Benachrichtigungen aktiviert');
+    step('Erlaubnis …');
+    const perm = await within(Notification.requestPermission(), 60000, 'Erlaubnis-Abfrage');
+    if (perm !== 'granted') throw new Error('Benachrichtigungen nicht erlaubt (' + perm + ').');
+    step('Service Worker …');
+    const reg = await within(activeReg(), 15000, 'Service Worker startet nicht');
+    step('Anmeldung beim Push-Dienst …');
+    let sub = await within(reg.pushManager.getSubscription(), 10000, 'Push-Dienst (Abfrage)');
+    if (sub && sub.options && sub.options.applicationServerKey) {
+      const k = btoa(String.fromCharCode(...new Uint8Array(sub.options.applicationServerKey))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+      if (k !== PUSH_KEY) { await sub.unsubscribe(); sub = null; }   // alter Schlüssel → neu anmelden
+    }
+    sub = sub || await within(reg.pushManager.subscribe({userVisibleOnly: true, applicationServerKey: b64uBytes(PUSH_KEY)}), 20000, 'Push-Dienst (Anmeldung)');
+    step('Speichern …');
+    await within(store.call('subscribe', {sub: sub.toJSON(), name: myName(), sports: mySports(), lang: HD() ? 'de' : 'dia'}), 30000, 'Server');
+    status('Benachrichtigungen aktiviert ✔');
   } catch (e) { status('Fehler: ' + e.message, true); alert('Fehler: ' + e.message); }
-  finally { b.textContent = '🔔 Benachrichtigungen aktivieren'; pushDraw(); }
+  finally { b.disabled = false; b.textContent = '🔔 Benachrichtigungen aktivieren'; pushDraw(); }
 };
 $('#pushOff').onclick = async () => {
   try {
