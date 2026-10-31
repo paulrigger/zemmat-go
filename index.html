@@ -91,6 +91,8 @@ button.satz{display:inline; padding:2px 6px; line-height:2.4; text-align:left}
 .ev .eb{padding:4px 12px 2px}
 .ev .fibel{font-size:19px}
 .ev .bild{border-color:#ddd}
+.ev .eb{padding-top:10px}
+.neu.ecke{position:absolute; top:-10px; right:10px; transform:rotate(6deg); font-size:12px; padding:2px 7px; border:1px solid #000}
 .neu{background:red; color:#ff0; font:bold 11px var(--ui); padding:1px 5px; margin-left:4px}
 .dabei{font:15px var(--fibel); padding:4px 12px 8px}
 .dabei b{color:#006400}
@@ -504,7 +506,7 @@ html[data-theme=modern]{background:var(--g-bg)}
    API_URL = Apps-Script-Web-App (…/exec). Leer → Demo-Modus (localStorage).
    ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbz4xf-IjvvDWh2qYNFIw7fqRttaO1khWAzOT44ZKT8AsNx1l9ad6CIJeIroiMzmIew/exec';
-const VERSION = '1.5';
+const VERSION = '1.6';
 // Begrüßungs-GIF im Intro (z. B. Giphy-Link „…/giphy.gif“). Leer = ohne GIF.
 const INTRO_GIF = '';
 
@@ -582,6 +584,17 @@ function werText(w) {
   const n = (w.names || []).filter(Boolean);
   return n.length < 2 ? (n[0] || T('Mir', 'Wir')) : n.slice(0, -1).join(', ') + ' und ' + n[n.length - 1];
 }
+/** Alle, die gehen: Ersteller:in bzw. genannte Namen + alle mit „dabei“ (ohne Doppelte) */
+function goers(ev) {
+  const w = ev.wer || {mode: 'i'}, out = [];
+  const add = n => { if (n && !out.some(x => same(x, n))) out.push(n); };
+  (w.mode === 'names' && (w.names || []).length ? w.names : [ev.von]).forEach(add);
+  (ev.dabei || []).forEach(add);
+  return out;
+}
+function joinNames(a) { return a.length < 2 ? (a[0] || '') : a.slice(0, -1).join(', ') + ' und ' + a[a.length - 1]; }
+function goersText(ev) { const g = goers(ev); return (ev.wer && ev.wer.mode === 'mir') ? joinNames([...g, 'Co.']) : joinNames(g); }
+function goersPlural(ev) { return goers(ev).length > 1 || (ev.wer && ev.wer.mode === 'mir'); }
 function startOf(ev) { const d = parseYmd(ev.datum); const [h, m] = ev.zeit.split(':').map(Number); d.setHours(h, m); return d; }
 function endOf(ev) { return new Date(startOf(ev).getTime() + ((DAUER[ev.dauer] || [0, 2])[1]) * 36e5); }
 
@@ -593,8 +606,10 @@ function bild(k, e, t, edit, x = {}) {
 }
 function fibel(ev, edit) {
   const w = ev.wer || {mode: 'i'}, pl = plural(w), sp = sportOf(ev);
-  const verb = pl ? T('gond', 'gehen') : T('gang', 'gehe');
-  let h = bild('wer', w.mode === 'i' ? '🙋' : w.mode === 'mir' ? '👫' : '👥', werText(w), edit) + ' ' + verb + ' '
+  const many = edit ? pl : goersPlural(ev);
+  const verb = edit ? (pl ? T('gond', 'gehen') : T('gang', 'gehe')) : (many ? T('gond', 'gehen') : T('goht', 'geht'));
+  const who = edit ? werText(w) : goersText(ev);
+  let h = bild('wer', edit ? (w.mode === 'i' ? '🙋' : w.mode === 'mir' ? '👫' : '👥') : (many ? '👥' : '🙋'), who, edit) + ' ' + verb + ' '
         + bild('datum', '📅', dayLabel(ev.datum), edit) + ' um ' + bild('zeit', clock(ev.zeit), ev.zeit, edit);
   if (ev.dauer || edit) h += ' ' + bild('dauer', '⏳', ev.dauer ? 'für ' + dLabel(ev.dauer) : T('wia lang?', 'wie lange?'), edit, {leer: !ev.dauer});
   h += ' ' + bild('sport', sp.e, sp.t, edit) + '.';
@@ -603,7 +618,7 @@ function fibel(ev, edit) {
   const dr = HD() ? 'Danach ' + (pl ? 'haben wir' : 'habe ich') + ' noch Zeit für einen ' : 'Nochher ' + (pl ? 'hond mir' : 'hon i') + ' o no Zit für an ';
   const glas = `<span class="bild"><span class="e" aria-hidden="true">🍺</span><span class="w">Drink</span></span>`;
   if (edit) h += ` <button type="button" class="luecke satz${ev.drink ? '' : ' strike'}" data-k="drink" aria-pressed="${!ev.drink}">${dr}${glas}.</button>`;
-  else if (ev.drink) h += ' ' + dr + glas + '.';
+  else if (ev.drink) h += ' ' + T('Nochher isch o no Zit für an ', 'Danach ist noch Zeit für einen ') + glas + '.';
   return h;
 }
 function plain(ev) {
@@ -700,13 +715,8 @@ function render() {
     if (e.datum !== last) { h += `<h3>📅 ${esc(dayHeading(e.datum))}</h3>`; last = e.datum; }
     const mine = me && same(e.von, me), joined = me && (e.dabei || []).some(n => same(n, me));
     const isNew = Date.now() - new Date(e.erstellt).getTime() < 864e5;
-    const dab = (e.dabei || []).length
-      ? `🙋 <b>Dabei:</b> ${esc(e.dabei.join(', '))} <small>(${e.dabei.length} ${e.dabei.length === 1 ? T('Person', 'Person') : T('Lüt', 'Personen')})</small>`
-      : T('🙋 Bis jetzt no niemert – gang mit!', 'Noch niemand dabei.');
-    h += `<div class="ev" id="e${esc(e.id)}">
-      <div class="eh"><span>✍️ <b>${esc(e.von)}</b> ${T('schriebt:', '')}${isNew ? '<span class="neu blink">NEU!</span>' : ''}</span><span>${e.zeit} ${T('Uhr', 'Uhr')}</span></div>
+    h += `<div class="ev" id="e${esc(e.id)}">${isNew ? '<span class="neu blink ecke">NEU!</span>' : ''}
       <div class="eb fibel">${fibel(e, false)}</div>
-      <div class="dabei">${dab}</div>
       <div class="act">
         ${mine ? '' : joined
           ? `<button class="b95 on" data-a="leave" data-id="${esc(e.id)}">${T('✅ I bin dabei · doch ned?', '✓ Dabei · absagen')}</button>`
@@ -972,12 +982,12 @@ function renderIOS(evs, me) {
     if (e.datum !== last) { if (last) h += '</div>'; h += `<h3 class="ios-sec">${esc(dayHeading(e.datum))}</h3><div class="ios-list">`; last = e.datum; }
     const n = (e.dabei || []).length, joined = me && (e.dabei || []).some(x => same(x, me)), mine = me && same(e.von, me);
     const isNew = Date.now() - new Date(e.erstellt).getTime() < 864e5;
-    const sub = [werPlain(e), e.treffpunkt].filter(Boolean).map(esc).join(' · ');
+    const sub = [goersText(e), e.treffpunkt].filter(Boolean).map(esc).join(' · ');
     h += `<button class="ios-row s-${esc(e.sport)}" id="e${esc(e.id)}" data-open="${esc(e.id)}">
       <span class="ios-time"><b>${e.zeit}</b><small>${e.dauer ? DUR_SHORT[e.dauer] : ''}</small></span>
       <span class="ios-main"><span class="ios-title">${esc(sportName(e))}${isNew ? '<i class="ios-new">Neu</i>' : ''}${e.drink ? '<i class="ios-tag">Drink</i>' : ''}${unread(e) ? '<i class="ios-dot" title="Neue Nachrichten"></i>' : ''}</span>
         <span class="ios-sub">${sub}</span></span>
-      <span class="ios-acc">${joined || mine ? '<i class="ios-ok">✓</i>' : ''}${n ? `<i class="ios-count">${n}</i>` : ''}<i class="ios-chev">›</i></span>
+      <span class="ios-acc">${joined || mine ? '<i class="ios-ok">✓</i>' : ''}<i class="ios-count">${goers(e).length}</i><i class="ios-chev">›</i></span>
     </button>`;
   }
   $('#list').innerHTML = h + '</div>';
@@ -991,12 +1001,12 @@ function drawDetail(e) {
   const end = endOf(e), endT = pad(end.getHours()) + ':' + pad(end.getMinutes());
   const rows = [
     ['Wann', esc(dayHeading(e.datum)) + '<br>' + e.zeit + (e.dauer ? ' – ' + endT + ' <small>(' + DUR_SHORT[e.dauer] + ')</small>' : ' Uhr')],
-    ['Wer', esc(werPlain(e))],
+    ['Wer', esc(goersText(e))],
     e.treffpunkt ? ['Treffpunkt', esc(e.treffpunkt)] : null,
     ['Danach', e.drink ? 'Zeit für einen Drink' : '–'],
-    ['Dabei', (e.dabei || []).length ? esc(e.dabei.join(', ')) : '<span class="muted">Noch niemand</span>']
+    ['Angelegt von', esc(e.von)]
   ].filter(Boolean);
-  $('#dBody').innerHTML = `<div class="d-hero s-${esc(e.sport)}"><h2 id="dTitle">${esc(sportName(e))}</h2><p>von ${esc(e.von)}</p></div>
+  $('#dBody').innerHTML = `<div class="d-hero s-${esc(e.sport)}"><h2 id="dTitle">${esc(sportName(e))}</h2><p>${goers(e).length} ${goers(e).length === 1 ? 'Person' : 'Personen'}</p></div>
     <div class="grp">${rows.map(r => `<div class="frow"><span>${r[0]}</span><span class="v">${r[1]}</span></div>`).join('')}</div>
     ${mine ? '' : `<button class="ios-btn wide${joined ? ' tinted' : ''}" data-d="${joined ? 'leave' : 'join'}">${joined ? 'Teilnahme zurückziehen' : 'Ich bin dabei'}</button>`}
     <div class="grp">
