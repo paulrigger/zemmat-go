@@ -1,5 +1,5 @@
 /**
- * zemmat go – API v1.3 (Google Apps Script, gebunden an ein Google Sheet)
+ * zemmat go – API v1.4 (Google Apps Script, gebunden an ein Google Sheet)
  *
  * Einrichtung:
  *   1. Neues Google Sheet → Erweiterungen → Apps Script → diesen Code einfügen
@@ -15,6 +15,7 @@
  *                   {action:"subscribe", k, sub, name, sports:[…], lang} -> { ok }  Push-Abo (lang: dia|de)
  *                   {action:"unsubscribe", k, endpoint}   -> { ok }
  *                   {action:"test", k, endpoint}          -> { ok, result }  Test-Popup an dieses Gerät
+ *                   {action:"update", k, id, name, event:{…}} -> { ok, event }  nur Ersteller:in
  *                   {action:"chat", k, id, name, text}    -> { ok, chat:[…] }  Chat-Nachricht zu einem Termin
  * Jeder Termin in list hat chat:[{n, t, z}] (Name, Text, Zeit).
  * Fehler immer als { ok:false, error:"…" }
@@ -26,7 +27,7 @@
  *   PUSH_SECRET  gleiches Secret wie im Worker (SECRET)
  *   APP_URL      optional, Standard https://paulrigger.github.io/zemmat-go/
  */
-const VERSION = '1.3';
+const VERSION = '1.4';
 const TZ = 'Europe/Vienna';
 const SHEET = 'Events';
 const COLS = ['id', 'erstellt', 'von', 'datum', 'zeit', 'dauer', 'sport', 'sportText', 'wer', 'treffpunkt', 'drink', 'dabei', 'status'];
@@ -109,6 +110,11 @@ function run_(p) {
       case 'subscribe':   return locked_(() => subscribe_(p));
       case 'unsubscribe': return locked_(() => unsubscribe_(p.endpoint));
       case 'test':        return test_(p.endpoint);
+      case 'update': {
+        const r = locked_(() => update_(p.id, p.name, p.event || {}));
+        if (r.ok) { try { notifyChange_(r.before, r.event, name_(p.name)); } catch (x) { console.error('Push Änderung: ' + x); } delete r.before; }
+        return r;
+      }
       case 'chat': {
         const r = locked_(() => chatPost_(p.id, p.name, p.text));
         if (r.ok) { try { notifyChat_(r.event, r.msg); } catch (x) { console.error('Push Chat: ' + x); } delete r.event; delete r.msg; }
@@ -168,9 +174,8 @@ function list_() {
 function name_(s) { return String(s || '').replace(/[,<>]/g, '').replace(/\s+/g, ' ').trim().slice(0, 24); }
 function text_(s, n) { return String(s || '').replace(/[<>]/g, '').replace(/\s+/g, ' ').trim().slice(0, n); }
 
-function create_(e) {
-  const von = name_(e.von);
-  if (!von) throw new Error('Nama fehlt');
+/** Gemeinsame Prüfung für create/update → bereinigte Felder */
+function fields_(e) {
   if (!/^\d{4}-\d\d-\d\d$/.test(e.datum || '') || e.datum < today_(0) || e.datum > today_(366)) throw new Error('Ungültigs Datum');
   if (!/^([01]\d|2[0-3]):[0-5]\d$/.test(e.zeit || '')) throw new Error('Ungültigi Zit');
   if (SPORTS.indexOf(e.sport) < 0) throw new Error('Dia Sportart kenn i ned');
@@ -182,17 +187,23 @@ function create_(e) {
     const n = (w.names || []).map(name_).filter(String).slice(0, 8);
     wer = n.length ? n.join(', ') : 'i';
   }
+  return { datum: e.datum, zeit: e.zeit, dauer, sport: e.sport, sportText: e.sport === 'anders' ? text_(e.sportText, 40) : '',
+           wer, treffpunkt: text_(e.treffpunkt, 60), drink: e.drink ? 'ja' : '' };
+}
+
+function create_(e) {
+  const von = name_(e.von);
+  if (!von) throw new Error('Nama fehlt');
+  const f = fields_(e);
   const { sh, rows } = rows_();
   const open = rows.filter(r => r.ev.status !== 'abgsagt' && r.ev.datum >= today_(0)).length;
   if (open >= MAX_OPEN) throw new Error('Z\'viel offne Termin');
 
-  const ev = {
+  const ev = Object.assign({
     id: Utilities.getUuid().replace(/-/g, '').slice(0, 8),
     erstellt: Utilities.formatDate(new Date(), TZ, "yyyy-MM-dd'T'HH:mm:ssXXX"),
-    von, datum: e.datum, zeit: e.zeit, dauer, sport: e.sport,
-    sportText: e.sport === 'anders' ? text_(e.sportText, 40) : '',
-    wer, treffpunkt: text_(e.treffpunkt, 60), drink: e.drink ? 'ja' : '', dabei: '', status: ''
-  };
+    von, dabei: '', status: ''
+  }, f);
   const r = sh.getLastRow() + 1;
   sh.getRange(r, 1, 1, COLS.length).setNumberFormat('@').setValues([COLS.map(c => ev[c])]);
   return { ok: true, event: toEvent_(COLS.map(c => ev[c])) };
@@ -381,4 +392,45 @@ function notifyChat_(ev, msg) {
   const de = subs.filter(a => a.lang === 'de'), dia = subs.filter(a => a.lang !== 'de');
   if (dia.length) push_(dia, mk(false));
   if (de.length) push_(de, mk(true));
+}
+
+/* ---------- Ändern ---------- */
+function update_(id, name, e) {
+  const { sh, hit } = find_(id);
+  if (name_(name).toLowerCase() !== String(hit.ev.von).toLowerCase()) throw new Error('Nur ' + hit.ev.von + ' ka des ändra');
+  const f = fields_(e);
+  const row = sh.getRange(hit.row, 1, 1, COLS.length);
+  const fmt = c => c === 'zeit' ? 'HH:mm' : c === 'datum' ? 'yyyy-MM-dd' : "yyyy-MM-dd'T'HH:mm:ssXXX";
+  const raw = row.getValues()[0].map((v, j) => v instanceof Date ? str_(v, fmt(COLS[j])) : v);
+  Object.keys(f).forEach(k => { raw[COLS.indexOf(k)] = f[k]; });
+  row.setNumberFormat('@').setValues([raw]);
+  const ev = toEvent_(row.getValues()[0]);
+  ev.chat = chatMap_()[ev.id] || [];
+  return { ok: true, event: ev, before: hit.ev };
+}
+
+/** Popup „Termin geändert“ an alle Beteiligten außer der Person, die geändert hat */
+function notifyChange_(before, ev, by) {
+  const what = [];
+  if (before.datum !== ev.datum) what.push('datum');
+  if (before.zeit !== ev.zeit) what.push('zeit');
+  if (before.treffpunkt !== ev.treffpunkt) what.push('treff');
+  if (before.sport !== ev.sport || before.sportText !== ev.sportText) what.push('sport');
+  if (before.dauer !== ev.dauer) what.push('dauer');
+  if (!what.length) return;                       // nur Kleinigkeiten (z. B. Drink) → kein Popup
+  const people = {};
+  [ev.von].concat(ev.dabei || [], (ev.wer && ev.wer.names) || [], (ev.chat || []).map(c => c.n))
+    .forEach(x => { if (x) people[String(x).toLowerCase()] = 1; });
+  delete people[String(by).toLowerCase()];
+  const { rows } = aboRows_();
+  const subs = rows.filter(a => people[a.name.toLowerCase()]);
+  if (!subs.length) return;
+  const app = props_().getProperty('APP_URL') || 'https://paulrigger.github.io/zemmat-go/';
+  const mk = lang => {
+    const m = message_(ev, lang);
+    return { title: (lang === 'de' ? '✏️ Geändert: ' : '✏️ Gändert: ') + m.title.replace(/^\S+ /, ''), body: m.body, url: app + '#e' + ev.id, tag: 'zg-' + ev.id };
+  };
+  const de = subs.filter(a => a.lang === 'de'), dia = subs.filter(a => a.lang !== 'de');
+  if (dia.length) push_(dia, mk('dia'));
+  if (de.length) push_(de, mk('de'));
 }

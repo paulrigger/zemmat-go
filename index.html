@@ -505,7 +505,7 @@ html[data-theme=modern]{background:var(--g-bg)}
    API_URL = Apps-Script-Web-App (…/exec). Leer → Demo-Modus (localStorage).
    ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbz4xf-IjvvDWh2qYNFIw7fqRttaO1khWAzOT44ZKT8AsNx1l9ad6CIJeIroiMzmIew/exec';
-const VERSION = '1.6.4';
+const VERSION = '1.7';
 // Begrüßungs-GIF im Intro (z. B. Giphy-Link „…/giphy.gif“). Leer = ohne GIF.
 const INTRO_GIF = '';
 
@@ -666,6 +666,7 @@ const demo = {
     if (action === 'join') { const e = find(); if (!e.dabei.some(n => same(n, p.name))) e.dabei.push(p.name); this.save(d); return {ok: true, event: e}; }
     if (action === 'leave') { const e = find(); e.dabei = e.dabei.filter(n => !same(n, p.name)); this.save(d); return {ok: true, event: e}; }
     if (action === 'chat') { const e = find(); e.chat = e.chat || []; const t = String(p.text || '').trim().slice(0, 500); if (!t) throw new Error('Nüt gschrieba'); e.chat.push({n: p.name, t, z: new Date().toISOString()}); this.save(d); return {ok: true, chat: e.chat}; }
+    if (action === 'update') { const e = find(); if (!same(e.von, p.name)) throw new Error('Nur ' + e.von + ' ka des ändra'); ['datum', 'zeit', 'dauer', 'sport', 'sportText', 'wer', 'treffpunkt', 'drink'].forEach(k => e[k] = p.event[k]); this.save(d); return {ok: true, event: e}; }
     if (action === 'cancel') { const e = find(); if (!same(e.von, p.name)) throw new Error('Nur ' + e.von + ' ka des absaga'); d.events = d.events.filter(x => x !== e); this.save(d); return {ok: true}; }
     throw new Error('Unbekannte Aktion');
   }
@@ -734,7 +735,7 @@ function render() {
         <button class="b95" data-a="chat" data-id="${esc(e.id)}">💬 Schwätza${chatBadge(e)}</button>
         <button class="b95" data-a="wa" data-id="${esc(e.id)}">${T('📣 Teila', 'Teilen')}</button>
         <button class="b95" data-a="ics" data-id="${esc(e.id)}">${T('📆 Kalender', 'Kalender')}</button>
-        ${mine ? `<button class="b95" data-a="cancel" data-id="${esc(e.id)}">${T('🗑️ Absaga', 'Absagen')}</button>` : ''}
+        ${mine ? `<button class="b95" data-a="edit" data-id="${esc(e.id)}">✏️ Ändra</button><button class="b95" data-a="cancel" data-id="${esc(e.id)}">${T('🗑️ Absaga', 'Absagen')}</button>` : ''}
       </div></div>`;
   }
   $('#list').innerHTML = h;
@@ -749,6 +750,7 @@ $('#list').addEventListener('click', ev => {
 });
 async function doAct(a, e, b) {
   if (a === 'chat') return openChat(e.id);
+  if (a === 'edit') return HD() ? openForm(e) : openEdit(e);
   if (a === 'wa') return share(e);
   if (a === 'ics') return ics(e);
   const name = myName() || await askName(); if (!name) return;
@@ -818,7 +820,16 @@ document.querySelectorAll('.ov').forEach(o => {
 document.addEventListener('keydown', e => { if (e.key !== 'Escape') return; const top = [...document.querySelectorAll('.ov:not([hidden])')].sort((a, b) => (+b.style.zIndex || 0) - (+a.style.zIndex || 0))[0]; if (top) closeOv('#' + top.id); });
 
 /* ---------- Neuer Termin: Lückentext ---------- */
-let draft = null, sel = null;
+let draft = null, sel = null, editId = null;
+const EDIT_KEYS = ['datum', 'zeit', 'dauer', 'sport', 'sportText', 'treffpunkt', 'drink'];
+function openEdit(e) {
+  editId = e.id; sel = null;
+  draft = {wer: JSON.parse(JSON.stringify(e.wer || {mode: 'i', names: []}))};
+  EDIT_KEYS.forEach(k => draft[k] = e[k] ?? '');
+  draft.drink = !!e.drink;
+  $('#newErr').textContent = ''; $('#tNew').textContent = '✏️ Ändra.txt – Was isch anders?'; $('#send').textContent = '💾 Speichra!';
+  drawNew(); $('#pk').hidden = true; openOv('#ovNew');
+}
 function freshDraft() {
   let last = {}; try { last = JSON.parse(localStorage.getItem('zg_last')) || {}; } catch (e) {}
   return {wer: {mode: 'i', names: []}, datum: ymd(addDays(today0(), 1)), zeit: '18:00', dauer: '',
@@ -826,7 +837,9 @@ function freshDraft() {
 }
 async function openNew() {
   const n = myName() || await askName(); if (!n) return;
+  editId = null;
   if (HD()) return openForm();
+  $('#tNew').textContent = '📝 Neu.txt – Was hosch vor?'; $('#send').textContent = '📨 Abschicka!';
   draft = freshDraft(); sel = null; $('#newErr').textContent = ''; drawNew(); $('#pk').hidden = true; openOv('#ovNew');
 }
 window.openNew = openNew;
@@ -910,6 +923,13 @@ $('#send').onclick = async () => {
   if (endOf(draft) < new Date()) { $('#newErr').textContent = T('⏰ Dä Zitpunkt isch scho verbei.', 'Der Zeitpunkt liegt in der Vergangenheit.'); return; }
   b.disabled = true; b.textContent = T('⏳ Schick …', 'Sende …'); $('#newErr').textContent = ''; status(T('Schick …', 'Sende …'));
   try {
+    if (editId) {
+      const j = await store.call('update', {id: editId, name, event: draft});
+      const old = EVENTS.find(x => x.id === editId); if (old) Object.assign(old, j.event);
+      closeOv('#ovNew'); render(); status('Gspeicheret ✔');
+      const el = document.getElementById('e' + editId); if (el) { el.scrollIntoView({block: 'center', behavior: 'smooth'}); el.classList.add('flash'); }
+      return;
+    }
     const j = await store.call('create', {event: {...draft, von: name}});
     EVENTS.push(j.event);
     localStorage.setItem('zg_last', JSON.stringify({sport: draft.sport, sportText: draft.sportText}));
@@ -918,7 +938,7 @@ $('#send').onclick = async () => {
     closeOv('#ovNew'); render(); status(T('Iitraga! 🎉 Jetzt no teila.', 'Eingetragen.'));
     const el = document.getElementById('e' + j.event.id); if (el) { el.scrollIntoView({block: 'center', behavior: 'smooth'}); el.classList.add('flash'); }
   } catch (x) { $('#newErr').textContent = T('Hoppla: ', 'Fehler: ') + x.message; status('Fehler: ' + x.message, true); }
-  finally { b.disabled = false; b.textContent = T('📨 Abschicka!', 'Eintragen'); }
+  finally { b.disabled = false; b.textContent = editId ? '💾 Speichra!' : T('📨 Abschicka!', 'Eintragen'); }
 };
 
 /* ---------- Chat pro Termin ---------- */
@@ -1024,7 +1044,7 @@ function drawDetail(e) {
       <button class="frow link" data-d="chat"><span>Nachrichten</span><span class="v">${(e.chat || []).length || ''}${unread(e) ? ' <i class="ios-dot"></i>' : ''} ›</span></button>
       <button class="frow link" data-d="wa">Teilen</button>
       <button class="frow link" data-d="ics">Zum Kalender hinzufügen</button>
-      ${mine ? '<button class="frow link danger" data-d="cancel">Termin absagen</button>' : ''}
+      ${mine ? '<button class="frow link" data-d="edit">Bearbeiten</button><button class="frow link danger" data-d="cancel">Termin absagen</button>' : ''}
     </div>`;
 }
 $('#dBody').addEventListener('click', ev => {
@@ -1033,13 +1053,19 @@ $('#dBody').addEventListener('click', ev => {
 });
 
 let fWer = 'i';
-function openForm() {
-  const d = freshDraft();
+let formEditId = null;
+function openForm(ev) {
+  formEditId = ev ? ev.id : null;
+  const d = ev ? {...ev, drink: !!ev.drink} : freshDraft();
+  $('#tForm').textContent = ev ? 'Termin bearbeiten' : 'Neuer Termin';
+  $('#fSave').textContent = ev ? 'Sichern' : 'Hinzufügen';
   $('#fSport').innerHTML = Object.entries(SPORT).map(([k, s]) => `<option value="${k}">${esc(s.lh)}</option>`).join('');
   $('#fSport').value = d.sport; $('#fSportText').value = d.sport === 'anders' ? d.sportText : '';
   $('#fDauer').innerHTML = '<option value="">Offen</option>' + Object.keys(DAUER).map(k => `<option value="${k}">${DUR_SHORT[k]}</option>`).join('');
-  $('#fDauer').value = ''; $('#fDate').value = d.datum; $('#fDate').min = ymd(today0()); $('#fTime').value = d.zeit;
-  $('#fNames').value = ''; $('#fTreff').value = ''; $('#fDrink').checked = false; fWer = 'i'; $('#fErr').textContent = '';
+  $('#fDauer').value = d.dauer || ''; $('#fDate').value = d.datum; $('#fDate').min = ymd(today0()); $('#fTime').value = d.zeit;
+  const w = d.wer || {mode: 'i', names: []};
+  fWer = w.mode || 'i'; $('#fNames').value = w.mode === 'names' ? (w.names || []).join(', ') : '';
+  $('#fTreff').value = d.treffpunkt || ''; $('#fDrink').checked = !!d.drink; $('#fErr').textContent = '';
   let hist = []; try { hist = JSON.parse(localStorage.getItem('zg_treff')) || []; } catch (e) {}
   $('#treffList').innerHTML = hist.map(t => `<option value="${esc(t)}">`).join('');
   formSync(); openOv('#ovForm');
@@ -1071,6 +1097,12 @@ $('#fSave').onclick = async () => {
   if (endOf(d) < new Date()) return err.textContent = 'Der Zeitpunkt liegt in der Vergangenheit.';
   b.disabled = true; err.textContent = '';
   try {
+    if (formEditId) {
+      const j = await store.call('update', {id: formEditId, name, event: d});
+      const old = EVENTS.find(x => x.id === formEditId); if (old) Object.assign(old, j.event);
+      closeOv('#ovForm'); render(); if (!$('#ovDetail').hidden && old) drawDetail(old);
+      return;
+    }
     const j = await store.call('create', {event: {...d, von: name}});
     EVENTS.push(j.event);
     localStorage.setItem('zg_last', JSON.stringify({sport: d.sport, sportText: d.sportText}));
