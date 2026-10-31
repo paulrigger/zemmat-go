@@ -30,12 +30,13 @@ du tragst ii, wenn du gosch, und wer will, kunnt mit.
 - **🙋 I bin dabei!** / doch ned – Teilnehmer:innen stehen beim Termin
 - **📣 Teilen** (Share-Sheet bzw. WhatsApp) mit direktem Link auf den Termin
 - **📆 Kalender** – .ics-Datei zum Importieren
+- **💬 Chat pro Termin** – 90er: IRC-Look („Schwätza“), Langweilig: Nachrichten-Blasen. Ungelesene werden markiert, Popup an alle Beteiligten (Ersteller:in, Dabei, Mitschreibende) mit aktivierten Benachrichtigungen
 - **Kein Login:** Name wird beim ersten Mal abgefragt und lokal gespeichert
 - Absagen kann nur, wer den Termin angelegt hat (Namensvergleich)
 - PWA: „Zum Home-Bildschirm“ hinzufügen
 - **🔔 Popups (Web Push)** bei neuen Terminen – pro Gerät einstellbar, für welche Sportarten. Eigene Termine lösen kein Popup aus.
   iPhone: ab iOS 16.4, **nur** wenn die App am Home-Bildschirm liegt. Android/Desktop: direkt im Browser.
-- **⚙️ Iistellige:** Name, Popups (an/aus, Sportarten, Test-Popup), Design
+- **⚙️ Einstellungen** (immer Hochdeutsch): Name, Benachrichtigungen (an/aus, Sportarten, Test), Design
 - **🎨 Zwei Designs:** 🌈 90er im Vorarlberger Dialekt (Standard) · 😐 Langweilig – eigene Oberfläche im iOS-2026-Stil (Liquid Glass, hell/dunkel): schlichte Terminliste, Detailansicht, Eingabeformular statt Lückentext, **auf Hochdeutsch** (auch die Popups)
 - **Begrüßung** beim ersten Öffnen: „Oa App statt zwölf WhatsApp-Gruppa“ + Anleitung Home-Bildschirm, optional mit GIF (`INTRO_GIF` in `index.html`). Später über ⚙️ → „Wia goht des?“
 - 90er-Look: WordArt, Laufschrift, Under Construction, Besucher-Zähler (= Einträge seit Anfang), Webring 😄
@@ -98,6 +99,8 @@ Apps Script kann die Web-Push-Kryptografie (ECDH, ES256) nicht, deshalb übernim
 1. Gruppen-Link öffnen → **Teilen → Zum Home-Bildschirm** → App vom Home-Bildschirm starten.
 2. ⚙️ **Iistellige** → Sportarten wählen → **🔔 Popups iischalta** → erlauben → **📣 Test-Popup**.
 
+**Update auf API v1.3 (Chat):** neuen `Code.gs` einfügen → `setup()` ausführen (legt Tab `Chat` an) → Bereitstellungen verwalten → ✏️ → Version: Neu.
+
 **Code-Änderungen an der API:** Bereitstellen → Bereitstellungen verwalten → ✏️ → Version „Neu“ (sonst bleibt die alte aktiv, URL bleibt gleich).
 **Ohne Schlüssel betreiben:** Skripteigenschaft `KEY` löschen.
 **Schlüssel tauschen:** `KEY` ändern → alte Links funktionieren nicht mehr.
@@ -113,6 +116,7 @@ Apps Script kann die Web-Push-Kryptografie (ECDH, ES256) nicht, deshalb übernim
 | `POST` | `{action:"subscribe", k, sub, name, sports:[…]}` | `{ok}` – Push-Abo anlegen/aktualisieren (Schlüssel: endpoint) |
 | `POST` | `{action:"unsubscribe", k, endpoint}` | `{ok}` |
 | `POST` | `{action:"test", k, endpoint}` | `{ok, result}` – Test-Popup an dieses Gerät |
+| `POST` | `{action:"chat", k, id, name, text}` | `{ok, chat}` – Nachricht zum Termin (max. 500 Zeichen) |
 
 `list` liefert zusätzlich `push` = öffentlicher VAPID-Schlüssel (leer, solange Popups nicht eingerichtet sind).
 Neuer Termin → Apps Script schickt alle Abos mit passender Sportart (außer Ersteller:in) an den Worker; abgelaufene Abos (404/410) werden gelöscht.
@@ -135,6 +139,8 @@ POST immer als `Content-Type: text/plain` (kein CORS-Preflight bei Apps Script).
 | drink | `ja` / leer | |
 | dabei | `Anna, Ben` | |
 | status | leer / `abgsagt` | |
+
+Tab `Chat`: `id, event, zeit, name, text`. In `list` hat jeder Termin `chat:[{n, t, z}]` (letzte 100).
 
 Tab `Abos`: `endpoint, p256dh, auth, name, sports, erstellt, aktualisiert, lang` (`dia`/`de`) – ein Eintrag pro Gerät.
 

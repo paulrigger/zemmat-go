@@ -306,6 +306,32 @@ html[data-theme=modern]{background:var(--g-bg)}
 .d-hero p{margin:4px 0 0; color:var(--g-sec); font-size:15px}
 .muted{color:var(--g-sec)}
 
+/* Chat: 90er = IRC, Langweilig = Nachrichten */
+.chatwin{display:flex; flex-direction:column; max-width:560px; height:min(78vh,640px)}
+.chat-head{display:none}
+.chat-log{flex:1; overflow-y:auto; margin:6px 6px 0; padding:8px; background:#fff; border:2px solid; border-color:#808080 #fff #fff #808080; font:14px/1.45 "Courier New",monospace; -webkit-overflow-scrolling:touch}
+.irc{margin:2px 0; word-wrap:break-word} .irc .ts{color:#808080} .irc-sys{color:#008000; margin:2px 0}
+.chat-in{display:flex; gap:6px; padding:6px}
+.chat-in input{flex:1; min-width:0; font:16px var(--ui); padding:6px; border:2px solid; border-color:#404040 #fff #fff #404040; border-radius:0; background:#fff}
+[data-theme=modern] .chatwin{display:flex; padding:0; height:min(88vh,760px); border-radius:28px 28px 0 0; background:var(--g-glass2); -webkit-backdrop-filter:blur(40px) saturate(180%); backdrop-filter:blur(40px) saturate(180%); box-shadow:inset 0 .5px 0 var(--g-edge), 0 -10px 40px rgba(0,0,0,.2)}
+[data-theme=modern] .chatwin .tb{display:none}
+[data-theme=modern] .chat-head{display:grid}
+[data-theme=modern] .chat-log{background:none; border:0; margin:0; padding:8px 14px; font:16px/1.35 var(--m-font); display:flex; flex-direction:column; gap:2px}
+.bub{max-width:78%; align-self:flex-start; display:flex; flex-direction:column; margin-top:2px}
+.bub.first{margin-top:10px}
+.bub small{font-size:12px; color:var(--g-sec); margin:0 0 2px 12px}
+.bub span{background:var(--g-fill); color:var(--g-ink); padding:8px 13px; border-radius:20px; white-space:pre-wrap; word-wrap:break-word}
+.bub time{font-size:11px; color:var(--g-sec); margin:2px 12px 0}
+.bub.me{align-self:flex-end; align-items:flex-end} .bub.me span{background:var(--g-tint); color:#fff}
+.chat-empty{margin:auto; text-align:center; color:var(--g-sec); font-size:15px}
+[data-theme=modern] .chat-in{padding:8px 12px calc(10px + env(safe-area-inset-bottom)); align-items:center}
+[data-theme=modern] .chat-in input{all:unset; box-sizing:border-box; flex:1; min-width:0; font:17px var(--m-font); color:var(--g-ink); padding:9px 16px; border-radius:999px;
+  background:var(--g-glass); box-shadow:inset 0 0 0 .5px var(--g-hair)}
+[data-theme=modern] .chat-in button{all:unset; cursor:pointer; padding:9px 16px; border-radius:999px; background:var(--g-tint); color:#fff; font:600 15px var(--m-font)}
+[data-theme=modern] .chat-in button:disabled{opacity:.4}
+.ios-dot{display:inline-block; width:9px; height:9px; border-radius:50%; background:var(--g-tint); vertical-align:middle}
+.frow.link .v{color:var(--g-sec)}
+
 .themes{display:grid; grid-template-columns:repeat(2,1fr); gap:6px; margin-top:4px}
 .themes .b95{display:flex; flex-direction:column; align-items:center; gap:2px; font-size:13px; padding:8px 4px}
 .themes .b95 span{font-size:24px}
@@ -325,8 +351,7 @@ html[data-theme=modern]{background:var(--g-bg)}
     <div class="sports">🚵 Bika · 🚴 Rennvelo · 🚲 Gravla · 🏃 Jogga · 🥾 Wandra · 🧗 Klettra · ⛷️ Schitoura</div>
   </header>
   <marquee class="d90" scrollamount="5">+++ Hoi zemma! +++ Kei zwölf WhatsApp-Gruppa meh +++ Iitraga wenn du gosch – wer will, kunnt mit +++ Kei Login, kei Schmarra +++ Lustenauer usdrücklich willkomma +++</marquee>
-  <div class="uc d90"><span>🚧 UNDER CONSTRUCTION 🚧</span></div>
-  <div class="hello"><span id="hi">Hoi!</span><button class="b95 mini" id="setBtn" data-hd="⚙️ Einstellungen">⚙️ Iistellige</button></div>
+  <div class="hello"><span id="hi">Hoi!</span><button class="b95 mini" id="setBtn">⚙️ Einstellungen</button></div>
   <div class="demo" id="demo" hidden data-hd="⚠️ <b>DEMO-MODUS</b> – Einträge werden nur auf diesem Gerät gespeichert. Für die echte Version brauchst du den Link aus der Gruppe.">⚠️ <b>DEMO-MODUS</b> – Iiträg landan nur uf dim eigna Gerät. Für die echte Version brucht's da Link us dr Gruppa.</div>
   <main>
     <h2 data-hd="Was steht an?">Was lauft? <span class="blink d90">✨</span></h2>
@@ -340,7 +365,7 @@ html[data-theme=modern]{background:var(--g-bg)}
     <div class="badges d90">
       <span class="badge"><b>HTML</b><i>3.2</i></span>
       <span class="badge"><b>NO</b><i>LOGIN</i></span>
-      <span class="badge"><b>100%</b><i>DIALEKT</i></span>
+      <span class="badge"><b>100%</b><i>KI-DIALEKT</i></span>
       <span class="badge"><b>SOURCE</b><i><a href="https://github.com/paulrigger/zemmat-go" style="color:#000">GitHub</a></i></span>
     </div>
   </footer>
@@ -426,6 +451,16 @@ html[data-theme=modern]{background:var(--g-bg)}
   </div>
 </div>
 
+<!-- Chat -->
+<div class="ov" id="ovChat" hidden>
+  <div class="win chatwin" role="dialog" aria-modal="true" aria-labelledby="cTitle">
+    <div class="tb"><span id="cTitle">💬 Chat</span><button class="b95 x" data-close aria-label="Zuamacha" data-hd-aria="Schließen">✕</button></div>
+    <div class="sheet-head chat-head"><span></span><b id="cTitle2">Chat</b><button class="ios-txt strong" data-close>Fertig</button></div>
+    <div class="chat-log" id="cLog" aria-live="polite"></div>
+    <form class="chat-in" id="cForm"><input id="cText" maxlength="500" autocomplete="off" enterkeyhint="send"><button class="b95" id="cSend" type="submit">Schick</button></form>
+  </div>
+</div>
+
 <!-- iOS: Detail -->
 <div class="ov" id="ovDetail" hidden>
   <div class="win sheet" role="dialog" aria-modal="true" aria-labelledby="dTitle">
@@ -437,28 +472,28 @@ html[data-theme=modern]{background:var(--g-bg)}
 <!-- Iistellige -->
 <div class="ov" id="ovSet" hidden>
   <div class="win" role="dialog" aria-modal="true" aria-labelledby="tSet" style="max-width:500px">
-    <div class="tb"><span id="tSet" data-hd="Einstellungen">⚙️ Iistellige</span><button class="b95 x" data-close aria-label="Zuamacha" data-hd-aria="Schließen">✕</button></div>
+    <div class="tb"><span id="tSet">⚙️ Einstellungen</span><button class="b95 x" data-close aria-label="Zuamacha" data-hd-aria="Schließen">✕</button></div>
     <div class="wb">
-      <fieldset class="fs"><legend data-hd="Name">👤 Nama</legend>
-        <span id="setName"></span> <button class="b95 mini" id="setNameBtn" data-hd="ändern">ändra</button>
+      <fieldset class="fs"><legend>👤 Name</legend>
+        <span id="setName"></span> <button class="b95 mini" id="setNameBtn">ändern</button>
       </fieldset>
-      <fieldset class="fs"><legend data-hd="Benachrichtigungen">🔔 Popups bi neua Termin</legend>
+      <fieldset class="fs"><legend>🔔 Benachrichtigungen bei neuen Terminen</legend>
         <div class="info" id="pushInfo">…</div>
-        <div style="font:13px var(--ui);margin-top:8px" data-hd="Bei welchen Sportarten möchtest du benachrichtigt werden?">Bi wellna Sportarta willsch a Popup?</div>
+        <div style="font:13px var(--ui);margin-top:8px">Bei welchen Sportarten möchtest du benachrichtigt werden?</div>
         <div class="chk" id="pushSports"></div>
         <div class="btns" style="justify-content:flex-start">
-          <button class="b95 big" id="pushOn" data-hd="Benachrichtigungen aktivieren">🔔 Popups iischalta</button>
-          <button class="b95" id="pushTest" hidden data-hd="Testnachricht">📣 Test-Popup</button>
-          <button class="b95" id="pushOff" hidden data-hd="Deaktivieren">🔕 Usschalta</button>
+          <button class="b95 big" id="pushOn">🔔 Benachrichtigungen aktivieren</button>
+          <button class="b95" id="pushTest" hidden>📣 Testnachricht</button>
+          <button class="b95" id="pushOff" hidden>🔕 Deaktivieren</button>
         </div>
       </fieldset>
-      <fieldset class="fs"><legend data-hd="Design">🎨 Usseha</legend>
+      <fieldset class="fs"><legend>🎨 Design</legend>
         <div class="themes" id="themes">
           <button class="b95" data-theme-set="90er"><span>🌈</span>90er</button>
           <button class="b95" data-theme-set="modern"><span>😐</span>Langweilig</button>
         </div>
       </fieldset>
-      <div class="btns"><button class="b95" id="introBtn" data-hd="Anleitung">❓ Wia goht des?</button><button class="b95 big" data-close data-hd="Fertig">Fertig ✔</button></div>
+      <div class="btns"><button class="b95" id="introBtn">❓ Anleitung</button><button class="b95 big" data-close>Fertig</button></div>
     </div>
   </div>
 </div>
@@ -469,7 +504,7 @@ html[data-theme=modern]{background:var(--g-bg)}
    API_URL = Apps-Script-Web-App (…/exec). Leer → Demo-Modus (localStorage).
    ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbz4xf-IjvvDWh2qYNFIw7fqRttaO1khWAzOT44ZKT8AsNx1l9ad6CIJeIroiMzmIew/exec';
-const VERSION = '1.4';
+const VERSION = '1.5';
 // Begrüßungs-GIF im Intro (z. B. Giphy-Link „…/giphy.gif“). Leer = ohne GIF.
 const INTRO_GIF = '';
 
@@ -600,7 +635,8 @@ const demo = {
       const t = today0(), id = () => Math.random().toString(36).slice(2, 10), now = new Date().toISOString();
       d = {total: 41, events: [
         {id: id(), erstellt: now, von: 'Paul', datum: ymd(addDays(t, 1)), zeit: '14:00', dauer: 'h1', sport: 'jogga', wer: {mode: 'i'}, treffpunkt: 'Rheinbrugg Lustenau', drink: false, dabei: ['Anna']},
-        {id: id(), erstellt: now, von: 'Mäx', datum: ymd(addDays(t, 1)), zeit: '18:00', dauer: '', sport: 'mtb', wer: {mode: 'names', names: ['Mäx', 'Lisi']}, treffpunkt: 'Karren Talstation', drink: true, dabei: []},
+        {id: id(), erstellt: now, von: 'Mäx', datum: ymd(addDays(t, 1)), zeit: '18:00', dauer: '', sport: 'mtb', wer: {mode: 'names', names: ['Mäx', 'Lisi']}, treffpunkt: 'Karren Talstation', drink: true, dabei: [],
+         chat: [{n: 'Lisi', t: 'Hot öpper a Lämpli für d\'Abfahrt?', z: now}, {n: 'Mäx', t: 'I nimm zwoa mit 🔦', z: now}]},
         {id: id(), erstellt: '2026-01-01T00:00:00Z', von: 'Bernd', datum: ymd(addDays(t, 3)), zeit: '07:00', dauer: 'ganz', sport: 'schitour', wer: {mode: 'mir'}, treffpunkt: 'Parkplatz Bödele', drink: true, dabei: ['Paul', 'Vroni', 'Simon']}
       ]};
       this.save(d);
@@ -615,6 +651,7 @@ const demo = {
     if (action === 'create') { const e = {...p.event, id: Math.random().toString(36).slice(2, 10), erstellt: new Date().toISOString(), dabei: []}; d.events.push(e); d.total++; this.save(d); return {ok: true, event: e}; }
     if (action === 'join') { const e = find(); if (!e.dabei.some(n => same(n, p.name))) e.dabei.push(p.name); this.save(d); return {ok: true, event: e}; }
     if (action === 'leave') { const e = find(); e.dabei = e.dabei.filter(n => !same(n, p.name)); this.save(d); return {ok: true, event: e}; }
+    if (action === 'chat') { const e = find(); e.chat = e.chat || []; const t = String(p.text || '').trim().slice(0, 500); if (!t) throw new Error('Nüt gschrieba'); e.chat.push({n: p.name, t, z: new Date().toISOString()}); this.save(d); return {ok: true, chat: e.chat}; }
     if (action === 'cancel') { const e = find(); if (!same(e.von, p.name)) throw new Error('Nur ' + e.von + ' ka des absaga'); d.events = d.events.filter(x => x !== e); this.save(d); return {ok: true}; }
     throw new Error('Unbekannte Aktion');
   }
@@ -627,7 +664,7 @@ function status(t, bad) { $('#st').textContent = t; $('#st').style.color = bad ?
 /* ---------- Liste ---------- */
 let EVENTS = [], busy = false;
 async function load(quiet) {
-  if (busy) return; busy = true;
+  if (busy) return; busy = true; // eslint-disable-line
   if (!quiet) status(T('Verbinda mit zemmat-go.at …', 'Lade …'));
   try {
     const j = await store.call('list');
@@ -664,16 +701,17 @@ function render() {
     const mine = me && same(e.von, me), joined = me && (e.dabei || []).some(n => same(n, me));
     const isNew = Date.now() - new Date(e.erstellt).getTime() < 864e5;
     const dab = (e.dabei || []).length
-      ? `🙋 <b>Dabei:</b> ${esc(e.dabei.join(', '))} <small>(${e.dabei.length} ${e.dabei.length === 1 ? 'Person' : T('Lüt', 'Personen')})</small>`
+      ? `🙋 <b>Dabei:</b> ${esc(e.dabei.join(', '))} <small>(${e.dabei.length} ${e.dabei.length === 1 ? T('Person', 'Person') : T('Lüt', 'Personen')})</small>`
       : T('🙋 Bis jetzt no niemert – gang mit!', 'Noch niemand dabei.');
     h += `<div class="ev" id="e${esc(e.id)}">
-      <div class="eh"><span>✍️ <b>${esc(e.von)}</b> ${T('schriebt:', '')}${isNew ? '<span class="neu blink">NEU!</span>' : ''}</span><span>${e.zeit} Uhr</span></div>
+      <div class="eh"><span>✍️ <b>${esc(e.von)}</b> ${T('schriebt:', '')}${isNew ? '<span class="neu blink">NEU!</span>' : ''}</span><span>${e.zeit} ${T('Uhr', 'Uhr')}</span></div>
       <div class="eb fibel">${fibel(e, false)}</div>
       <div class="dabei">${dab}</div>
       <div class="act">
         ${mine ? '' : joined
           ? `<button class="b95 on" data-a="leave" data-id="${esc(e.id)}">${T('✅ I bin dabei · doch ned?', '✓ Dabei · absagen')}</button>`
           : `<button class="b95 big" data-a="join" data-id="${esc(e.id)}">${T('🙋 I bin dabei!', 'Ich bin dabei')}</button>`}
+        <button class="b95" data-a="chat" data-id="${esc(e.id)}">💬 Schwätza${chatBadge(e)}</button>
         <button class="b95" data-a="wa" data-id="${esc(e.id)}">${T('📣 Teila', 'Teilen')}</button>
         <button class="b95" data-a="ics" data-id="${esc(e.id)}">${T('📆 Kalender', 'Kalender')}</button>
         ${mine ? `<button class="b95" data-a="cancel" data-id="${esc(e.id)}">${T('🗑️ Absaga', 'Absagen')}</button>` : ''}
@@ -690,6 +728,7 @@ $('#list').addEventListener('click', ev => {
   doAct(b.dataset.a, e, b);
 });
 async function doAct(a, e, b) {
+  if (a === 'chat') return openChat(e.id);
   if (a === 'wa') return share(e);
   if (a === 'ics') return ics(e);
   const name = myName() || await askName(); if (!name) return;
@@ -749,12 +788,13 @@ function openOv(s) { $(s).hidden = false; document.body.style.overflow = 'hidden
 function closeOv(s) {
   $(s).hidden = true; if (document.querySelectorAll('.ov:not([hidden])').length === 0) document.body.style.overflow = '';
   if (s === '#ovIntro') localStorage.setItem('zg_intro', '1');
+  if (s === '#ovChat') { clearInterval(chatTimer); render(); if (!$('#ovDetail').hidden) { const e = EVENTS.find(x => x.id === detailId); if (e) drawDetail(e); } }
   if (s === '#ovName' && nameResolve) { nameResolve(''); nameResolve = null; }
 }
 document.querySelectorAll('.ov').forEach(o => {
   o.addEventListener('click', e => { if (e.target === o || e.target.closest('[data-close]')) closeOv('#' + o.id); });
 });
-document.addEventListener('keydown', e => { if (e.key === 'Escape') ['#ovName', '#ovNew', '#ovSet', '#ovIntro', '#ovForm', '#ovDetail'].forEach(s => { if (!$(s).hidden) closeOv(s); }); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') ['#ovName', '#ovChat', '#ovNew', '#ovSet', '#ovIntro', '#ovForm', '#ovDetail'].forEach(s => { if (!$(s).hidden) closeOv(s); }); });
 
 /* ---------- Neuer Termin: Lückentext ---------- */
 let draft = null, sel = null;
@@ -860,6 +900,60 @@ $('#send').onclick = async () => {
   finally { b.disabled = false; b.textContent = T('📨 Abschicka!', 'Eintragen'); }
 };
 
+/* ---------- Chat pro Termin ---------- */
+let chatId = null, chatTimer = null;
+function seen() { try { return JSON.parse(localStorage.getItem('zg_seen')) || {}; } catch (e) { return {}; } }
+function unread(e) { const me = myName(), c = (e.chat || []).filter(m => !same(m.n, me)).length; return Math.max(0, c - (seen()[e.id] || 0)); }
+function markSeen(e) { const s = seen(), me = myName(); s[e.id] = (e.chat || []).filter(m => !same(m.n, me)).length; localStorage.setItem('zg_seen', JSON.stringify(s)); }
+function chatBadge(e) {
+  const n = (e.chat || []).length, u = unread(e);
+  return n ? ` (${n})` + (u ? ` <span class="neu blink">${u} NEU</span>` : '') : '';
+}
+const NICK = ['#c00000', '#0000c0', '#008000', '#800080', '#c06000', '#008080', '#a0a000', '#c00080'];
+function nickCol(n) { let h = 0; for (const c of String(n).toLowerCase()) h = (h * 31 + c.charCodeAt(0)) >>> 0; return NICK[h % NICK.length]; }
+function hhmm(z) { const d = new Date(z); return isNaN(d) ? '' : pad(d.getHours()) + ':' + pad(d.getMinutes()); }
+async function openChat(id) {
+  const e = EVENTS.find(x => x.id === id); if (!e) return;
+  if (!myName() && !await askName()) return;
+  chatId = id; drawChat(true); openOv('#ovChat');
+  setTimeout(() => $('#cText').focus(), 80);
+  clearInterval(chatTimer);
+  chatTimer = setInterval(async () => { if ($('#ovChat').hidden) return clearInterval(chatTimer); if (!document.hidden) { await load(true); drawChat(); } }, 8000);
+}
+function drawChat(scroll) {
+  const e = EVENTS.find(x => x.id === chatId); if (!e) return;
+  const me = myName(), log = $('#cLog'), atEnd = log.scrollHeight - log.scrollTop - log.clientHeight < 40;
+  const sp = sportOf(e);
+  $('#cTitle').textContent = '💬 #' + sp.t.replace(/\s+/g, '-') + '-' + dayLabel(e.datum).replace(/\s+/g, '') + ' – ' + e.von;
+  $('#cTitle2').textContent = sportName(e) + ' · ' + dayHeading(e.datum).replace(/^.* – /, '');
+  const msgs = e.chat || [];
+  if (HD()) {
+    log.innerHTML = msgs.length ? msgs.map((m, i) => {
+      const mine = same(m.n, me), first = i === 0 || !same(msgs[i - 1].n, m.n);
+      return `<div class="bub${mine ? ' me' : ''}${first ? ' first' : ''}">${!mine && first ? `<small>${esc(m.n)}</small>` : ''}<span>${esc(m.t)}</span><time>${hhmm(m.z)}</time></div>`;
+    }).join('') : '<p class="chat-empty">Noch keine Nachrichten.<br>Frag, wer mitkommt, oder stimmt euch ab.</p>';
+  } else {
+    log.innerHTML = `<div class="irc-sys">*** Du bisch jetzt im Chat vo <b>${esc(e.von)}</b> (${esc(sp.t)} ${esc(dayLabel(e.datum))} um ${e.zeit})</div>`
+      + (msgs.length ? msgs.map(m => `<div class="irc"><span class="ts">[${hhmm(m.z)}]</span> <b style="color:${nickCol(m.n)}">&lt;${esc(m.n)}&gt;</b> ${esc(m.t)}</div>`).join('')
+         : '<div class="irc-sys">*** Do isch no nüt gschrieba. Sag „Hoi“! 👋</div>');
+  }
+  $('#cText').placeholder = T('Schriib öppis …', 'Nachricht');
+  $('#cSend').textContent = T('Schick!', 'Senden');
+  if (scroll || atEnd) log.scrollTop = log.scrollHeight;
+  markSeen(e);
+}
+$('#cForm').addEventListener('submit', async ev => {
+  ev.preventDefault();
+  const t = $('#cText').value.trim(), e = EVENTS.find(x => x.id === chatId);
+  if (!t || !e) return;
+  const b = $('#cSend'); b.disabled = true;
+  try {
+    const j = await store.call('chat', {id: e.id, name: myName(), text: t});
+    e.chat = j.chat; $('#cText').value = ''; drawChat(true); render();
+  } catch (x) { alert(T('Hoppla: ', 'Fehler: ') + x.message); }
+  finally { b.disabled = false; $('#cText').focus(); }
+});
+
 /* ---------- Langweilig: iOS-Liste, Formular, Detail ---------- */
 const DUR_SHORT = {h05: '30 Min.', h1: '1 Std.', h15: '1,5 Std.', h2: '2 Std.', h3: '3 Std.', halb: 'halber Tag', ganz: 'ganzer Tag'};
 function sportName(e) { const s = SPORT[e.sport] || SPORT.anders; return e.sport === 'anders' ? (e.sportText || 'Aktivität') : s.lh; }
@@ -881,7 +975,7 @@ function renderIOS(evs, me) {
     const sub = [werPlain(e), e.treffpunkt].filter(Boolean).map(esc).join(' · ');
     h += `<button class="ios-row s-${esc(e.sport)}" id="e${esc(e.id)}" data-open="${esc(e.id)}">
       <span class="ios-time"><b>${e.zeit}</b><small>${e.dauer ? DUR_SHORT[e.dauer] : ''}</small></span>
-      <span class="ios-main"><span class="ios-title">${esc(sportName(e))}${isNew ? '<i class="ios-new">Neu</i>' : ''}${e.drink ? '<i class="ios-tag">Drink</i>' : ''}</span>
+      <span class="ios-main"><span class="ios-title">${esc(sportName(e))}${isNew ? '<i class="ios-new">Neu</i>' : ''}${e.drink ? '<i class="ios-tag">Drink</i>' : ''}${unread(e) ? '<i class="ios-dot" title="Neue Nachrichten"></i>' : ''}</span>
         <span class="ios-sub">${sub}</span></span>
       <span class="ios-acc">${joined || mine ? '<i class="ios-ok">✓</i>' : ''}${n ? `<i class="ios-count">${n}</i>` : ''}<i class="ios-chev">›</i></span>
     </button>`;
@@ -906,6 +1000,7 @@ function drawDetail(e) {
     <div class="grp">${rows.map(r => `<div class="frow"><span>${r[0]}</span><span class="v">${r[1]}</span></div>`).join('')}</div>
     ${mine ? '' : `<button class="ios-btn wide${joined ? ' tinted' : ''}" data-d="${joined ? 'leave' : 'join'}">${joined ? 'Teilnahme zurückziehen' : 'Ich bin dabei'}</button>`}
     <div class="grp">
+      <button class="frow link" data-d="chat"><span>Nachrichten</span><span class="v">${(e.chat || []).length || ''}${unread(e) ? ' <i class="ios-dot"></i>' : ''} ›</span></button>
       <button class="frow link" data-d="wa">Teilen</button>
       <button class="frow link" data-d="ics">Zum Kalender hinzufügen</button>
       ${mine ? '<button class="frow link danger" data-d="cancel">Termin absagen</button>' : ''}
@@ -977,30 +1072,30 @@ async function getSub() { const reg = await SW; return reg && reg.pushManager ? 
 
 function openSet() {
   $('#pushSports').innerHTML = Object.entries(SPORT).map(([k, s]) =>
-    `<label><input type="checkbox" value="${k}"${mySports().includes(k) ? ' checked' : ''}> ${s.e} ${esc(sLabel(s))}</label>`).join('');
+    `<label><input type="checkbox" value="${k}"${mySports().includes(k) ? ' checked' : ''}> ${s.e} ${esc(s.lh)}</label>`).join('');
   setDraw(); openOv('#ovSet');
 }
-function setDraw() { $('#setName').innerHTML = myName() ? '<b>' + esc(myName()) + '</b>' : T('<i>no kei Nama</i>', '<i>noch kein Name</i>'); pushDraw(); }
+function setDraw() { $('#setName').innerHTML = myName() ? '<b>' + esc(myName()) + '</b>' : '<i>noch kein Name</i>'; pushDraw(); }
 $('#setNameBtn').onclick = () => askName();
 
 async function pushDraw() {
   const info = $('#pushInfo'), on = $('#pushOn'), off = $('#pushOff'), test = $('#pushTest');
   const say = (t, cls) => { info.innerHTML = t; info.className = 'info' + (cls ? ' ' + cls : ''); };
   on.hidden = false; on.disabled = true; off.hidden = test.hidden = true;
-  if (DEMO) return say(T('Im Demo-Modus gits kei Popups.', 'Im Demo-Modus gibt es keine Benachrichtigungen.'));
+  if (DEMO) return say('Im Demo-Modus gibt es keine Benachrichtigungen.');
   if (!CAN_PUSH) return IS_IOS && !STANDALONE
     ? say(T('📱 Uf\'m iPhone gond Popups nur, wenn zemmat go uf\'m <b>Home-Bildschirm</b> isch:<br>Unta uf <b>Teila ⬆️</b> → <b>„Zum Home-Bildschirm“</b> → d\'App vo dött ufmacha und do nomol iischalta.',
             'Auf dem iPhone funktionieren Benachrichtigungen nur, wenn zemmat go auf dem <b>Home-Bildschirm</b> liegt:<br><b>Teilen</b> → <b>„Zum Home-Bildschirm“</b> → App von dort öffnen und hier aktivieren.'))
-    : say(T('Dä Browser ka leider kei Popups. 🤷', 'Dieser Browser unterstützt keine Benachrichtigungen.'), 'bad');
-  if (!PUSH_KEY) return say(T('Popups sind am Server no ned iigrichtet.', 'Benachrichtigungen sind auf dem Server noch nicht eingerichtet.'), 'bad');
-  if (Notification.permission === 'denied') return say(T('🔕 Popups sind für zemmat go <b>blockiert</b>. In da Iistellige vom Handy bzw. Browser erlauba und denn nomol probiera.', 'Benachrichtigungen sind <b>blockiert</b>. Bitte in den Einstellungen des Geräts bzw. Browsers erlauben.'), 'bad');
+    : say('Dieser Browser unterstützt keine Benachrichtigungen.', 'bad');
+  if (!PUSH_KEY) return say('Benachrichtigungen sind auf dem Server noch nicht eingerichtet.', 'bad');
+  if (Notification.permission === 'denied') return say('Benachrichtigungen sind <b>blockiert</b>. Bitte in den Einstellungen des Geräts bzw. Browsers erlauben.', 'bad');
   const sub = await getSub();
   if (sub) {
     on.hidden = true; off.hidden = test.hidden = false;
-    say(T('✅ Popups sind <b>a</b>. Du kriagsch a Popup, wenn öpper an neua Termin für dine Sportarta iiträgt (dine eigna ned).', 'Benachrichtigungen sind <b>aktiv</b>. Du wirst informiert, wenn jemand einen Termin in deinen Sportarten einträgt (außer deine eigenen).'), 'ok');
+    say('Benachrichtigungen sind <b>aktiv</b>. Du wirst informiert, wenn jemand einen Termin in deinen Sportarten einträgt (außer deine eigenen).', 'ok');
   } else {
     on.disabled = false;
-    say(T('Wähl d\'Sportarta und schalt Popups ii.', 'Sportarten auswählen und Benachrichtigungen aktivieren.') + (IS_IOS ? '' : T(' Am beschta zerscht zum Home-Bildschirm hinzuefüega.', ' Am besten vorher zum Home-Bildschirm hinzufügen.')));
+    say('Sportarten auswählen und Benachrichtigungen aktivieren.' + (IS_IOS ? '' : ' Am besten vorher zum Home-Bildschirm hinzufügen.'));
   }
 }
 
@@ -1008,45 +1103,46 @@ let syncT = null;
 async function pushSync() {
   if (DEMO || !PUSH_KEY) return;
   const sub = await getSub(); if (!sub) return;
-  await store.call('subscribe', {sub: sub.toJSON(), name: myName(), sports: mySports(), lang: T('dia', 'de')});
+  await store.call('subscribe', {sub: sub.toJSON(), name: myName(), sports: mySports(), lang: HD() ? 'de' : 'dia'});
 }
 $('#pushSports').addEventListener('change', () => {
   localStorage.setItem('zg_sports', JSON.stringify([...document.querySelectorAll('#pushSports input:checked')].map(i => i.value)));
   clearTimeout(syncT);
-  syncT = setTimeout(async () => { try { if (await getSub()) { await pushSync(); status(T('Sportarta gspeicheret ✔', 'Gespeichert')); } } catch (e) { status('Fehler: ' + e.message, true); } }, 600);
+  syncT = setTimeout(async () => { try { if (await getSub()) { await pushSync(); status('Gespeichert'); } } catch (e) { status('Fehler: ' + e.message, true); } }, 600);
 });
 
 $('#pushOn').onclick = async () => {
-  const b = $('#pushOn'); b.disabled = true; b.textContent = T('⏳ Moment …', 'Moment …');
+  const b = $('#pushOn'); b.disabled = true; b.textContent = 'Moment …';
   try {
     if (!myName() && !await askName()) return;
-    if (!mySports().length) throw new Error(T('Wähl mindestens oa Sportart.', 'Bitte mindestens eine Sportart wählen.'));
+    if (!mySports().length) throw new Error('Bitte mindestens eine Sportart wählen.');
     const perm = await Notification.requestPermission();
-    if (perm !== 'granted') throw new Error(T('Popups ned erlaubt.', 'Benachrichtigungen nicht erlaubt.'));
+    if (perm !== 'granted') throw new Error('Benachrichtigungen nicht erlaubt.');
     const reg = (await SW) || await navigator.serviceWorker.register('sw.js');
     await navigator.serviceWorker.ready;
     let sub = await reg.pushManager.getSubscription();
     sub = sub || await reg.pushManager.subscribe({userVisibleOnly: true, applicationServerKey: b64uBytes(PUSH_KEY)});
-    await store.call('subscribe', {sub: sub.toJSON(), name: myName(), sports: mySports(), lang: T('dia', 'de')});
-    status(T('Popups iigschalta 🔔', 'Benachrichtigungen aktiviert'));
-  } catch (e) { status('Fehler: ' + e.message, true); alert(T('Hoppla: ', 'Fehler: ') + e.message); }
-  finally { b.textContent = T('🔔 Popups iischalta', 'Benachrichtigungen aktivieren'); pushDraw(); }
+    await store.call('subscribe', {sub: sub.toJSON(), name: myName(), sports: mySports(), lang: HD() ? 'de' : 'dia'});
+    status('Benachrichtigungen aktiviert');
+  } catch (e) { status('Fehler: ' + e.message, true); alert('Fehler: ' + e.message); }
+  finally { b.textContent = '🔔 Benachrichtigungen aktivieren'; pushDraw(); }
 };
 $('#pushOff').onclick = async () => {
   try {
     const sub = await getSub();
     if (sub) { await store.call('unsubscribe', {endpoint: sub.endpoint}).catch(() => {}); await sub.unsubscribe(); }
-    status(T('Popups usgschalta 🔕', 'Benachrichtigungen deaktiviert'));
+    status('Benachrichtigungen deaktiviert');
   } catch (e) { status('Fehler: ' + e.message, true); }
   pushDraw();
 };
 $('#pushTest').onclick = async () => {
-  const b = $('#pushTest'); b.disabled = true; status(T('Schick Test-Popup …', 'Sende Testnachricht …'));
-  try { const sub = await getSub(); await store.call('test', {endpoint: sub.endpoint, lang: T('dia', 'de')}); status(T('Test-Popup gschickt – kunnt glei 📣', 'Testnachricht gesendet')); }
-  catch (e) { status('Fehler: ' + e.message, true); alert(T('Hoppla: ', 'Fehler: ') + e.message); }
+  const b = $('#pushTest'); b.disabled = true; status('Sende Testnachricht …');
+  try { const sub = await getSub(); await store.call('test', {endpoint: sub.endpoint, lang: HD() ? 'de' : 'dia'}); status('Testnachricht gesendet'); }
+  catch (e) { status('Fehler: ' + e.message, true); alert('Fehler: ' + e.message); }
   finally { b.disabled = false; }
 };
-window.addEventListener('hashchange', () => { load(true).then(() => { const el = document.getElementById(location.hash.slice(1)); if (el) { el.scrollIntoView({block: 'center'}); el.classList.add('flash'); } }); });
+function hashChat() { if (location.hash.startsWith('#c')) { const id = location.hash.slice(2); if (EVENTS.some(e => e.id === id)) { openChat(id); history.replaceState(null, '', location.pathname + location.search); } } }
+window.addEventListener('hashchange', () => { if (location.hash.startsWith('#c')) return load(true).then(hashChat); load(true).then(() => { const el = document.getElementById(location.hash.slice(1)); if (el) { el.scrollIntoView({block: 'center'}); el.classList.add('flash'); } }); });
 
 /* ---------- Usseha & Intro ---------- */
 const THEME_COL = {'90er': '#000080', modern: '#175676'};
@@ -1059,7 +1155,6 @@ $('#themes').addEventListener('click', e => {
   const b = e.target.closest('[data-theme-set]'); if (!b) return;
   document.documentElement.dataset.theme = b.dataset.themeSet; localStorage.setItem('zg_theme', b.dataset.themeSet); themeDraw();
   applyLang(); hello(); render(); setDraw();
-  if (!$('#ovSet').hidden) $('#pushSports').querySelectorAll('label').forEach(l => { const i = l.querySelector('input'), s = SPORT[i.value]; l.lastChild.textContent = ' ' + s.e + ' ' + sLabel(s); });
   if (!HD()) { closeOv('#ovForm'); closeOv('#ovDetail'); } else if (!$('#ovNew').hidden) closeOv('#ovNew');
   if (draft && !$('#ovNew').hidden) { drawNew(); picker(); }
   pushSync().catch(() => {});
@@ -1099,9 +1194,9 @@ $('#ringPrev').onclick = $('#ringNext').onclick = e => { e.preventDefault(); sta
 /* ---------- Start ---------- */
 $('#ver').textContent = 'zemmat go ' + VERSION + (DEMO ? ' · DEMO' : '');
 $('#demo').hidden = !DEMO;
-hello(); load();
+hello(); load().then(hashChat);
 if (!localStorage.getItem('zg_intro') && !qs.has('nointro')) openIntro();
-setInterval(() => { if (!document.hidden && $('#ovNew').hidden && $('#ovForm').hidden) load(true); }, 60000);
+setInterval(() => { if (!document.hidden && $('#ovNew').hidden && $('#ovForm').hidden && $('#ovChat').hidden) load(true); }, 60000);
 document.addEventListener('visibilitychange', () => { if (!document.hidden) load(true); });
 </script>
 </body>

@@ -1,5 +1,5 @@
 /**
- * zemmat go – API v1.2 (Google Apps Script, gebunden an ein Google Sheet)
+ * zemmat go – API v1.3 (Google Apps Script, gebunden an ein Google Sheet)
  *
  * Einrichtung:
  *   1. Neues Google Sheet → Erweiterungen → Apps Script → diesen Code einfügen
@@ -15,6 +15,8 @@
  *                   {action:"subscribe", k, sub, name, sports:[…], lang} -> { ok }  Push-Abo (lang: dia|de)
  *                   {action:"unsubscribe", k, endpoint}   -> { ok }
  *                   {action:"test", k, endpoint}          -> { ok, result }  Test-Popup an dieses Gerät
+ *                   {action:"chat", k, id, name, text}    -> { ok, chat:[…] }  Chat-Nachricht zu einem Termin
+ * Jeder Termin in list hat chat:[{n, t, z}] (Name, Text, Zeit).
  * Fehler immer als { ok:false, error:"…" }
  *
  * Skripteigenschaften:
@@ -24,7 +26,7 @@
  *   PUSH_SECRET  gleiches Secret wie im Worker (SECRET)
  *   APP_URL      optional, Standard https://paulrigger.github.io/zemmat-go/
  */
-const VERSION = '1.2';
+const VERSION = '1.3';
 const TZ = 'Europe/Vienna';
 const SHEET = 'Events';
 const COLS = ['id', 'erstellt', 'von', 'datum', 'zeit', 'dauer', 'sport', 'sportText', 'wer', 'treffpunkt', 'drink', 'dabei', 'status'];
@@ -32,6 +34,8 @@ const SPORTS = ['mtb', 'rennrad', 'gravel', 'jogga', 'wandra', 'klettra', 'schit
 const DAUER = ['', 'h05', 'h1', 'h15', 'h2', 'h3', 'halb', 'ganz'];
 const MAX_OPEN = 300;
 const ABOS = 'Abos';
+const CHAT = 'Chat';
+const CHAT_COLS = ['id', 'event', 'zeit', 'name', 'text'];
 const ABO_COLS = ['endpoint', 'p256dh', 'auth', 'name', 'sports', 'erstellt', 'aktualisiert', 'lang'];
 // [Emoji, Dialekt, Hochdeutsch]
 const SPORT_TXT = { mtb: ['🚵', 'Mountainbika', 'Mountainbiken'], rennrad: ['🚴', 'Rennvelo fahra', 'Rennrad fahren'], gravel: ['🚲', 'gravla', 'graveln'],
@@ -60,6 +64,7 @@ function tab_(name, cols) {
   return sh;
 }
 function sheet_() { return tab_(SHEET, COLS); }
+function chat_() { return tab_(CHAT, CHAT_COLS); }
 function abos_() {
   const sh = tab_(ABOS, ABO_COLS);
   if (sh.getLastColumn() < ABO_COLS.length) sh.getRange(1, 1, 1, ABO_COLS.length).setValues([ABO_COLS]).setFontWeight('bold'); // neue Spalten nachziehen
@@ -70,6 +75,7 @@ function abos_() {
 function setup() {
   sheet_();
   abos_();
+  chat_();
   let key = props_().getProperty('KEY');
   if (!key) {
     key = Utilities.getUuid().replace(/-/g, '').slice(0, 10);
@@ -92,7 +98,7 @@ function out_(o) {
 function run_(p) {
   try {
     const key = props_().getProperty('KEY');
-    if (key && p.k !== key) return { ok: false, error: 'Falscher oder fehlender Schlüssel – bitte Link us dr Gruppa verwenda.' };
+    if (key && p.k !== key) return { ok: false, error: 'Falscha oder kua Schlüssel – nimm da Link us dr Gruppa.' };
     switch (p.action) {
       case 'list':   return list_();
       case 'create': {
@@ -103,10 +109,15 @@ function run_(p) {
       case 'subscribe':   return locked_(() => subscribe_(p));
       case 'unsubscribe': return locked_(() => unsubscribe_(p.endpoint));
       case 'test':        return test_(p.endpoint);
+      case 'chat': {
+        const r = locked_(() => chatPost_(p.id, p.name, p.text));
+        if (r.ok) { try { notifyChat_(r.event, r.msg); } catch (x) { console.error('Push Chat: ' + x); } delete r.event; delete r.msg; }
+        return r;
+      }
       case 'join':   return locked_(() => join_(p.id, p.name, true));
       case 'leave':  return locked_(() => join_(p.id, p.name, false));
       case 'cancel': return locked_(() => cancel_(p.id, p.name));
-      default:       return { ok: false, error: 'Unbekannte Aktion' };
+      default:       return { ok: false, error: 'Dia Aktion kenn i ned' };
     }
   } catch (err) {
     return { ok: false, error: String((err && err.message) || err) };
@@ -148,6 +159,8 @@ function list_() {
   const { rows } = rows_();
   const from = today_(-1);
   const events = rows.map(r => r.ev).filter(e => e.status !== 'abgsagt' && e.datum >= from);
+  const chats = chatMap_();
+  events.forEach(e => e.chat = chats[e.id] || []);
   return { ok: true, version: VERSION, events, total: rows.length, push: vapid_() };
 }
 
@@ -159,8 +172,8 @@ function create_(e) {
   const von = name_(e.von);
   if (!von) throw new Error('Nama fehlt');
   if (!/^\d{4}-\d\d-\d\d$/.test(e.datum || '') || e.datum < today_(0) || e.datum > today_(366)) throw new Error('Ungültigs Datum');
-  if (!/^([01]\d|2[0-3]):[0-5]\d$/.test(e.zeit || '')) throw new Error('Ungültige Zit');
-  if (SPORTS.indexOf(e.sport) < 0) throw new Error('Unbekannte Sportart');
+  if (!/^([01]\d|2[0-3]):[0-5]\d$/.test(e.zeit || '')) throw new Error('Ungültigi Zit');
+  if (SPORTS.indexOf(e.sport) < 0) throw new Error('Dia Sportart kenn i ned');
   const dauer = DAUER.indexOf(e.dauer || '') >= 0 ? (e.dauer || '') : '';
   const w = e.wer || {};
   let wer = 'i';
@@ -171,7 +184,7 @@ function create_(e) {
   }
   const { sh, rows } = rows_();
   const open = rows.filter(r => r.ev.status !== 'abgsagt' && r.ev.datum >= today_(0)).length;
-  if (open >= MAX_OPEN) throw new Error('Z\'viel offene Termine');
+  if (open >= MAX_OPEN) throw new Error('Z\'viel offne Termin');
 
   const ev = {
     id: Utilities.getUuid().replace(/-/g, '').slice(0, 8),
@@ -314,11 +327,58 @@ function test_(endpoint) {
   const { rows } = aboRows_();
   const a = rows.find(r => r.endpoint === String(endpoint));
   if (!a) throw new Error('Abo nüm gfunda – Popups nomol iischalta');
-  if (!props_().getProperty('PUSH_URL')) throw new Error('PUSH_URL fehlt in de Skripteigenschafta');
+  if (!props_().getProperty('PUSH_URL')) throw new Error('PUSH_URL fehlt in da Skripteigenschafta');
   const app = props_().getProperty('APP_URL') || 'https://paulrigger.github.io/zemmat-go/';
   const body = a.lang === 'de' ? 'Hallo ' + (a.name || '') + ', Benachrichtigungen funktionieren.' : 'Hoi ' + (a.name || 'du') + '! Popups funktioniarand. 🎉';
   const j = push_([a], { title: '🔔 zemmat go', body, url: app, tag: 'zg-test' });
   const res = j && j.results && j.results[0];
   if (!res || res.status < 200 || res.status >= 300) throw new Error('Push-Dienst seit ' + (res ? res.status + ' ' + (res.error || '') : 'nüt'));
   return { ok: true, result: res };
+}
+
+/* ---------- Chat ---------- */
+function chatMap_() {
+  const v = chat_().getDataRange().getValues();
+  const m = {};
+  for (let i = 1; i < v.length; i++) {
+    if (!v[i][0]) continue;
+    const ev = String(v[i][1]);
+    (m[ev] = m[ev] || []).push({ n: String(v[i][3]), t: String(v[i][4]), z: str_(v[i][2], "yyyy-MM-dd'T'HH:mm:ssXXX") });
+  }
+  Object.keys(m).forEach(k => { if (m[k].length > 100) m[k] = m[k].slice(-100); });
+  return m;
+}
+
+function chatPost_(id, name, text) {
+  const n = name_(name);
+  if (!n) throw new Error('Nama fehlt');
+  const t = String(text || '').replace(/[<>]/g, '').replace(/\s+/g, ' ').trim().slice(0, 500);
+  if (!t) throw new Error('Nüt gschrieba');
+  const { hit } = find_(id);
+  const sh = chat_();
+  const z = Utilities.formatDate(new Date(), TZ, "yyyy-MM-dd'T'HH:mm:ssXXX");
+  sh.getRange(sh.getLastRow() + 1, 1, 1, CHAT_COLS.length).setNumberFormat('@')
+    .setValues([[Utilities.getUuid().replace(/-/g, '').slice(0, 8), String(id), z, n, t]]);
+  const chat = chatMap_()[String(id)] || [];
+  return { ok: true, chat, event: hit.ev, msg: { n, t, z } };
+}
+
+/** Popup an alle, die beim Termin beteiligt sind (Ersteller:in, Dabei, Namen, Chat), außer Absender:in */
+function notifyChat_(ev, msg) {
+  const people = {};
+  [ev.von].concat(ev.dabei || [], (ev.wer && ev.wer.names) || [], (chatMap_()[ev.id] || []).map(c => c.n))
+    .forEach(x => { if (x) people[String(x).toLowerCase()] = 1; });
+  delete people[msg.n.toLowerCase()];
+  const { rows } = aboRows_();
+  const subs = rows.filter(a => people[a.name.toLowerCase()]);
+  if (!subs.length) return;
+  const app = props_().getProperty('APP_URL') || 'https://paulrigger.github.io/zemmat-go/';
+  const sp = SPORT_TXT[ev.sport] || SPORT_TXT.anders;
+  const mk = de => ({
+    title: '💬 ' + msg.n + ' (' + sp[0] + ' ' + (ev.sport === 'anders' ? ev.sportText : sp[de ? 2 : 1]) + ', ' + dayLabel_(ev.datum, de ? 'de' : 'dia').replace(/ \(.*\)$/, '') + ')',
+    body: msg.t.slice(0, 180), url: app + '#c' + ev.id, tag: 'zg-chat-' + ev.id
+  });
+  const de = subs.filter(a => a.lang === 'de'), dia = subs.filter(a => a.lang !== 'de');
+  if (dia.length) push_(dia, mk(false));
+  if (de.length) push_(de, mk(true));
 }
