@@ -96,9 +96,15 @@ async function newJwk() {
   return JSON.stringify({ kty: 'EC', crv: 'P-256', x: j.x, y: j.y, d: j.d });
 }
 
+/** VAPID_JWK lesen – verträgt auch maskiert (\\") oder in Anführungszeichen eingefügte Werte */
 function jwk_(env) {
-  if (!env.VAPID_JWK) return null;
-  try { const j = JSON.parse(env.VAPID_JWK); return j.x && j.y && j.d ? j : null; } catch (e) { return null; }
+  let v = String(env.VAPID_JWK || '').trim();
+  if (!v) return null;
+  for (let i = 0; i < 3; i++) {
+    try { const j = JSON.parse(v); if (typeof j === 'string') { v = j; continue; } return j && j.x && j.y && j.d ? j : null; }
+    catch (e) { if (v.includes('\\"')) { v = v.replace(/\\"/g, '"'); continue; } return null; }
+  }
+  return null;
 }
 
 export default {
@@ -108,11 +114,12 @@ export default {
     const jwk = jwk_(env);
 
     if (req.method === 'GET' && url.pathname === '/') {
-      if (!jwk) return json({
-        ok: false,
-        hinweis: 'VAPID_JWK fehlt. Den Wert unten als Secret VAPID_JWK speichern (Settings → Variables and Secrets → Add → Type: Secret). Danach diese Seite neu laden.',
-        VAPID_JWK: await newJwk()
-      });
+      if (!jwk) return new Response(
+        (env.VAPID_JWK ? 'VAPID_JWK ist gesetzt, aber ungültig. Neuen Wert unten verwenden.\n\n' : 'VAPID_JWK fehlt.\n\n') +
+        'Die Zeile unten KOMPLETT kopieren (von { bis }) und speichern unter:\n' +
+        'Settings → Variables and Secrets → Add → Type: Secret → Name: VAPID_JWK\n' +
+        'Danach Deploy und diese Seite neu laden.\n\n' + await newJwk() + '\n',
+        { headers: { 'content-type': 'text/plain; charset=utf-8' } });
       return json({ ok: true, service: 'zemmat go push', key: b64u(pubFromJwk(jwk)), secret: env.SECRET ? 'gesetzt' : 'FEHLT' });
     }
     if (req.method === 'GET' && url.pathname === '/key') {
