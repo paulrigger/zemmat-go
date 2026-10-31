@@ -268,7 +268,12 @@ footer{border-top:3px double var(--navy); text-align:center; padding:12px 8px 16
 .themes{display:grid; grid-template-columns:repeat(3,1fr); gap:6px; margin-top:4px}
 .themes .b95{display:flex; flex-direction:column; align-items:center; gap:2px; font-size:13px; padding:8px 4px}
 .themes .b95 span{font-size:24px}
-#ovIntro img{display:block; width:100%; max-width:380px; margin:0 auto; border:2px solid #000; background:#fff}
+#ovIntro img{display:block; width:100%; max-width:380px; max-height:42vh; object-fit:contain; margin:0 auto 6px; border:2px solid #000; background:#000}
+.intro{font-size:19px; line-height:1.45}
+.intro p{margin:6px 0} .intro ol{margin:6px 0 6px 4px; padding-left:22px} .intro li{margin:4px 0}
+.introEnd{font-size:24px; font-weight:bold; color:#c00000; text-align:center; transform:rotate(-2deg)}
+[data-theme=xp] .intro{font-family:Tahoma,sans-serif; font-size:16px} [data-theme=xp] .introEnd{color:#0a246a; transform:none}
+[data-theme=modern] .introEnd{color:var(--m-ink); transform:none; font-size:20px}
 [data-theme=modern] #ovIntro img{border:0; border-radius:14px}
 </style>
 </head>
@@ -334,13 +339,20 @@ footer{border-top:3px double var(--navy); text-align:center; padding:12px 8px 16
 <!-- Intro -->
 <div class="ov" id="ovIntro" hidden>
   <div class="win" role="dialog" aria-modal="true" aria-labelledby="tIntro" style="max-width:440px">
-    <div class="tb"><span id="tIntro">❓ Wia goht zemmat go?</span><button class="b95 x" data-close aria-label="Zuamacha">✕</button></div>
+    <div class="tb"><span id="tIntro">👋 Hoi zemma!</span><button class="b95 x" data-close aria-label="Zuamacha">✕</button></div>
     <div class="wb">
-      <img id="introGif" alt="Kurzanleitung: Termin iitraga, Wörter ändra, abschicka, dabei si, Popups iistella" width="351" height="678">
-      <p class="fibel" style="line-height:1.5;font-size:18px;margin:10px 0 0">
-        ➕ tippa · gelbe Wörter ändra · abschicka.<br>Die andra tippand <b>„I bin dabei!“</b> 🙋<br>
-        <small>Kei Login – nur dä Nama. ⚙️ Popups und Usseha in da Iistellige.</small></p>
-      <div class="btns"><button class="b95 big" data-close>Los goht's! 🚀</button></div>
+      <div id="introGifBox" hidden><img id="introGif" alt="Begrüßungs-GIF"></div>
+      <div class="fibel intro">
+        <p><b>Oa App statt zwölf WhatsApp-Gruppa</b> – für Lustenauer:inna und alli, wo i dr Nöchi wohnand. 🏔️</p>
+        <ol>
+          <li>📲 Uf da <b>Home-Bildschirm</b> lega</li>
+          <li>➕ Iitraga, wenn du gosch</li>
+          <li>🙋 Wer will, kunnt mit</li>
+        </ol>
+        <p class="introEnd">… und guat gganga! 🥾</p>
+      </div>
+      <div class="info" id="a2hs"></div>
+      <div class="btns"><button class="b95" id="installBtn" hidden>📲 Installiera</button><button class="b95 big" data-close>Los goht's! 🚀</button></div>
     </div>
   </div>
 </div>
@@ -381,7 +393,9 @@ footer{border-top:3px double var(--navy); text-align:center; padding:12px 8px 16
    API_URL = Apps-Script-Web-App (…/exec). Leer → Demo-Modus (localStorage).
    ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbz4xf-IjvvDWh2qYNFIw7fqRttaO1khWAzOT44ZKT8AsNx1l9ad6CIJeIroiMzmIew/exec';
-const VERSION = '1.1';
+const VERSION = '1.2';
+// Begrüßungs-GIF im Intro (z. B. Giphy-Link „…/giphy.gif“). Leer = ohne GIF.
+const INTRO_GIF = '';
 
 const qs = new URLSearchParams(location.search);
 if (qs.has('k')) localStorage.setItem('zg_k', qs.get('k'));
@@ -845,7 +859,17 @@ $('#themes').addEventListener('click', e => {
   const b = e.target.closest('[data-theme-set]'); if (!b) return;
   document.documentElement.dataset.theme = b.dataset.themeSet; localStorage.setItem('zg_theme', b.dataset.themeSet); themeDraw();
 });
-function openIntro() { $('#introGif').src = 'intro.gif'; openOv('#ovIntro'); }
+function openIntro() {
+  if (INTRO_GIF) { $('#introGif').src = INTRO_GIF; $('#introGifBox').hidden = false; }
+  $('#a2hs').innerHTML = STANDALONE ? '✅ Liit scho uf\'m Home-Bildschirm. Super!'
+    : IS_IOS ? '📱 <b>iPhone:</b> unta uf <b>Teila ⬆️</b> → <b>„Zum Home-Bildschirm“</b>'
+    : '📱 <b>Android:</b> Browser-Menü <b>⋮</b> → <b>„App installieren“</b> bzw. „Zum Startbildschirm hinzufügen“';
+  $('#installBtn').hidden = !installEvt;
+  openOv('#ovIntro');
+}
+let installEvt = null;
+window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); installEvt = e; if (!$('#ovIntro').hidden) $('#installBtn').hidden = false; });
+$('#installBtn').onclick = async () => { if (!installEvt) return; installEvt.prompt(); await installEvt.userChoice; installEvt = null; $('#installBtn').hidden = true; };
 $('#introBtn').onclick = () => { closeOv('#ovSet'); openIntro(); };
 themeDraw();
 

@@ -11,7 +11,6 @@ du tragst ii, wenn du gosch, und wer will, kunnt mit.
 <p>
   <img src="docs/liste.png" width="260" alt="Liste der nächsten Termine">
   <img src="docs/neu.png" width="260" alt="Neuer Termin als Lückentext">
-  <img src="intro.gif" width="200" alt="Erklär-GIF">
 </p>
 <p>
   <img src="docs/xp.png" width="200" alt="Design Windows XP">
@@ -39,7 +38,7 @@ du tragst ii, wenn du gosch, und wer will, kunnt mit.
   iPhone: ab iOS 16.4, **nur** wenn die App am Home-Bildschirm liegt. Android/Desktop: direkt im Browser.
 - **⚙️ Iistellige:** Name, Popups (an/aus, Sportarten, Test-Popup), Design
 - **🎨 Drei Designs:** 🌈 90er (Standard) · 🪟 Windows XP · 😐 Langweilig (modern, hell/dunkel, im Stil vom Fahrtenbuch)
-- **Erklär-GIF** beim ersten Öffnen (später über ⚙️ → „Wia goht des?“)
+- **Begrüßung** beim ersten Öffnen: „Oa App statt zwölf WhatsApp-Gruppa“ + Anleitung Home-Bildschirm, optional mit GIF (`INTRO_GIF` in `index.html`). Später über ⚙️ → „Wia goht des?“
 - 90er-Look: WordArt, Laufschrift, Under Construction, Besucher-Zähler (= Einträge seit Anfang), Webring 😄
 
 ## Architektur
@@ -142,7 +141,7 @@ Tab `Abos`: `endpoint, p256dh, auth, name, sports, erstellt, aktualisiert` – e
 
 ## Entwicklung
 
-`index.html?demo` direkt im Browser öffnen → Demo-Modus. `?nointro` unterdrückt das Erklär-GIF.
+`index.html?demo` direkt im Browser öffnen → Demo-Modus. `?nointro` unterdrückt die Begrüßung.
 Worker lokal testen: Krypto ist gegen `http_ece` (Referenz-Implementierung) geprüft. Demo-Daten zurücksetzen: `localStorage.removeItem('zg_demo')`.
 
 ## Ideen / Roadmap
