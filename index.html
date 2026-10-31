@@ -13,6 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@0,400;0,700;1,400&display=swap">
 <meta name="apple-mobile-web-app-title" content="zemmat go">
+<script>try{document.documentElement.dataset.theme=localStorage.getItem('zg_theme')||'90er'}catch(e){}</script>
 <style>
 :root{
   --navy:#000080; --teal:#008080; --gray:#c0c0c0; --dark:#808080; --paper:#fffbea;
@@ -126,6 +127,13 @@ button.satz{display:inline; padding:2px 6px; line-height:2.4; text-align:left}
 .btns{display:flex; flex-wrap:wrap; gap:8px; justify-content:flex-end; margin-top:12px}
 .err{color:#c00000; font:bold 13px var(--ui)}
 
+fieldset.fs{border:2px groove #fff; margin:0 0 12px; padding:8px 10px 10px; font:14px var(--ui)}
+fieldset.fs legend{padding:0 4px; font-weight:bold}
+.chk{display:grid; grid-template-columns:repeat(auto-fill,minmax(132px,1fr)); gap:4px 8px; margin:8px 0}
+.chk label{display:flex; align-items:center; gap:6px; min-height:34px; cursor:pointer; font:14px var(--ui)}
+.chk input{width:18px; height:18px; accent-color:var(--navy)}
+.info{background:#ffffe1; border:1px solid #000; padding:6px 8px; font:13px/1.4 var(--ui); margin:4px 0 6px}
+.info.ok{background:#e1ffe1} .info.bad{background:#ffe1e1}
 footer{border-top:3px double var(--navy); text-align:center; padding:12px 8px 16px; font:13px var(--ui)}
 .lcd{display:inline-block; background:#000; color:#ff2020; font:bold 18px "Courier New",monospace; letter-spacing:3px; padding:2px 8px; border:3px inset #888}
 .ring{margin:10px auto; display:inline-block; border:2px outset var(--gray); background:#eee; padding:4px 10px}
@@ -136,29 +144,155 @@ footer{border-top:3px double var(--navy); text-align:center; padding:12px 8px 16
   body{padding:0 0 90px} #page{border-width:4px; box-shadow:none}
   .fibel{font-size:19px} .ev .fibel{font-size:17px}
 }
+/* ================= THEME: Windows XP ================= */
+[data-theme=xp] .d90, [data-theme=modern] .d90{display:none !important}
+[data-theme=xp] body{
+  font:15px/1.45 Tahoma,"Segoe UI",Verdana,sans-serif;
+  background:linear-gradient(180deg,#2a6fd6 0%,#5b9cf0 38%,#9fd0ff 58%,#5fae3a 60%,#3f8f22 78%,#2f7a18 100%) fixed;
+}
+[data-theme=xp] #page{border:0; border-radius:8px 8px 0 0; overflow:hidden; background:#ece9d8;
+  box-shadow:0 0 0 1px #0831d9, 0 8px 24px rgba(0,0,0,.4)}
+[data-theme=xp] header{background:linear-gradient(180deg,#0a5fe0 0%,#2b84f5 8%,#0a5fe0 40%,#0647c8 100%); color:#fff; text-align:left; padding:10px 14px}
+[data-theme=xp] .wordart{transform:none; filter:none; background:none; -webkit-background-clip:initial; background-clip:initial; color:#fff;
+  font:bold 26px Trebuchet MS,Tahoma,sans-serif; letter-spacing:0; text-shadow:1px 1px 1px #0a246a; margin:0}
+[data-theme=xp] .sub{font:italic 13px Tahoma,sans-serif; color:#dbe8ff; margin:2px 0 0}
+[data-theme=xp] .sports{color:#dbe8ff; font-size:12px}
+[data-theme=xp] .hello{font:14px Tahoma,sans-serif; border:0; background:linear-gradient(180deg,#fff,#ece9d8); border-bottom:1px solid #aca899}
+[data-theme=xp] main{padding:4px 12px 10px}
+[data-theme=xp] h2{font:bold 20px Tahoma,sans-serif; color:#0a246a; text-shadow:none}
+[data-theme=xp] h3{background:linear-gradient(90deg,#7ba2e7,#6375d6); border-radius:5px 5px 0 0; font:bold 13px Tahoma,sans-serif}
+[data-theme=xp] hr.rb{height:1px; background:#aca899}
+[data-theme=xp] .b95, [data-theme=xp] button.luecke{
+  font-family:Tahoma,sans-serif; border:1px solid #003c74; border-radius:3px; box-shadow:none;
+  background:linear-gradient(180deg,#fff 0%,#ecebe6 70%,#d6d0c5 100%)}
+[data-theme=xp] .b95:hover{box-shadow:inset 0 0 0 2px #f8b636}
+[data-theme=xp] .b95:active, [data-theme=xp] .b95.on{background:linear-gradient(180deg,#e3e3db,#f2f2ef); box-shadow:inset 0 0 0 2px #7da2ce}
+[data-theme=xp] .fibel{font-family:Tahoma,sans-serif; font-size:17px}
+[data-theme=xp] button.luecke{background:linear-gradient(180deg,#fffbe6,#fff2b3)}
+[data-theme=xp] button.luecke.sel{background:linear-gradient(180deg,#e6ffe6,#bff0bf)}
+[data-theme=xp] button.luecke.leer{background:#f4f3ee}
+[data-theme=xp] .bild{border:1px solid #c9c6b6; border-radius:3px}
+[data-theme=xp] .ev{border:1px solid #0831d9; border-radius:6px 6px 3px 3px; box-shadow:2px 2px 6px rgba(0,0,0,.25); overflow:hidden}
+[data-theme=xp] .ev .eh{background:linear-gradient(180deg,#3b8cf5,#0a5fe0); color:#fff; border:0; font-family:Tahoma,sans-serif}
+[data-theme=xp] .neu{background:#f8b636; color:#000; animation:none}
+[data-theme=xp] .dabei{font-family:Tahoma,sans-serif; font-size:14px}
+[data-theme=xp] .leerliste{font-family:Tahoma,sans-serif; font-size:16px}
+[data-theme=xp] .win{border:0; border-radius:8px 8px 0 0; background:#ece9d8; padding:0; box-shadow:0 0 0 1px #0831d9, 6px 6px 18px rgba(0,0,0,.45); overflow:hidden}
+[data-theme=xp] .tb{background:linear-gradient(180deg,#0997ff 0%,#0053ee 10%,#0050ee 50%,#06f 90%,#0053ee 100%); padding:6px 6px 6px 10px; font:bold 14px Trebuchet MS,Tahoma,sans-serif; text-shadow:1px 1px #0a246a}
+[data-theme=xp] .tb .x{background:linear-gradient(180deg,#e9876c,#d9441c); color:#fff; border:1px solid #fff; border-radius:3px; width:24px; min-height:22px}
+[data-theme=xp] .papier{background:#fff; border:1px solid #7f9db9; background-image:none}
+[data-theme=xp] .picker{border:1px solid #7f9db9}
+[data-theme=xp] input.t95{border:1px solid #7f9db9}
+[data-theme=xp] fieldset.fs{border:1px solid #d0d0bf; border-radius:4px}
+[data-theme=xp] fieldset.fs legend{color:#0046d5}
+[data-theme=xp] #plus{border-radius:50%; width:70px; height:70px; color:#fff; border:2px solid #fff;
+  background:radial-gradient(circle at 35% 30%,#7fdc6a,#3c9a23 60%,#2b7a14); box-shadow:2px 3px 8px rgba(0,0,0,.45); text-shadow:1px 1px #1d5a0c}
+[data-theme=xp] #status{background:linear-gradient(180deg,#3168d5 0%,#4993e6 8%,#2157d7 40%,#245edb 100%); border-top:1px solid #0831d9; color:#fff}
+[data-theme=xp] #status > span{border:0}
+[data-theme=xp] #status #st{background:linear-gradient(180deg,#3c8f2a,#2f7d1e); border-radius:0 8px 8px 0; font-weight:bold; font-style:italic; padding-left:10px}
+[data-theme=xp] #status #net{background:#0b77e9; border-left:1px solid #0a246a}
+[data-theme=xp] footer{border-top:1px solid #aca899; background:#ece9d8}
+[data-theme=xp] .lcd{background:none; color:#0a246a; border:0; font:bold 14px Tahoma,sans-serif; letter-spacing:0; padding:0}
+
+/* ================= THEME: Langweilig (modern) ================= */
+[data-theme=modern]{
+  --m-font:-apple-system,BlinkMacSystemFont,"SF Pro Text",Inter,"Segoe UI",Roboto,sans-serif; --m-bg:#cce6f4; --m-page:#f4f8fb; --m-card:#ffffff; --m-ink:#0b0f14; --m-muted:rgba(11,15,20,.6);
+  --m-line:rgba(23,86,118,.14); --m-pri:#175676; --m-pri-ink:#fff; --m-chip:rgba(23,86,118,.08); --m-acc:#4ba3c3; --m-red:#d62839;
+}
+@media (prefers-color-scheme:dark){[data-theme=modern]{
+  --m-bg:#0f3347; --m-page:#175676; --m-card:rgba(6,28,40,.42); --m-ink:#fff; --m-muted:rgba(255,255,255,.75);
+  --m-line:rgba(255,255,255,.14); --m-pri:#cce6f4; --m-pri-ink:#0b0f14; --m-chip:rgba(255,255,255,.12); --m-acc:#4ba3c3;
+}}
+[data-theme=modern] body{font:16px/1.45 -apple-system,BlinkMacSystemFont,"SF Pro Text",Inter,"Segoe UI",Roboto,sans-serif; color:var(--m-ink);
+  background:radial-gradient(120% 60% at 100% 0%,rgba(75,163,195,.3),transparent 60%),var(--m-page) fixed; padding:0 0 100px}
+[data-theme=modern] #page{border:0; box-shadow:none; background:none; max-width:640px}
+[data-theme=modern] header{background:none; text-align:left; padding:max(18px,env(safe-area-inset-top)) 16px 4px}
+[data-theme=modern] .wordart{transform:none; filter:none; background:none; color:var(--m-ink); -webkit-background-clip:initial; background-clip:initial;
+  font:700 30px/1.1 -apple-system,BlinkMacSystemFont,"SF Pro Display",Inter,sans-serif; letter-spacing:-.5px; margin:0}
+[data-theme=modern] .sub{font:15px var(--m-font); color:var(--m-muted); margin:2px 0 0}
+[data-theme=modern] .sports{display:none}
+[data-theme=modern] .hello{border:0; font:15px var(--m-font); padding:6px 16px 0; color:var(--m-muted)}
+[data-theme=modern] .hello b{color:var(--m-ink)}
+[data-theme=modern] .demo{border:0; border-radius:12px; background:rgba(214,40,57,.12); color:var(--m-ink); margin:10px 16px 0}
+[data-theme=modern] main{padding:0 16px 10px}
+[data-theme=modern] h2{font:700 20px/1.2 var(--m-font); color:var(--m-ink); text-shadow:none; margin:18px 0 4px}
+[data-theme=modern] h3{background:none; color:var(--m-muted); font:600 13px var(--m-font); text-transform:uppercase; letter-spacing:.6px; padding:0 4px; margin:18px 0 6px}
+[data-theme=modern] hr.rb{display:none}
+[data-theme=modern] .b95{font:600 15px var(--m-font); color:var(--m-ink); background:var(--m-chip); border:0; box-shadow:none; border-radius:10px; padding:8px 14px}
+[data-theme=modern] .b95.big{background:var(--m-pri); color:var(--m-pri-ink)}
+[data-theme=modern] .b95.on{background:rgba(75,163,195,.25); color:var(--m-ink)}
+[data-theme=modern] .b95.mini{font-size:13px; padding:5px 10px}
+[data-theme=modern] .b95:active{transform:scale(.97)}
+[data-theme=modern] .fibel{font-family:var(--m-font); font-size:17px; line-height:2.1}
+[data-theme=modern] .bild{flex-direction:row; gap:4px; border:0; background:var(--m-chip); border-radius:999px; padding:2px 10px; line-height:1.6}
+[data-theme=modern] .bild .e{font-size:1em} [data-theme=modern] .bild .w{font-size:1em; color:var(--m-ink); font-family:var(--m-font)}
+[data-theme=modern] button.luecke{border:0; border-radius:999px; background:rgba(75,163,195,.22); color:var(--m-ink)}
+[data-theme=modern] button.luecke .w{color:var(--m-ink); text-decoration:none; font-weight:600}
+[data-theme=modern] button.luecke.sel{background:var(--m-pri)} [data-theme=modern] button.luecke.sel .w{color:var(--m-pri-ink)}
+[data-theme=modern] button.luecke.leer{background:transparent; outline:1.5px dashed var(--m-line); opacity:1}
+[data-theme=modern] button.satz{border-radius:12px; text-decoration:none; line-height:2.1}
+[data-theme=modern] .ev{background:var(--m-card); border:0; border-radius:16px; box-shadow:0 1px 2px rgba(0,0,0,.06); margin:8px 0 12px; overflow:hidden}
+[data-theme=modern] .ev .eh{background:none; border:0; padding:12px 16px 0; font:13px var(--m-font); color:var(--m-muted)}
+[data-theme=modern] .ev .eh b{color:var(--m-ink)}
+[data-theme=modern] .ev .eb{padding:2px 16px}
+[data-theme=modern] .ev .fibel{font-size:16px}
+[data-theme=modern] .neu{background:var(--m-acc); color:#fff; border-radius:6px; animation:none}
+[data-theme=modern] .dabei{font:14px var(--m-font); color:var(--m-muted); padding:4px 16px 10px}
+[data-theme=modern] .dabei b{color:var(--m-ink)}
+[data-theme=modern] .ev .act{padding:0 16px 14px}
+[data-theme=modern] .leerliste{font:16px var(--m-font); color:var(--m-muted)}
+[data-theme=modern] #plus{border-radius:20px; width:64px; height:64px; background:var(--m-pri); color:var(--m-pri-ink); border:0; box-shadow:0 6px 18px rgba(0,0,0,.25); font:300 34px/1 var(--m-font)}
+[data-theme=modern] #plus small{display:none}
+[data-theme=modern] #status{display:none}
+[data-theme=modern] .ov{background:rgba(0,0,0,.35); -webkit-backdrop-filter:blur(4px); backdrop-filter:blur(4px); align-items:flex-end; padding:0}
+[data-theme=modern] .win{border:0; box-shadow:0 -4px 30px rgba(0,0,0,.25); border-radius:16px 16px 0 0; background:var(--m-page); color:var(--m-ink); padding:0 0 env(safe-area-inset-bottom); max-height:92vh; overflow-y:auto}
+[data-theme=modern] .tb{background:none; color:var(--m-ink); font:600 17px var(--m-font); padding:14px 12px 4px 16px}
+[data-theme=modern] .tb .x{background:var(--m-chip); border-radius:50%; width:30px; min-height:30px; color:var(--m-ink)}
+[data-theme=modern] .wb{padding:8px 16px 16px}
+[data-theme=modern] .wb .hint{font:13px var(--m-font); color:var(--m-muted)}
+[data-theme=modern] .papier{background:var(--m-card); border:0; border-radius:14px; background-image:none}
+[data-theme=modern] .picker{background:var(--m-card); border:0; border-radius:14px}
+[data-theme=modern] .picker .ttl{font:600 13px var(--m-font); color:var(--m-muted)}
+[data-theme=modern] .picker .row{font:14px var(--m-font)}
+[data-theme=modern] input.t95{font:16px var(--m-font); border:1px solid var(--m-line); border-radius:10px; background:var(--m-card); color:var(--m-ink)}
+[data-theme=modern] fieldset.fs{border:0; background:var(--m-card); border-radius:14px; padding:12px 14px; font-family:var(--m-font)}
+[data-theme=modern] fieldset.fs legend{float:left; width:100%; padding:0 0 6px; font:600 13px var(--m-font); color:var(--m-muted); text-transform:uppercase; letter-spacing:.5px}
+[data-theme=modern] fieldset.fs > legend + *{clear:both}
+[data-theme=modern] .b95:disabled{opacity:.45; color:var(--m-ink); text-shadow:none}
+[data-theme=modern] .chk label{font:15px var(--m-font)}
+[data-theme=modern] .info{border:0; border-radius:10px; background:var(--m-chip); font-family:var(--m-font)}
+[data-theme=modern] .info.ok{background:rgba(75,163,195,.2)} [data-theme=modern] .info.bad{background:rgba(214,40,57,.14)}
+[data-theme=modern] footer{border:0; color:var(--m-muted); font:13px var(--m-font)}
+[data-theme=modern] .lcd{background:none; border:0; color:var(--m-muted); font:inherit; letter-spacing:0; padding:0}
+[data-theme=modern] .err{font-family:var(--m-font)}
+.themes{display:grid; grid-template-columns:repeat(3,1fr); gap:6px; margin-top:4px}
+.themes .b95{display:flex; flex-direction:column; align-items:center; gap:2px; font-size:13px; padding:8px 4px}
+.themes .b95 span{font-size:24px}
+#ovIntro img{display:block; width:100%; max-width:380px; margin:0 auto; border:2px solid #000; background:#fff}
+[data-theme=modern] #ovIntro img{border:0; border-radius:14px}
 </style>
 </head>
 <body>
 <div id="page">
   <header>
     <div class="wordart">zemmat go</div>
-    <p class="sub">~ mitanand an d'Luft ~</p>
+    <p class="sub"><span class="d90">~ </span>mitanand an d'Luft<span class="d90"> ~</span></p>
     <div class="sports">🚵 Bika · 🚴 Rennvelo · 🚲 Gravla · 🏃 Jogga · 🥾 Wandra · 🧗 Klettra · ⛷️ Schitoura</div>
   </header>
-  <marquee scrollamount="5">+++ Hoi zemma! +++ Kei zwölf WhatsApp-Gruppa meh +++ Iitraga wenn du gosch – wer will, kunnt mit +++ Kei Login, kei Schmarra +++ Lustenauer usdrücklich willkomma +++</marquee>
-  <div class="uc"><span>🚧 UNDER CONSTRUCTION 🚧</span></div>
-  <div class="hello"><span id="hi">Hoi!</span><button class="b95 mini" id="nameBtn">Nama ändra</button></div>
+  <marquee class="d90" scrollamount="5">+++ Hoi zemma! +++ Kei zwölf WhatsApp-Gruppa meh +++ Iitraga wenn du gosch – wer will, kunnt mit +++ Kei Login, kei Schmarra +++ Lustenauer usdrücklich willkomma +++</marquee>
+  <div class="uc d90"><span>🚧 UNDER CONSTRUCTION 🚧</span></div>
+  <div class="hello"><span id="hi">Hoi!</span><button class="b95 mini" id="setBtn">⚙️ Iistellige</button></div>
   <div class="demo" id="demo" hidden>⚠️ <b>DEMO-MODUS</b> – Iiträg landan nur uf dim eigna Gerät. Für die echte Version brucht's da Link us dr Gruppa.</div>
   <main>
-    <h2>Was lauft? <span class="blink">✨</span></h2>
+    <h2>Was lauft? <span class="blink d90">✨</span></h2>
     <div id="list"><p class="leerliste"><span class="e">⏳</span>Lada …</p></div>
     <hr class="rb">
   </main>
   <footer>
     <div>Iiträg sit Afang: <span class="lcd" id="cnt">000000</span></div>
-    <div class="ring">« <a href="#" id="ringPrev">zrugg</a> | 🏔️ Vorarlberger Sport-Webring | <a href="#" id="ringNext">wiiter</a> »</div>
-    <div>Best viewed with Netscape Navigator 3.0 @ 800×600 · Gmacht mit ❤️ in Vorarlberg</div>
-    <div class="badges">
+    <div class="ring d90">« <a href="#" id="ringPrev">zrugg</a> | 🏔️ Vorarlberger Sport-Webring | <a href="#" id="ringNext">wiiter</a> »</div>
+    <div class="d90">Best viewed with Netscape Navigator 3.0 @ 800×600 · Gmacht mit ❤️ in Vorarlberg</div>
+    <div class="badges d90">
       <span class="badge"><b>HTML</b><i>3.2</i></span>
       <span class="badge"><b>NO</b><i>LOGIN</i></span>
       <span class="badge"><b>100%</b><i>DIALEKT</i></span>
@@ -197,17 +331,65 @@ footer{border-top:3px double var(--navy); text-align:center; padding:12px 8px 16
   </div>
 </div>
 
+<!-- Intro -->
+<div class="ov" id="ovIntro" hidden>
+  <div class="win" role="dialog" aria-modal="true" aria-labelledby="tIntro" style="max-width:440px">
+    <div class="tb"><span id="tIntro">❓ Wia goht zemmat go?</span><button class="b95 x" data-close aria-label="Zuamacha">✕</button></div>
+    <div class="wb">
+      <img id="introGif" alt="Kurzanleitung: Termin iitraga, Wörter ändra, abschicka, dabei si, Popups iistella" width="351" height="678">
+      <p class="fibel" style="line-height:1.5;font-size:18px;margin:10px 0 0">
+        ➕ tippa · gelbe Wörter ändra · abschicka.<br>Die andra tippand <b>„I bin dabei!“</b> 🙋<br>
+        <small>Kei Login – nur dä Nama. ⚙️ Popups und Usseha in da Iistellige.</small></p>
+      <div class="btns"><button class="b95 big" data-close>Los goht's! 🚀</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- Iistellige -->
+<div class="ov" id="ovSet" hidden>
+  <div class="win" role="dialog" aria-modal="true" aria-labelledby="tSet" style="max-width:500px">
+    <div class="tb"><span id="tSet">⚙️ Iistellige</span><button class="b95 x" data-close aria-label="Zuamacha">✕</button></div>
+    <div class="wb">
+      <fieldset class="fs"><legend>👤 Nama</legend>
+        <span id="setName"></span> <button class="b95 mini" id="setNameBtn">ändra</button>
+      </fieldset>
+      <fieldset class="fs"><legend>🔔 Popups bi neua Termin</legend>
+        <div class="info" id="pushInfo">…</div>
+        <div style="font:13px var(--ui);margin-top:8px">Bi wellna Sportarta willsch a Popup?</div>
+        <div class="chk" id="pushSports"></div>
+        <div class="btns" style="justify-content:flex-start">
+          <button class="b95 big" id="pushOn">🔔 Popups iischalta</button>
+          <button class="b95" id="pushTest" hidden>📣 Test-Popup</button>
+          <button class="b95" id="pushOff" hidden>🔕 Usschalta</button>
+        </div>
+      </fieldset>
+      <fieldset class="fs"><legend>🎨 Usseha</legend>
+        <div class="themes" id="themes">
+          <button class="b95" data-theme-set="90er"><span>🌈</span>90er</button>
+          <button class="b95" data-theme-set="xp"><span>🪟</span>Windows XP</button>
+          <button class="b95" data-theme-set="modern"><span>😐</span>Langweilig</button>
+        </div>
+      </fieldset>
+      <div class="btns"><button class="b95" id="introBtn">❓ Wia goht des?</button><button class="b95 big" data-close>Fertig ✔</button></div>
+    </div>
+  </div>
+</div>
+
 <script>
 /* =====================================================================
    zemmat go – Frontend v1.0
    API_URL = Apps-Script-Web-App (…/exec). Leer → Demo-Modus (localStorage).
    ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbz4xf-IjvvDWh2qYNFIw7fqRttaO1khWAzOT44ZKT8AsNx1l9ad6CIJeIroiMzmIew/exec';
-const VERSION = '1.0.1';
+const VERSION = '1.1';
 
 const qs = new URLSearchParams(location.search);
-if (qs.has('k')) { localStorage.setItem('zg_k', qs.get('k')); qs.delete('k'); history.replaceState(null, '', location.pathname + (qs.toString() ? '?' + qs : '') + location.hash); }
+if (qs.has('k')) localStorage.setItem('zg_k', qs.get('k'));
 const KEY  = localStorage.getItem('zg_k') || '';
+// Schlüssel in der Adresse halten: iPhone übernimmt beim „Zum Home-Bildschirm“ die aktuelle Adresse,
+// die Home-Screen-App hat aber einen eigenen Speicher.
+if (KEY && !qs.has('k')) { qs.set('k', KEY); history.replaceState(null, '', location.pathname + '?' + qs + location.hash); }
+let PUSH_KEY = '';
 const DEMO = !API_URL || qs.has('demo');
 
 /* ---------- Wörterbuach ---------- */
@@ -350,6 +532,7 @@ async function load(quiet) {
   try {
     const j = await store.call('list');
     EVENTS = (j.events || []).filter(e => e.status !== 'abgsagt');
+    PUSH_KEY = j.push || '';
     $('#cnt').textContent = String(j.total || 0).padStart(6, '0');
     render(); status('Dokument: Fertig'); $('#net').textContent = '🌐';
   } catch (e) {
@@ -444,28 +627,28 @@ function askName() {
 function saveName() {
   const n = cleanName($('#nameIn').value);
   if (!n) { $('#nameIn').focus(); return; }
-  localStorage.setItem('zg_name', n); closeOv('#ovName'); hello(); render();
+  localStorage.setItem('zg_name', n); closeOv('#ovName'); hello(); render(); setDraw(); pushSync();
   if (nameResolve) { nameResolve(n); nameResolve = null; }
 }
 $('#nameOk').onclick = saveName;
 $('#nameIn').addEventListener('keydown', e => { if (e.key === 'Enter') saveName(); });
-$('#nameBtn').onclick = () => askName();
+$('#setBtn').onclick = openSet;
 function hello() {
   const n = myName();
   $('#hi').innerHTML = n ? `Hoi <b>${esc(n)}</b>! 👋` : 'Hoi Fremda! 👋 <small>(no kei Nama)</small>';
-  $('#nameBtn').textContent = n ? 'Nama ändra' : 'Wia hoaßt du?';
 }
 
 /* ---------- Fenster ---------- */
 function openOv(s) { $(s).hidden = false; document.body.style.overflow = 'hidden'; }
 function closeOv(s) {
-  $(s).hidden = true; if ($('#ovNew').hidden && $('#ovName').hidden) document.body.style.overflow = '';
+  $(s).hidden = true; if (document.querySelectorAll('.ov:not([hidden])').length === 0) document.body.style.overflow = '';
+  if (s === '#ovIntro') localStorage.setItem('zg_intro', '1');
   if (s === '#ovName' && nameResolve) { nameResolve(''); nameResolve = null; }
 }
 document.querySelectorAll('.ov').forEach(o => {
   o.addEventListener('click', e => { if (e.target === o || e.target.closest('[data-close]')) closeOv('#' + o.id); });
 });
-document.addEventListener('keydown', e => { if (e.key === 'Escape') ['#ovName', '#ovNew'].forEach(s => { if (!$(s).hidden) closeOv(s); }); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') ['#ovName', '#ovNew', '#ovSet', '#ovIntro'].forEach(s => { if (!$(s).hidden) closeOv(s); }); });
 
 /* ---------- Neuer Termin: Lückentext ---------- */
 let draft = null, sel = null;
@@ -570,6 +753,102 @@ $('#send').onclick = async () => {
   finally { b.disabled = false; b.textContent = '📨 Abschicka!'; }
 };
 
+/* ---------- Iistellige & Push ---------- */
+const IS_IOS = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+const STANDALONE = matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+const CAN_PUSH = 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
+const SW = CAN_PUSH && location.protocol === 'https:' ? navigator.serviceWorker.register('sw.js').catch(e => { console.warn('SW', e); return null; }) : Promise.resolve(null);
+function mySports() { try { const v = JSON.parse(localStorage.getItem('zg_sports')); if (Array.isArray(v)) return v; } catch (e) {} return Object.keys(SPORT); }
+function b64uBytes(s) { s = s.replace(/-/g, '+').replace(/_/g, '/'); s += '='.repeat((4 - s.length % 4) % 4); return Uint8Array.from(atob(s), c => c.charCodeAt(0)); }
+async function getSub() { const reg = await SW; return reg && reg.pushManager ? reg.pushManager.getSubscription() : null; }
+
+function openSet() {
+  $('#pushSports').innerHTML = Object.entries(SPORT).map(([k, s]) =>
+    `<label><input type="checkbox" value="${k}"${mySports().includes(k) ? ' checked' : ''}> ${s.e} ${esc(s.l)}</label>`).join('');
+  setDraw(); openOv('#ovSet');
+}
+function setDraw() { $('#setName').innerHTML = myName() ? '<b>' + esc(myName()) + '</b>' : '<i>no kei Nama</i>'; pushDraw(); }
+$('#setNameBtn').onclick = () => askName();
+
+async function pushDraw() {
+  const info = $('#pushInfo'), on = $('#pushOn'), off = $('#pushOff'), test = $('#pushTest');
+  const say = (t, cls) => { info.innerHTML = t; info.className = 'info' + (cls ? ' ' + cls : ''); };
+  on.hidden = false; on.disabled = true; off.hidden = test.hidden = true;
+  if (DEMO) return say('Im Demo-Modus gits kei Popups.');
+  if (!CAN_PUSH) return IS_IOS && !STANDALONE
+    ? say('📱 Uf\'m iPhone gond Popups nur, wenn zemmat go uf\'m <b>Home-Bildschirm</b> isch:<br>Unta uf <b>Teila ⬆️</b> → <b>„Zum Home-Bildschirm“</b> → d\'App vo dött ufmacha und do nomol iischalta.')
+    : say('Dä Browser ka leider kei Popups. 🤷', 'bad');
+  if (!PUSH_KEY) return say('Popups sind am Server no ned iigrichtet.', 'bad');
+  if (Notification.permission === 'denied') return say('🔕 Popups sind für zemmat go <b>blockiert</b>. In da Iistellige vom Handy bzw. Browser erlauba und denn nomol probiera.', 'bad');
+  const sub = await getSub();
+  if (sub) {
+    on.hidden = true; off.hidden = test.hidden = false;
+    say('✅ Popups sind <b>a</b>. Du kriagsch a Popup, wenn öpper an neua Termin für dine Sportarta iiträgt (dine eigna ned).', 'ok');
+  } else {
+    on.disabled = false;
+    say('Wähl d\'Sportarta und schalt Popups ii.' + (IS_IOS ? '' : ' Am beschta zerscht zum Home-Bildschirm hinzuefüega.'));
+  }
+}
+
+let syncT = null;
+async function pushSync() {
+  if (DEMO || !PUSH_KEY) return;
+  const sub = await getSub(); if (!sub) return;
+  await store.call('subscribe', {sub: sub.toJSON(), name: myName(), sports: mySports()});
+}
+$('#pushSports').addEventListener('change', () => {
+  localStorage.setItem('zg_sports', JSON.stringify([...document.querySelectorAll('#pushSports input:checked')].map(i => i.value)));
+  clearTimeout(syncT);
+  syncT = setTimeout(async () => { try { if (await getSub()) { await pushSync(); status('Sportarta gspeicheret ✔'); } } catch (e) { status('Fehler: ' + e.message, true); } }, 600);
+});
+
+$('#pushOn').onclick = async () => {
+  const b = $('#pushOn'); b.disabled = true; b.textContent = '⏳ Moment …';
+  try {
+    if (!myName() && !await askName()) return;
+    if (!mySports().length) throw new Error('Wähl mindestens oa Sportart.');
+    const perm = await Notification.requestPermission();
+    if (perm !== 'granted') throw new Error('Popups ned erlaubt.');
+    const reg = (await SW) || await navigator.serviceWorker.register('sw.js');
+    await navigator.serviceWorker.ready;
+    let sub = await reg.pushManager.getSubscription();
+    sub = sub || await reg.pushManager.subscribe({userVisibleOnly: true, applicationServerKey: b64uBytes(PUSH_KEY)});
+    await store.call('subscribe', {sub: sub.toJSON(), name: myName(), sports: mySports()});
+    status('Popups iigschalta 🔔');
+  } catch (e) { status('Fehler: ' + e.message, true); alert('Hoppla: ' + e.message); }
+  finally { b.textContent = '🔔 Popups iischalta'; pushDraw(); }
+};
+$('#pushOff').onclick = async () => {
+  try {
+    const sub = await getSub();
+    if (sub) { await store.call('unsubscribe', {endpoint: sub.endpoint}).catch(() => {}); await sub.unsubscribe(); }
+    status('Popups usgschalta 🔕');
+  } catch (e) { status('Fehler: ' + e.message, true); }
+  pushDraw();
+};
+$('#pushTest').onclick = async () => {
+  const b = $('#pushTest'); b.disabled = true; status('Schick Test-Popup …');
+  try { const sub = await getSub(); await store.call('test', {endpoint: sub.endpoint}); status('Test-Popup gschickt – kunnt glei 📣'); }
+  catch (e) { status('Fehler: ' + e.message, true); alert('Hoppla: ' + e.message); }
+  finally { b.disabled = false; }
+};
+window.addEventListener('hashchange', () => { load(true).then(() => { const el = document.getElementById(location.hash.slice(1)); if (el) { el.scrollIntoView({block: 'center'}); el.classList.add('flash'); } }); });
+
+/* ---------- Usseha & Intro ---------- */
+const THEME_COL = {'90er': '#000080', xp: '#0a5fe0', modern: '#175676'};
+function themeDraw() {
+  const t = document.documentElement.dataset.theme || '90er';
+  document.querySelectorAll('[data-theme-set]').forEach(b => b.classList.toggle('on', b.dataset.themeSet === t));
+  document.querySelector('meta[name=theme-color]').content = THEME_COL[t] || '#000080';
+}
+$('#themes').addEventListener('click', e => {
+  const b = e.target.closest('[data-theme-set]'); if (!b) return;
+  document.documentElement.dataset.theme = b.dataset.themeSet; localStorage.setItem('zg_theme', b.dataset.themeSet); themeDraw();
+});
+function openIntro() { $('#introGif').src = 'intro.gif'; openOv('#ovIntro'); }
+$('#introBtn').onclick = () => { closeOv('#ovSet'); openIntro(); };
+themeDraw();
+
 /* ---------- Webring (Spaß) ---------- */
 $('#ringPrev').onclick = $('#ringNext').onclick = e => { e.preventDefault(); status('404 – Dr Webring isch 1999 igschlofa. 😴'); };
 
@@ -577,6 +856,7 @@ $('#ringPrev').onclick = $('#ringNext').onclick = e => { e.preventDefault(); sta
 $('#ver').textContent = 'zemmat go ' + VERSION + (DEMO ? ' · DEMO' : '');
 $('#demo').hidden = !DEMO;
 hello(); load();
+if (!localStorage.getItem('zg_intro') && !qs.has('nointro')) openIntro();
 setInterval(() => { if (!document.hidden && $('#ovNew').hidden) load(true); }, 60000);
 document.addEventListener('visibilitychange', () => { if (!document.hidden) load(true); });
 </script>
