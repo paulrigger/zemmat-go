@@ -13,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@0,400;0,700;1,400&display=swap">
 <meta name="apple-mobile-web-app-title" content="zemmat go">
-<script>try{document.documentElement.dataset.theme=localStorage.getItem('zg_theme')||'90er'}catch(e){}</script>
+<script>try{var t=localStorage.getItem('zg_theme');document.documentElement.dataset.theme=t==='modern'?'modern':'90er'}catch(e){}</script>
 <style>
 :root{
   --navy:#000080; --teal:#008080; --gray:#c0c0c0; --dark:#808080; --paper:#fffbea;
@@ -144,55 +144,7 @@ footer{border-top:3px double var(--navy); text-align:center; padding:12px 8px 16
   body{padding:0 0 90px} #page{border-width:4px; box-shadow:none}
   .fibel{font-size:19px} .ev .fibel{font-size:17px}
 }
-/* ================= THEME: Windows XP ================= */
-[data-theme=xp] .d90, [data-theme=modern] .d90{display:none !important}
-[data-theme=xp] body{
-  font:15px/1.45 Tahoma,"Segoe UI",Verdana,sans-serif;
-  background:linear-gradient(180deg,#2a6fd6 0%,#5b9cf0 38%,#9fd0ff 58%,#5fae3a 60%,#3f8f22 78%,#2f7a18 100%) fixed;
-}
-[data-theme=xp] #page{border:0; border-radius:8px 8px 0 0; overflow:hidden; background:#ece9d8;
-  box-shadow:0 0 0 1px #0831d9, 0 8px 24px rgba(0,0,0,.4)}
-[data-theme=xp] header{background:linear-gradient(180deg,#0a5fe0 0%,#2b84f5 8%,#0a5fe0 40%,#0647c8 100%); color:#fff; text-align:left; padding:10px 14px}
-[data-theme=xp] .wordart{transform:none; filter:none; background:none; -webkit-background-clip:initial; background-clip:initial; color:#fff;
-  font:bold 26px Trebuchet MS,Tahoma,sans-serif; letter-spacing:0; text-shadow:1px 1px 1px #0a246a; margin:0}
-[data-theme=xp] .sub{font:italic 13px Tahoma,sans-serif; color:#dbe8ff; margin:2px 0 0}
-[data-theme=xp] .sports{color:#dbe8ff; font-size:12px}
-[data-theme=xp] .hello{font:14px Tahoma,sans-serif; border:0; background:linear-gradient(180deg,#fff,#ece9d8); border-bottom:1px solid #aca899}
-[data-theme=xp] main{padding:4px 12px 10px}
-[data-theme=xp] h2{font:bold 20px Tahoma,sans-serif; color:#0a246a; text-shadow:none}
-[data-theme=xp] h3{background:linear-gradient(90deg,#7ba2e7,#6375d6); border-radius:5px 5px 0 0; font:bold 13px Tahoma,sans-serif}
-[data-theme=xp] hr.rb{height:1px; background:#aca899}
-[data-theme=xp] .b95, [data-theme=xp] button.luecke{
-  font-family:Tahoma,sans-serif; border:1px solid #003c74; border-radius:3px; box-shadow:none;
-  background:linear-gradient(180deg,#fff 0%,#ecebe6 70%,#d6d0c5 100%)}
-[data-theme=xp] .b95:hover{box-shadow:inset 0 0 0 2px #f8b636}
-[data-theme=xp] .b95:active, [data-theme=xp] .b95.on{background:linear-gradient(180deg,#e3e3db,#f2f2ef); box-shadow:inset 0 0 0 2px #7da2ce}
-[data-theme=xp] .fibel{font-family:Tahoma,sans-serif; font-size:17px}
-[data-theme=xp] button.luecke{background:linear-gradient(180deg,#fffbe6,#fff2b3)}
-[data-theme=xp] button.luecke.sel{background:linear-gradient(180deg,#e6ffe6,#bff0bf)}
-[data-theme=xp] button.luecke.leer{background:#f4f3ee}
-[data-theme=xp] .bild{border:1px solid #c9c6b6; border-radius:3px}
-[data-theme=xp] .ev{border:1px solid #0831d9; border-radius:6px 6px 3px 3px; box-shadow:2px 2px 6px rgba(0,0,0,.25); overflow:hidden}
-[data-theme=xp] .ev .eh{background:linear-gradient(180deg,#3b8cf5,#0a5fe0); color:#fff; border:0; font-family:Tahoma,sans-serif}
-[data-theme=xp] .neu{background:#f8b636; color:#000; animation:none}
-[data-theme=xp] .dabei{font-family:Tahoma,sans-serif; font-size:14px}
-[data-theme=xp] .leerliste{font-family:Tahoma,sans-serif; font-size:16px}
-[data-theme=xp] .win{border:0; border-radius:8px 8px 0 0; background:#ece9d8; padding:0; box-shadow:0 0 0 1px #0831d9, 6px 6px 18px rgba(0,0,0,.45); overflow:hidden}
-[data-theme=xp] .tb{background:linear-gradient(180deg,#0997ff 0%,#0053ee 10%,#0050ee 50%,#06f 90%,#0053ee 100%); padding:6px 6px 6px 10px; font:bold 14px Trebuchet MS,Tahoma,sans-serif; text-shadow:1px 1px #0a246a}
-[data-theme=xp] .tb .x{background:linear-gradient(180deg,#e9876c,#d9441c); color:#fff; border:1px solid #fff; border-radius:3px; width:24px; min-height:22px}
-[data-theme=xp] .papier{background:#fff; border:1px solid #7f9db9; background-image:none}
-[data-theme=xp] .picker{border:1px solid #7f9db9}
-[data-theme=xp] input.t95{border:1px solid #7f9db9}
-[data-theme=xp] fieldset.fs{border:1px solid #d0d0bf; border-radius:4px}
-[data-theme=xp] fieldset.fs legend{color:#0046d5}
-[data-theme=xp] #plus{border-radius:50%; width:70px; height:70px; color:#fff; border:2px solid #fff;
-  background:radial-gradient(circle at 35% 30%,#7fdc6a,#3c9a23 60%,#2b7a14); box-shadow:2px 3px 8px rgba(0,0,0,.45); text-shadow:1px 1px #1d5a0c}
-[data-theme=xp] #status{background:linear-gradient(180deg,#3168d5 0%,#4993e6 8%,#2157d7 40%,#245edb 100%); border-top:1px solid #0831d9; color:#fff}
-[data-theme=xp] #status > span{border:0}
-[data-theme=xp] #status #st{background:linear-gradient(180deg,#3c8f2a,#2f7d1e); border-radius:0 8px 8px 0; font-weight:bold; font-style:italic; padding-left:10px}
-[data-theme=xp] #status #net{background:#0b77e9; border-left:1px solid #0a246a}
-[data-theme=xp] footer{border-top:1px solid #aca899; background:#ece9d8}
-[data-theme=xp] .lcd{background:none; color:#0a246a; border:0; font:bold 14px Tahoma,sans-serif; letter-spacing:0; padding:0}
+[data-theme=modern] .d90{display:none !important}
 
 /* ================= THEME: Langweilig (modern) ================= */
 [data-theme=modern]{
@@ -230,6 +182,7 @@ footer{border-top:3px double var(--navy); text-align:center; padding:12px 8px 16
 [data-theme=modern] button.luecke .w{color:var(--m-ink); text-decoration:none; font-weight:600}
 [data-theme=modern] button.luecke.sel{background:var(--m-pri)} [data-theme=modern] button.luecke.sel .w{color:var(--m-pri-ink)}
 [data-theme=modern] button.luecke.leer{background:transparent; outline:1.5px dashed var(--m-line); opacity:1}
+[data-theme=modern] button.luecke.leer.sel{background:var(--m-pri); outline:0}
 [data-theme=modern] button.satz{border-radius:12px; text-decoration:none; line-height:2.1}
 [data-theme=modern] .ev{background:var(--m-card); border:0; border-radius:16px; box-shadow:0 1px 2px rgba(0,0,0,.06); margin:8px 0 12px; overflow:hidden}
 [data-theme=modern] .ev .eh{background:none; border:0; padding:12px 16px 0; font:13px var(--m-font); color:var(--m-muted)}
@@ -265,14 +218,13 @@ footer{border-top:3px double var(--navy); text-align:center; padding:12px 8px 16
 [data-theme=modern] footer{border:0; color:var(--m-muted); font:13px var(--m-font)}
 [data-theme=modern] .lcd{background:none; border:0; color:var(--m-muted); font:inherit; letter-spacing:0; padding:0}
 [data-theme=modern] .err{font-family:var(--m-font)}
-.themes{display:grid; grid-template-columns:repeat(3,1fr); gap:6px; margin-top:4px}
+.themes{display:grid; grid-template-columns:repeat(2,1fr); gap:6px; margin-top:4px}
 .themes .b95{display:flex; flex-direction:column; align-items:center; gap:2px; font-size:13px; padding:8px 4px}
 .themes .b95 span{font-size:24px}
 #ovIntro img{display:block; width:100%; max-width:380px; max-height:42vh; object-fit:contain; margin:0 auto 6px; border:2px solid #000; background:#000}
 .intro{font-size:19px; line-height:1.45}
 .intro p{margin:6px 0} .intro ol{margin:6px 0 6px 4px; padding-left:22px} .intro li{margin:4px 0}
 .introEnd{font-size:24px; font-weight:bold; color:#c00000; text-align:center; transform:rotate(-2deg)}
-[data-theme=xp] .intro{font-family:Tahoma,sans-serif; font-size:16px} [data-theme=xp] .introEnd{color:#0a246a; transform:none}
 [data-theme=modern] .introEnd{color:var(--m-ink); transform:none; font-size:20px}
 [data-theme=modern] #ovIntro img{border:0; border-radius:14px}
 </style>
@@ -281,20 +233,20 @@ footer{border-top:3px double var(--navy); text-align:center; padding:12px 8px 16
 <div id="page">
   <header>
     <div class="wordart">zemmat go</div>
-    <p class="sub"><span class="d90">~ </span>mitanand an d'Luft<span class="d90"> ~</span></p>
+    <p class="sub"><span class="d90">~ </span><span data-hd="Gemeinsam raus">mitanand an d'Luft</span><span class="d90"> ~</span></p>
     <div class="sports">🚵 Bika · 🚴 Rennvelo · 🚲 Gravla · 🏃 Jogga · 🥾 Wandra · 🧗 Klettra · ⛷️ Schitoura</div>
   </header>
   <marquee class="d90" scrollamount="5">+++ Hoi zemma! +++ Kei zwölf WhatsApp-Gruppa meh +++ Iitraga wenn du gosch – wer will, kunnt mit +++ Kei Login, kei Schmarra +++ Lustenauer usdrücklich willkomma +++</marquee>
   <div class="uc d90"><span>🚧 UNDER CONSTRUCTION 🚧</span></div>
-  <div class="hello"><span id="hi">Hoi!</span><button class="b95 mini" id="setBtn">⚙️ Iistellige</button></div>
-  <div class="demo" id="demo" hidden>⚠️ <b>DEMO-MODUS</b> – Iiträg landan nur uf dim eigna Gerät. Für die echte Version brucht's da Link us dr Gruppa.</div>
+  <div class="hello"><span id="hi">Hoi!</span><button class="b95 mini" id="setBtn" data-hd="⚙️ Einstellungen">⚙️ Iistellige</button></div>
+  <div class="demo" id="demo" hidden data-hd="⚠️ <b>DEMO-MODUS</b> – Einträge werden nur auf diesem Gerät gespeichert. Für die echte Version brauchst du den Link aus der Gruppe.">⚠️ <b>DEMO-MODUS</b> – Iiträg landan nur uf dim eigna Gerät. Für die echte Version brucht's da Link us dr Gruppa.</div>
   <main>
-    <h2>Was lauft? <span class="blink d90">✨</span></h2>
+    <h2 data-hd="Was steht an?">Was lauft? <span class="blink d90">✨</span></h2>
     <div id="list"><p class="leerliste"><span class="e">⏳</span>Lada …</p></div>
     <hr class="rb">
   </main>
   <footer>
-    <div>Iiträg sit Afang: <span class="lcd" id="cnt">000000</span></div>
+    <div><span data-hd="Einträge seit Beginn:">Iiträg sit Afang:</span> <span class="lcd" id="cnt">000000</span></div>
     <div class="ring d90">« <a href="#" id="ringPrev">zrugg</a> | 🏔️ Vorarlberger Sport-Webring | <a href="#" id="ringNext">wiiter</a> »</div>
     <div class="d90">Best viewed with Netscape Navigator 3.0 @ 800×600 · Gmacht mit ❤️ in Vorarlberg</div>
     <div class="badges d90">
@@ -306,19 +258,19 @@ footer{border-top:3px double var(--navy); text-align:center; padding:12px 8px 16
   </footer>
 </div>
 
-<button class="b95" id="plus" aria-label="Neua Termin iitraga">+<small>NEU</small></button>
+<button class="b95" id="plus" aria-label="Neua Termin iitraga" data-hd-aria="Neuen Termin eintragen">+<small>NEU</small></button>
 <div id="status"><span id="st">Dokument: Fertig</span><span id="ver">zemmat go 1.0</span><span id="net">🌐</span></div>
 
 <!-- Neuer Termin -->
 <div class="ov" id="ovNew" hidden>
   <div class="win" role="dialog" aria-modal="true" aria-labelledby="tNew">
-    <div class="tb"><span id="tNew">📝 Neu.txt – Was hosch vor?</span><button class="b95 x" data-close aria-label="Zuamacha">✕</button></div>
+    <div class="tb"><span id="tNew" data-hd="📝 Neuer Termin">📝 Neu.txt – Was hosch vor?</span><button class="b95 x" data-close aria-label="Zuamacha" data-hd-aria="Schließen">✕</button></div>
     <div class="wb">
-      <p class="hint">👉 Tipp uf d'<u>gelba Wörter</u> zum Ändra. Da letschte Satz ka ma durchstricha.</p>
+      <p class="hint" data-hd="Tippe auf die markierten Wörter, um sie zu ändern. Den letzten Satz kannst du durchstreichen.">👉 Tipp uf d'<u>gelba Wörter</u> zum Ändra. Da letschte Satz ka ma durchstricha.</p>
       <div class="papier"><div id="lt" class="fibel"></div></div>
       <div id="pk" class="picker" hidden></div>
       <div class="err" id="newErr"></div>
-      <div class="btns"><button class="b95" data-close>Abbrecha</button><button class="b95 big" id="send">📨 Abschicka!</button></div>
+      <div class="btns"><button class="b95" data-close data-hd="Abbrechen">Abbrecha</button><button class="b95 big" id="send">📨 Abschicka!</button></div>
     </div>
   </div>
 </div>
@@ -326,12 +278,12 @@ footer{border-top:3px double var(--navy); text-align:center; padding:12px 8px 16
 <!-- Name -->
 <div class="ov" id="ovName" hidden>
   <div class="win" role="dialog" aria-modal="true" aria-labelledby="tName" style="max-width:420px">
-    <div class="tb"><span id="tName">👋 Wer bisch du?</span><button class="b95 x" data-close aria-label="Zuamacha">✕</button></div>
+    <div class="tb"><span id="tName" data-hd="👋 Wer bist du?">👋 Wer bisch du?</span><button class="b95 x" data-close aria-label="Zuamacha" data-hd-aria="Schließen">✕</button></div>
     <div class="wb">
-      <p class="fibel" style="margin:0 0 6px;line-height:1.6">Wia hoaßt du? 🙂</p>
-      <p class="hint">Kei Login, kei Passwort. Nur dr Nama, dass die andra wissand wer kunnt.</p>
+      <p class="fibel" style="margin:0 0 6px;line-height:1.6" data-hd="Wie heißt du?">Wia hoaßt du? 🙂</p>
+      <p class="hint" data-hd="Kein Login, kein Passwort. Nur dein Name, damit die anderen wissen, wer kommt.">Kei Login, kei Passwort. Nur dr Nama, dass die andra wissand wer kunnt.</p>
       <input class="t95" id="nameIn" maxlength="24" autocomplete="nickname" placeholder="z. B. Paul" style="width:100%">
-      <div class="btns"><button class="b95 big" id="nameOk">Passt! 👍</button></div>
+      <div class="btns"><button class="b95 big" id="nameOk" data-hd="Speichern">Passt! 👍</button></div>
     </div>
   </div>
 </div>
@@ -339,10 +291,12 @@ footer{border-top:3px double var(--navy); text-align:center; padding:12px 8px 16
 <!-- Intro -->
 <div class="ov" id="ovIntro" hidden>
   <div class="win" role="dialog" aria-modal="true" aria-labelledby="tIntro" style="max-width:440px">
-    <div class="tb"><span id="tIntro">👋 Hoi zemma!</span><button class="b95 x" data-close aria-label="Zuamacha">✕</button></div>
+    <div class="tb"><span id="tIntro" data-hd="👋 Willkommen!">👋 Hoi zemma!</span><button class="b95 x" data-close aria-label="Zuamacha" data-hd-aria="Schließen">✕</button></div>
     <div class="wb">
       <div id="introGifBox" hidden><img id="introGif" alt="Begrüßungs-GIF"></div>
-      <div class="fibel intro">
+      <div class="fibel intro" data-hd="<p><b>Eine App statt zwölf WhatsApp-Gruppen</b> – für Lustenauer:innen und alle aus der Umgebung.</p>
+        <ol><li>Auf den <b>Home-Bildschirm</b> legen</li><li>Eintragen, wenn du gehst</li><li>Wer will, kommt mit</li></ol>
+        <p class=&quot;introEnd&quot;>Viel Spaß!</p>">
         <p><b>Oa App statt zwölf WhatsApp-Gruppa</b> – für Lustenauer:inna und alli, wo i dr Nöchi wohnand. 🏔️</p>
         <ol>
           <li>📲 Uf da <b>Home-Bildschirm</b> lega</li>
@@ -352,7 +306,7 @@ footer{border-top:3px double var(--navy); text-align:center; padding:12px 8px 16
         <p class="introEnd">… und guat gganga! 🥾</p>
       </div>
       <div class="info" id="a2hs"></div>
-      <div class="btns"><button class="b95" id="installBtn" hidden>📲 Installiera</button><button class="b95 big" data-close>Los goht's! 🚀</button></div>
+      <div class="btns"><button class="b95" id="installBtn" hidden data-hd="Installieren">📲 Installiera</button><button class="b95 big" data-close data-hd="Los geht's">Los goht's! 🚀</button></div>
     </div>
   </div>
 </div>
@@ -360,29 +314,28 @@ footer{border-top:3px double var(--navy); text-align:center; padding:12px 8px 16
 <!-- Iistellige -->
 <div class="ov" id="ovSet" hidden>
   <div class="win" role="dialog" aria-modal="true" aria-labelledby="tSet" style="max-width:500px">
-    <div class="tb"><span id="tSet">⚙️ Iistellige</span><button class="b95 x" data-close aria-label="Zuamacha">✕</button></div>
+    <div class="tb"><span id="tSet" data-hd="Einstellungen">⚙️ Iistellige</span><button class="b95 x" data-close aria-label="Zuamacha" data-hd-aria="Schließen">✕</button></div>
     <div class="wb">
-      <fieldset class="fs"><legend>👤 Nama</legend>
-        <span id="setName"></span> <button class="b95 mini" id="setNameBtn">ändra</button>
+      <fieldset class="fs"><legend data-hd="Name">👤 Nama</legend>
+        <span id="setName"></span> <button class="b95 mini" id="setNameBtn" data-hd="ändern">ändra</button>
       </fieldset>
-      <fieldset class="fs"><legend>🔔 Popups bi neua Termin</legend>
+      <fieldset class="fs"><legend data-hd="Benachrichtigungen">🔔 Popups bi neua Termin</legend>
         <div class="info" id="pushInfo">…</div>
-        <div style="font:13px var(--ui);margin-top:8px">Bi wellna Sportarta willsch a Popup?</div>
+        <div style="font:13px var(--ui);margin-top:8px" data-hd="Bei welchen Sportarten möchtest du benachrichtigt werden?">Bi wellna Sportarta willsch a Popup?</div>
         <div class="chk" id="pushSports"></div>
         <div class="btns" style="justify-content:flex-start">
-          <button class="b95 big" id="pushOn">🔔 Popups iischalta</button>
-          <button class="b95" id="pushTest" hidden>📣 Test-Popup</button>
-          <button class="b95" id="pushOff" hidden>🔕 Usschalta</button>
+          <button class="b95 big" id="pushOn" data-hd="Benachrichtigungen aktivieren">🔔 Popups iischalta</button>
+          <button class="b95" id="pushTest" hidden data-hd="Testnachricht">📣 Test-Popup</button>
+          <button class="b95" id="pushOff" hidden data-hd="Deaktivieren">🔕 Usschalta</button>
         </div>
       </fieldset>
-      <fieldset class="fs"><legend>🎨 Usseha</legend>
+      <fieldset class="fs"><legend data-hd="Design">🎨 Usseha</legend>
         <div class="themes" id="themes">
           <button class="b95" data-theme-set="90er"><span>🌈</span>90er</button>
-          <button class="b95" data-theme-set="xp"><span>🪟</span>Windows XP</button>
           <button class="b95" data-theme-set="modern"><span>😐</span>Langweilig</button>
         </div>
       </fieldset>
-      <div class="btns"><button class="b95" id="introBtn">❓ Wia goht des?</button><button class="b95 big" data-close>Fertig ✔</button></div>
+      <div class="btns"><button class="b95" id="introBtn" data-hd="Anleitung">❓ Wia goht des?</button><button class="b95 big" data-close data-hd="Fertig">Fertig ✔</button></div>
     </div>
   </div>
 </div>
@@ -393,7 +346,7 @@ footer{border-top:3px double var(--navy); text-align:center; padding:12px 8px 16
    API_URL = Apps-Script-Web-App (…/exec). Leer → Demo-Modus (localStorage).
    ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbz4xf-IjvvDWh2qYNFIw7fqRttaO1khWAzOT44ZKT8AsNx1l9ad6CIJeIroiMzmIew/exec';
-const VERSION = '1.2';
+const VERSION = '1.3';
 // Begrüßungs-GIF im Intro (z. B. Giphy-Link „…/giphy.gif“). Leer = ohne GIF.
 const INTRO_GIF = '';
 
@@ -407,20 +360,28 @@ let PUSH_KEY = '';
 const DEMO = !API_URL || qs.has('demo');
 
 /* ---------- Wörterbuach ---------- */
-const WD = ['Sunntig','Mäntig','Zischtig','Mittwoch','Donnstig','Fritig','Samstig'];
+// Sprache: Dialekt, im Design „Langweilig“ Hochdeutsch
+const HD = () => document.documentElement.dataset.theme === 'modern';
+const T = (dia, hd) => HD() ? hd : dia;
+const WD_DIA = ['Sunntig','Mäntig','Zischtig','Mittwoch','Donnstig','Fritig','Samstig'];
+const WD_HD  = ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'];
+const wd = i => (HD() ? WD_HD : WD_DIA)[i];
 const SPORT = {
-  mtb:      {e:'🚵', t:'Mountainbika',  l:'Mountainbike'},
-  rennrad:  {e:'🚴', t:'Rennvelo fahra', l:'Rennvelo'},
-  gravel:   {e:'🚲', t:'gravla',         l:'Gravel'},
-  jogga:    {e:'🏃', t:'jogga',          l:'Jogga'},
-  wandra:   {e:'🥾', t:'wandra',         l:'Wandra'},
-  klettra:  {e:'🧗', t:'klettra',        l:'Klettra'},
-  schitour: {e:'⛷️', t:'uf Schitour',    l:'Schitour'},
-  langlauf: {e:'🎿', t:'langlaufa',      l:'Langlauf'},
-  schwimma: {e:'🏊', t:'schwimma',       l:'Schwimma'},
-  anders:   {e:'✨', t:'',               l:'Öppis anders'}
+  mtb:      {e:'🚵', t:'Mountainbika',  l:'Mountainbike', th:'Mountainbiken',  lh:'Mountainbike'},
+  rennrad:  {e:'🚴', t:'Rennvelo fahra', l:'Rennvelo',    th:'Rennrad fahren', lh:'Rennrad'},
+  gravel:   {e:'🚲', t:'gravla',         l:'Gravel',      th:'graveln',        lh:'Gravel'},
+  jogga:    {e:'🏃', t:'jogga',          l:'Jogga',       th:'joggen',         lh:'Joggen'},
+  wandra:   {e:'🥾', t:'wandra',         l:'Wandra',      th:'wandern',        lh:'Wandern'},
+  klettra:  {e:'🧗', t:'klettra',        l:'Klettra',     th:'klettern',       lh:'Klettern'},
+  schitour: {e:'⛷️', t:'uf Schitour',    l:'Schitour',    th:'auf Skitour',    lh:'Skitour'},
+  langlauf: {e:'🎿', t:'langlaufa',      l:'Langlauf',    th:'langlaufen',     lh:'Langlauf'},
+  schwimma: {e:'🏊', t:'schwimma',       l:'Schwimma',    th:'schwimmen',      lh:'Schwimmen'},
+  anders:   {e:'✨', t:'',               l:'Öppis anders', th:'',              lh:'Etwas anderes'}
 };
-const DAUER = {h05:['a halbe Stund',.5], h1:['a Stund',1], h15:['anderthalb Stund',1.5], h2:['zwoa Stund',2], h3:['drei Stund',3], halb:['an halba Tag',4], ganz:['an ganza Tag',9]};
+const sLabel = s => HD() ? s.lh : s.l;
+const DAUER = {h05:['a halbe Stund',.5,'eine halbe Stunde'], h1:['a Stund',1,'eine Stunde'], h15:['anderthalb Stund',1.5,'anderthalb Stunden'],
+  h2:['zwoa Stund',2,'zwei Stunden'], h3:['drei Stund',3,'drei Stunden'], halb:['an halba Tag',4,'einen halben Tag'], ganz:['an ganza Tag',9,'einen ganzen Tag']};
+const dLabel = k => HD() ? DAUER[k][2] : DAUER[k][0];
 const ZEITEN = ['06:00','07:00','09:00','10:00','12:00','14:00','16:00','17:00','17:30','18:00','18:30','19:00'];
 
 /* ---------- Helfer ---------- */
@@ -438,30 +399,30 @@ const myName = () => localStorage.getItem('zg_name') || '';
 function dayDiff(datum) { return Math.round((parseYmd(datum) - today0()) / 864e5); }
 function dayLabel(datum) {
   const d = parseYmd(datum), n = dayDiff(datum);
-  if (n === 0) return 'hüt';
-  if (n === 1) return 'morn';
-  if (n === 2) return 'übermorn';
-  if (n === -1) return 'geschtr';
-  if (n > 2 && n < 7) return 'am ' + WD[d.getDay()];
-  return 'am ' + WD[d.getDay()].slice(0, 2) + ' ' + d.getDate() + '.' + (d.getMonth() + 1) + '.';
+  if (n === 0) return T('hüt', 'heute');
+  if (n === 1) return T('morn', 'morgen');
+  if (n === 2) return T('übermorn', 'übermorgen');
+  if (n === -1) return T('geschtr', 'gestern');
+  if (n > 2 && n < 7) return 'am ' + wd(d.getDay());
+  return 'am ' + wd(d.getDay()).slice(0, 2) + ' ' + d.getDate() + '.' + (d.getMonth() + 1) + '.';
 }
 function dayHeading(datum) {
   const d = parseYmd(datum), n = dayDiff(datum);
-  const pre = n === 0 ? 'Hüt – ' : n === 1 ? 'Morn – ' : n === 2 ? 'Übermorn – ' : '';
-  return pre + WD[d.getDay()] + ', ' + d.getDate() + '.' + (d.getMonth() + 1) + '.';
+  const pre = n === 0 ? T('Hüt – ', 'Heute – ') : n === 1 ? T('Morn – ', 'Morgen – ') : n === 2 ? T('Übermorn – ', 'Übermorgen – ') : '';
+  return pre + wd(d.getDay()) + ', ' + d.getDate() + '.' + (d.getMonth() + 1) + '.';
 }
 function clock(z) {
   let [h, m] = (z || '12:00').split(':').map(Number); h = h % 12 || 12;
   const half = m >= 15 && m < 45; if (m >= 45) h = h % 12 + 1;
   return String.fromCodePoint((half ? 0x1F55C : 0x1F550) + h - 1);
 }
-function sportOf(ev) { const s = SPORT[ev.sport] || SPORT.anders; return {e: s.e, t: ev.sport === 'anders' ? (ev.sportText || 'öppis macha') : s.t}; }
+function sportOf(ev) { const s = SPORT[ev.sport] || SPORT.anders; return {e: s.e, t: ev.sport === 'anders' ? (ev.sportText || T('öppis macha', 'etwas unternehmen')) : T(s.t, s.th)}; }
 function plural(w) { return w && w.mode !== 'i'; }
 function werText(w) {
-  if (!w || w.mode === 'i') return 'I';
-  if (w.mode === 'mir') return 'Mir';
+  if (!w || w.mode === 'i') return T('I', 'Ich');
+  if (w.mode === 'mir') return T('Mir', 'Wir');
   const n = (w.names || []).filter(Boolean);
-  return n.length < 2 ? (n[0] || 'Mir') : n.slice(0, -1).join(', ') + ' und ' + n[n.length - 1];
+  return n.length < 2 ? (n[0] || T('Mir', 'Wir')) : n.slice(0, -1).join(', ') + ' und ' + n[n.length - 1];
 }
 function startOf(ev) { const d = parseYmd(ev.datum); const [h, m] = ev.zeit.split(':').map(Number); d.setHours(h, m); return d; }
 function endOf(ev) { return new Date(startOf(ev).getTime() + ((DAUER[ev.dauer] || [0, 2])[1]) * 36e5); }
@@ -474,13 +435,14 @@ function bild(k, e, t, edit, x = {}) {
 }
 function fibel(ev, edit) {
   const w = ev.wer || {mode: 'i'}, pl = plural(w), sp = sportOf(ev);
-  let h = bild('wer', w.mode === 'i' ? '🙋' : w.mode === 'mir' ? '👫' : '👥', werText(w), edit) + ' ' + (pl ? 'gond' : 'gang') + ' '
+  const verb = pl ? T('gond', 'gehen') : T('gang', 'gehe');
+  let h = bild('wer', w.mode === 'i' ? '🙋' : w.mode === 'mir' ? '👫' : '👥', werText(w), edit) + ' ' + verb + ' '
         + bild('datum', '📅', dayLabel(ev.datum), edit) + ' um ' + bild('zeit', clock(ev.zeit), ev.zeit, edit);
-  if (ev.dauer || edit) h += ' ' + bild('dauer', '⏳', ev.dauer ? 'für ' + DAUER[ev.dauer][0] : 'wia lang?', edit, {leer: !ev.dauer});
+  if (ev.dauer || edit) h += ' ' + bild('dauer', '⏳', ev.dauer ? 'für ' + dLabel(ev.dauer) : T('wia lang?', 'wie lange?'), edit, {leer: !ev.dauer});
   h += ' ' + bild('sport', sp.e, sp.t, edit) + '.';
   if (ev.treffpunkt || edit) h += ' Treffpunkt: ' + bild('treff', '📍', ev.treffpunkt || 'wo?', edit, {leer: !ev.treffpunkt}) + '.';
-  h += ' <b>Wer kunnt mit?</b>';
-  const dr = 'Nochher ' + (pl ? 'hond mir' : 'hon i') + ' o no Zit für an ';
+  h += ' <b>' + T('Wer kunnt mit?', 'Wer kommt mit?') + '</b>';
+  const dr = HD() ? 'Danach ' + (pl ? 'haben wir' : 'habe ich') + ' noch Zeit für einen ' : 'Nochher ' + (pl ? 'hond mir' : 'hon i') + ' o no Zit für an ';
   const glas = `<span class="bild"><span class="e" aria-hidden="true">🍺</span><span class="w">Drink</span></span>`;
   if (edit) h += ` <button type="button" class="luecke satz${ev.drink ? '' : ' strike'}" data-k="drink" aria-pressed="${!ev.drink}">${dr}${glas}.</button>`;
   else if (ev.drink) h += ' ' + dr + glas + '.';
@@ -488,11 +450,12 @@ function fibel(ev, edit) {
 }
 function plain(ev) {
   const w = ev.wer || {mode: 'i'}, pl = plural(w), sp = sportOf(ev);
-  let s = `${werText(w)} ${pl ? 'gond' : 'gang'} ${dayLabel(ev.datum)} (${dayHeading(ev.datum)}) um ${ev.zeit}`
-        + (ev.dauer ? ' für ' + DAUER[ev.dauer][0] : '') + ` ${sp.t} ${sp.e}.`;
+  const verb = pl ? T('gond', 'gehen') : T('gang', 'gehe');
+  let s = `${werText(w)} ${verb} ${dayLabel(ev.datum)} (${dayHeading(ev.datum)}) um ${ev.zeit}`
+        + (ev.dauer ? ' für ' + dLabel(ev.dauer) : '') + ` ${sp.t} ${sp.e}.`;
   if (ev.treffpunkt) s += ` Treffpunkt: ${ev.treffpunkt}.`;
-  s += ' Wer kunnt mit?';
-  if (ev.drink) s += ` Nochher ${pl ? 'hond mir' : 'hon i'} o no Zit für an Drink 🍺.`;
+  s += T(' Wer kunnt mit?', ' Wer kommt mit?');
+  if (ev.drink) s += HD() ? ` Danach ${pl ? 'haben wir' : 'habe ich'} noch Zeit für einen Drink 🍺.` : ` Nochher ${pl ? 'hond mir' : 'hon i'} o no Zit für an Drink 🍺.`;
   return s;
 }
 
@@ -542,18 +505,18 @@ function status(t, bad) { $('#st').textContent = t; $('#st').style.color = bad ?
 let EVENTS = [], busy = false;
 async function load(quiet) {
   if (busy) return; busy = true;
-  if (!quiet) status('Verbinda mit zemmat-go.at …');
+  if (!quiet) status(T('Verbinda mit zemmat-go.at …', 'Lade …'));
   try {
     const j = await store.call('list');
     EVENTS = (j.events || []).filter(e => e.status !== 'abgsagt');
     PUSH_KEY = j.push || '';
     $('#cnt').textContent = String(j.total || 0).padStart(6, '0');
-    render(); status('Dokument: Fertig'); $('#net').textContent = '🌐';
+    render(); status(T('Dokument: Fertig', 'Bereit')); $('#net').textContent = '🌐';
   } catch (e) {
     status('Fehler: ' + e.message, true); $('#net').textContent = '🔌';
-    if (/Schlüssel/.test(e.message)) $('#list').innerHTML = `<div class="leerliste"><span class="e">🔑</span>Do brucht's da Gruppa-Schlüssel.<br><small>Entweder da Link us dr WhatsApp-Gruppa uftua – oder Schlüssel (oder ganza Link) do iifüega:</small><br><br>
-      <input class="t95" id="keyIn" placeholder="Schlüssel oder Link" style="width:min(100%,280px)" autocapitalize="off" autocorrect="off"> <button class="b95 big" id="keyOk">🔓 Ine!</button></div>`, keyUi();
-    else if (!EVENTS.length) $('#list').innerHTML = `<p class="leerliste"><span class="e">🔌</span>Hoppla, d'Verbindig goht ned.<br><small>${esc(e.message)}</small></p>`;
+    if (/Schlüssel/.test(e.message)) $('#list').innerHTML = `<div class="leerliste"><span class="e">🔑</span>${T("Do brucht's da Gruppa-Schlüssel.", 'Hier fehlt der Gruppen-Schlüssel.')}<br><small>${T('Entweder da Link us dr WhatsApp-Gruppa uftua – oder Schlüssel (oder ganza Link) do iifüega:', 'Öffne den Link aus der WhatsApp-Gruppe oder füge den Schlüssel (oder den ganzen Link) hier ein:')}</small><br><br>
+      <input class="t95" id="keyIn" placeholder="Schlüssel oder Link" style="width:min(100%,280px)" autocapitalize="off" autocorrect="off"> <button class="b95 big" id="keyOk">${T('🔓 Ine!', 'Öffnen')}</button></div>`, keyUi();
+    else if (!EVENTS.length) $('#list').innerHTML = `<p class="leerliste"><span class="e">🔌</span>${T("Hoppla, d'Verbindig goht ned.", 'Keine Verbindung.')}<br><small>${esc(e.message)}</small></p>`;
   } finally { busy = false; }
 }
 function keyUi() {
@@ -568,7 +531,7 @@ function render() {
   const now = new Date(), me = myName();
   const evs = EVENTS.filter(e => endOf(e) > now).sort((a, b) => startOf(a) - startOf(b));
   if (!evs.length) {
-    $('#list').innerHTML = `<div class="leerliste"><span class="e">🦗</span>Do isch no nüt los.<br>Mach du da Afang!<br><br><button class="b95 big" onclick="openNew()">➕ I gang …</button></div>`;
+    $('#list').innerHTML = `<div class="leerliste"><span class="e">🦗</span>${T('Do isch no nüt los.<br>Mach du da Afang!', 'Noch keine Termine.<br>Trag den ersten ein!')}<br><br><button class="b95 big" onclick="openNew()">${T('➕ I gang …', '+ Neuer Termin')}</button></div>`;
     return;
   }
   let h = '', last = '';
@@ -577,19 +540,19 @@ function render() {
     const mine = me && same(e.von, me), joined = me && (e.dabei || []).some(n => same(n, me));
     const isNew = Date.now() - new Date(e.erstellt).getTime() < 864e5;
     const dab = (e.dabei || []).length
-      ? `🙋 <b>Dabei:</b> ${esc(e.dabei.join(', '))} <small>(${e.dabei.length} ${e.dabei.length === 1 ? 'Person' : 'Lüt'})</small>`
-      : '🙋 Bis jetzt no niemert – gang mit!';
+      ? `🙋 <b>Dabei:</b> ${esc(e.dabei.join(', '))} <small>(${e.dabei.length} ${e.dabei.length === 1 ? 'Person' : T('Lüt', 'Personen')})</small>`
+      : T('🙋 Bis jetzt no niemert – gang mit!', 'Noch niemand dabei.');
     h += `<div class="ev" id="e${esc(e.id)}">
-      <div class="eh"><span>✍️ <b>${esc(e.von)}</b> schriebt:${isNew ? '<span class="neu blink">NEU!</span>' : ''}</span><span>${e.zeit} Uhr</span></div>
+      <div class="eh"><span>✍️ <b>${esc(e.von)}</b> ${T('schriebt:', '')}${isNew ? '<span class="neu blink">NEU!</span>' : ''}</span><span>${e.zeit} Uhr</span></div>
       <div class="eb fibel">${fibel(e, false)}</div>
       <div class="dabei">${dab}</div>
       <div class="act">
         ${mine ? '' : joined
-          ? `<button class="b95 on" data-a="leave" data-id="${esc(e.id)}">✅ I bin dabei · doch ned?</button>`
-          : `<button class="b95 big" data-a="join" data-id="${esc(e.id)}">🙋 I bin dabei!</button>`}
-        <button class="b95" data-a="wa" data-id="${esc(e.id)}">📣 Teila</button>
-        <button class="b95" data-a="ics" data-id="${esc(e.id)}">📆 Kalender</button>
-        ${mine ? `<button class="b95" data-a="cancel" data-id="${esc(e.id)}">🗑️ Absaga</button>` : ''}
+          ? `<button class="b95 on" data-a="leave" data-id="${esc(e.id)}">${T('✅ I bin dabei · doch ned?', '✓ Dabei · absagen')}</button>`
+          : `<button class="b95 big" data-a="join" data-id="${esc(e.id)}">${T('🙋 I bin dabei!', 'Ich bin dabei')}</button>`}
+        <button class="b95" data-a="wa" data-id="${esc(e.id)}">${T('📣 Teila', 'Teilen')}</button>
+        <button class="b95" data-a="ics" data-id="${esc(e.id)}">${T('📆 Kalender', 'Kalender')}</button>
+        ${mine ? `<button class="b95" data-a="cancel" data-id="${esc(e.id)}">${T('🗑️ Absaga', 'Absagen')}</button>` : ''}
       </div></div>`;
   }
   $('#list').innerHTML = h;
@@ -603,13 +566,13 @@ $('#list').addEventListener('click', async ev => {
   if (a === 'wa') return share(e);
   if (a === 'ics') return ics(e);
   const name = myName() || await askName(); if (!name) return;
-  if (a === 'cancel' && !confirm('Würklich absaga? 😢')) return;
-  b.disabled = true; status('Schick …');
+  if (a === 'cancel' && !confirm(T('Würklich absaga? 😢', 'Termin wirklich absagen?'))) return;
+  b.disabled = true; status(T('Schick …', 'Sende …'));
   try {
     const j = await store.call(a, {id: e.id, name});
     if (a === 'cancel') EVENTS = EVENTS.filter(x => x !== e); else Object.assign(e, j.event);
-    render(); status(a === 'join' ? 'Super, du bisch dabei! 🎉' : a === 'leave' ? 'Schad – vlicht s\'nögscht Mol.' : 'Abgsagt.');
-  } catch (x) { status('Fehler: ' + x.message, true); b.disabled = false; alert('Hoppla: ' + x.message); }
+    render(); status(a === 'join' ? T('Super, du bisch dabei! 🎉', 'Du bist dabei.') : a === 'leave' ? T('Schad – vlicht s\'nögscht Mol.', 'Abgemeldet.') : T('Abgsagt.', 'Abgesagt.'));
+  } catch (x) { status('Fehler: ' + x.message, true); b.disabled = false; alert(T('Hoppla: ', 'Fehler: ') + x.message); }
 });
 
 function link(e) { return location.origin + location.pathname + (KEY ? '?k=' + encodeURIComponent(KEY) : DEMO && qs.has('demo') ? '?demo' : '') + '#e' + e.id; }
@@ -649,7 +612,7 @@ $('#nameIn').addEventListener('keydown', e => { if (e.key === 'Enter') saveName(
 $('#setBtn').onclick = openSet;
 function hello() {
   const n = myName();
-  $('#hi').innerHTML = n ? `Hoi <b>${esc(n)}</b>! 👋` : 'Hoi Fremda! 👋 <small>(no kei Nama)</small>';
+  $('#hi').innerHTML = n ? T(`Hoi <b>${esc(n)}</b>! 👋`, `Hallo <b>${esc(n)}</b>`) : T('Hoi Fremda! 👋 <small>(no kei Nama)</small>', 'Hallo! <small>(noch kein Name)</small>');
 }
 
 /* ---------- Fenster ---------- */
@@ -693,36 +656,36 @@ function picker() {
   let h = '';
   if (sel === 'wer') {
     const w = draft.wer, names = w.mode === 'names' ? w.names.join(', ') : myName() + ', ';
-    h = `<p class="ttl">Wer goht?</p><div class="opts">
-      ${opt('🙋 I', w.mode === 'i', 'data-set="wer" data-v="i"')}${opt('👫 Mir', w.mode === 'mir', 'data-set="wer" data-v="mir"')}</div>
-      <div class="row">👥 Mit Nama: <input class="t95" id="pkNames" value="${esc(names)}" placeholder="Paul, Anna" style="flex:1;min-width:150px">
+    h = `<p class="ttl">${T('Wer goht?', 'Wer geht?')}</p><div class="opts">
+      ${opt(T('🙋 I', '🙋 Ich'), w.mode === 'i', 'data-set="wer" data-v="i"')}${opt(T('👫 Mir', '👫 Wir'), w.mode === 'mir', 'data-set="wer" data-v="mir"')}</div>
+      <div class="row">👥 ${T('Mit Nama:', 'Mit Namen:')} <input class="t95" id="pkNames" value="${esc(names)}" placeholder="Paul, Anna" style="flex:1;min-width:150px">
       <button type="button" class="b95" data-set="names">OK</button></div>`;
   }
   if (sel === 'datum') {
     const t = today0();
-    h = '<p class="ttl">Wenn?</p><div class="opts">';
+    h = `<p class="ttl">${T('Wenn?', 'Wann?')}</p><div class="opts">`;
     for (let i = 0; i < 9; i++) { const d = ymd(addDays(t, i)); h += opt(dayLabel(d).replace(/^am /, ''), draft.datum === d, `data-set="datum" data-v="${d}"`); }
-    h += `</div><div class="row">📅 Oder: <input type="date" class="t95" id="pkDate" min="${ymd(t)}" value="${draft.datum}"></div>`;
+    h += `</div><div class="row">📅 ${T('Oder:', 'Oder:')} <input type="date" class="t95" id="pkDate" min="${ymd(t)}" value="${draft.datum}"></div>`;
   }
   if (sel === 'zeit') {
-    h = '<p class="ttl">Um wia viel Uhr?</p><div class="opts">' + ZEITEN.map(z => opt(clock(z) + ' ' + z, draft.zeit === z, `data-set="zeit" data-v="${z}"`)).join('') + '</div>'
-      + `<div class="row">⌚ Genau: <input type="time" class="t95" id="pkTime" step="300" value="${draft.zeit}"></div>`;
+    h = `<p class="ttl">${T('Um wia viel Uhr?', 'Um wie viel Uhr?')}</p><div class="opts">` + ZEITEN.map(z => opt(clock(z) + ' ' + z, draft.zeit === z, `data-set="zeit" data-v="${z}"`)).join('') + '</div>'
+      + `<div class="row">⌚ ${T('Genau:', 'Genau:')} <input type="time" class="t95" id="pkTime" step="300" value="${draft.zeit}"></div>`;
   }
   if (sel === 'dauer') {
-    h = '<p class="ttl">Wia lang ungefähr?</p><div class="opts">' + opt('🤷 Egal / offa', !draft.dauer, 'data-set="dauer" data-v=""')
-      + Object.entries(DAUER).map(([k, v]) => opt(v[0], draft.dauer === k, `data-set="dauer" data-v="${k}"`)).join('') + '</div>';
+    h = `<p class="ttl">${T('Wia lang ungefähr?', 'Wie lange ungefähr?')}</p><div class="opts">` + opt(T('🤷 Egal / offa', 'Offen'), !draft.dauer, 'data-set="dauer" data-v=""')
+      + Object.entries(DAUER).map(([k, v]) => opt(dLabel(k), draft.dauer === k, `data-set="dauer" data-v="${k}"`)).join('') + '</div>';
   }
   if (sel === 'sport') {
-    h = '<p class="ttl">Was macha mir?</p><div class="opts">' + Object.entries(SPORT).filter(([k]) => k !== 'anders')
-      .map(([k, s]) => opt(`<span class="e">${s.e}</span>${s.l}`, draft.sport === k, `data-set="sport" data-v="${k}"`, ' sp')).join('') + '</div>'
-      + `<div class="row">✨ Öppis anders: <input class="t95" id="pkSport" maxlength="40" value="${esc(draft.sport === 'anders' ? draft.sportText : '')}" placeholder="z. B. Skitura, Yoga …" style="flex:1;min-width:140px">
+    h = `<p class="ttl">${T('Was macha mir?', 'Welche Sportart?')}</p><div class="opts">` + Object.entries(SPORT).filter(([k]) => k !== 'anders')
+      .map(([k, s]) => opt(`<span class="e">${s.e}</span>${sLabel(s)}`, draft.sport === k, `data-set="sport" data-v="${k}"`, ' sp')).join('') + '</div>'
+      + `<div class="row">✨ ${T('Öppis anders:', 'Etwas anderes:')} <input class="t95" id="pkSport" maxlength="40" value="${esc(draft.sport === 'anders' ? draft.sportText : '')}" placeholder="${T('z. B. Skitura, Yoga …', 'z. B. Yoga, Tennis …')}" style="flex:1;min-width:140px">
          <button type="button" class="b95" data-set="anders">OK</button></div>`;
   }
   if (sel === 'treff') {
     let hist = []; try { hist = JSON.parse(localStorage.getItem('zg_treff')) || []; } catch (e) {}
-    h = `<p class="ttl">Wo trefft ma se?</p>${hist.length ? '<div class="opts">' + hist.map(t => opt('📍 ' + esc(t), draft.treffpunkt === t, `data-set="treff" data-v="${esc(t)}"`)).join('') + '</div>' : ''}
+    h = `<p class="ttl">${T('Wo trefft ma se?', 'Wo trefft ihr euch?')}</p>${hist.length ? '<div class="opts">' + hist.map(t => opt('📍 ' + esc(t), draft.treffpunkt === t, `data-set="treff" data-v="${esc(t)}"`)).join('') + '</div>' : ''}
       <div class="row"><input class="t95" id="pkTreff" maxlength="60" value="${esc(draft.treffpunkt)}" placeholder="z. B. Rheinbrugg, Karren Talstation" style="flex:1;min-width:160px">
-      <button type="button" class="b95" data-set="treffIn">OK</button>${draft.treffpunkt ? '<button type="button" class="b95" data-set="treff" data-v="">✕ weg</button>' : ''}</div>`;
+      <button type="button" class="b95" data-set="treffIn">OK</button>${draft.treffpunkt ? '<button type="button" class="b95" data-set="treff" data-v="">✕ ' + T('weg', 'entfernen') + '</button>' : ''}</div>`;
   }
   pk.innerHTML = h; pk.hidden = false;
   const inp = pk.querySelector('input');
@@ -753,18 +716,18 @@ $('#pk').addEventListener('click', e => {
 $('#send').onclick = async () => {
   const b = $('#send'), name = myName();
   if (!name) return askName();
-  if (endOf(draft) < new Date()) { $('#newErr').textContent = '⏰ Dä Zitpunkt isch scho verbei.'; return; }
-  b.disabled = true; b.textContent = '⏳ Schick …'; $('#newErr').textContent = ''; status('Schick …');
+  if (endOf(draft) < new Date()) { $('#newErr').textContent = T('⏰ Dä Zitpunkt isch scho verbei.', 'Der Zeitpunkt liegt in der Vergangenheit.'); return; }
+  b.disabled = true; b.textContent = T('⏳ Schick …', 'Sende …'); $('#newErr').textContent = ''; status(T('Schick …', 'Sende …'));
   try {
     const j = await store.call('create', {event: {...draft, von: name}});
     EVENTS.push(j.event);
     localStorage.setItem('zg_last', JSON.stringify({sport: draft.sport, sportText: draft.sportText}));
     if (draft.treffpunkt) { let h = []; try { h = JSON.parse(localStorage.getItem('zg_treff')) || []; } catch (e) {} h = [draft.treffpunkt, ...h.filter(t => t !== draft.treffpunkt)].slice(0, 6); localStorage.setItem('zg_treff', JSON.stringify(h)); }
     $('#cnt').textContent = String(Number($('#cnt').textContent) + 1).padStart(6, '0');
-    closeOv('#ovNew'); render(); status('Iitraga! 🎉 Jetzt no teila.');
+    closeOv('#ovNew'); render(); status(T('Iitraga! 🎉 Jetzt no teila.', 'Eingetragen.'));
     const el = document.getElementById('e' + j.event.id); if (el) { el.scrollIntoView({block: 'center', behavior: 'smooth'}); el.classList.add('flash'); }
-  } catch (x) { $('#newErr').textContent = 'Hoppla: ' + x.message; status('Fehler: ' + x.message, true); }
-  finally { b.disabled = false; b.textContent = '📨 Abschicka!'; }
+  } catch (x) { $('#newErr').textContent = T('Hoppla: ', 'Fehler: ') + x.message; status('Fehler: ' + x.message, true); }
+  finally { b.disabled = false; b.textContent = T('📨 Abschicka!', 'Eintragen'); }
 };
 
 /* ---------- Iistellige & Push ---------- */
@@ -778,29 +741,30 @@ async function getSub() { const reg = await SW; return reg && reg.pushManager ? 
 
 function openSet() {
   $('#pushSports').innerHTML = Object.entries(SPORT).map(([k, s]) =>
-    `<label><input type="checkbox" value="${k}"${mySports().includes(k) ? ' checked' : ''}> ${s.e} ${esc(s.l)}</label>`).join('');
+    `<label><input type="checkbox" value="${k}"${mySports().includes(k) ? ' checked' : ''}> ${s.e} ${esc(sLabel(s))}</label>`).join('');
   setDraw(); openOv('#ovSet');
 }
-function setDraw() { $('#setName').innerHTML = myName() ? '<b>' + esc(myName()) + '</b>' : '<i>no kei Nama</i>'; pushDraw(); }
+function setDraw() { $('#setName').innerHTML = myName() ? '<b>' + esc(myName()) + '</b>' : T('<i>no kei Nama</i>', '<i>noch kein Name</i>'); pushDraw(); }
 $('#setNameBtn').onclick = () => askName();
 
 async function pushDraw() {
   const info = $('#pushInfo'), on = $('#pushOn'), off = $('#pushOff'), test = $('#pushTest');
   const say = (t, cls) => { info.innerHTML = t; info.className = 'info' + (cls ? ' ' + cls : ''); };
   on.hidden = false; on.disabled = true; off.hidden = test.hidden = true;
-  if (DEMO) return say('Im Demo-Modus gits kei Popups.');
+  if (DEMO) return say(T('Im Demo-Modus gits kei Popups.', 'Im Demo-Modus gibt es keine Benachrichtigungen.'));
   if (!CAN_PUSH) return IS_IOS && !STANDALONE
-    ? say('📱 Uf\'m iPhone gond Popups nur, wenn zemmat go uf\'m <b>Home-Bildschirm</b> isch:<br>Unta uf <b>Teila ⬆️</b> → <b>„Zum Home-Bildschirm“</b> → d\'App vo dött ufmacha und do nomol iischalta.')
-    : say('Dä Browser ka leider kei Popups. 🤷', 'bad');
-  if (!PUSH_KEY) return say('Popups sind am Server no ned iigrichtet.', 'bad');
-  if (Notification.permission === 'denied') return say('🔕 Popups sind für zemmat go <b>blockiert</b>. In da Iistellige vom Handy bzw. Browser erlauba und denn nomol probiera.', 'bad');
+    ? say(T('📱 Uf\'m iPhone gond Popups nur, wenn zemmat go uf\'m <b>Home-Bildschirm</b> isch:<br>Unta uf <b>Teila ⬆️</b> → <b>„Zum Home-Bildschirm“</b> → d\'App vo dött ufmacha und do nomol iischalta.',
+            'Auf dem iPhone funktionieren Benachrichtigungen nur, wenn zemmat go auf dem <b>Home-Bildschirm</b> liegt:<br><b>Teilen</b> → <b>„Zum Home-Bildschirm“</b> → App von dort öffnen und hier aktivieren.'))
+    : say(T('Dä Browser ka leider kei Popups. 🤷', 'Dieser Browser unterstützt keine Benachrichtigungen.'), 'bad');
+  if (!PUSH_KEY) return say(T('Popups sind am Server no ned iigrichtet.', 'Benachrichtigungen sind auf dem Server noch nicht eingerichtet.'), 'bad');
+  if (Notification.permission === 'denied') return say(T('🔕 Popups sind für zemmat go <b>blockiert</b>. In da Iistellige vom Handy bzw. Browser erlauba und denn nomol probiera.', 'Benachrichtigungen sind <b>blockiert</b>. Bitte in den Einstellungen des Geräts bzw. Browsers erlauben.'), 'bad');
   const sub = await getSub();
   if (sub) {
     on.hidden = true; off.hidden = test.hidden = false;
-    say('✅ Popups sind <b>a</b>. Du kriagsch a Popup, wenn öpper an neua Termin für dine Sportarta iiträgt (dine eigna ned).', 'ok');
+    say(T('✅ Popups sind <b>a</b>. Du kriagsch a Popup, wenn öpper an neua Termin für dine Sportarta iiträgt (dine eigna ned).', 'Benachrichtigungen sind <b>aktiv</b>. Du wirst informiert, wenn jemand einen Termin in deinen Sportarten einträgt (außer deine eigenen).'), 'ok');
   } else {
     on.disabled = false;
-    say('Wähl d\'Sportarta und schalt Popups ii.' + (IS_IOS ? '' : ' Am beschta zerscht zum Home-Bildschirm hinzuefüega.'));
+    say(T('Wähl d\'Sportarta und schalt Popups ii.', 'Sportarten auswählen und Benachrichtigungen aktivieren.') + (IS_IOS ? '' : T(' Am beschta zerscht zum Home-Bildschirm hinzuefüega.', ' Am besten vorher zum Home-Bildschirm hinzufügen.')));
   }
 }
 
@@ -808,48 +772,48 @@ let syncT = null;
 async function pushSync() {
   if (DEMO || !PUSH_KEY) return;
   const sub = await getSub(); if (!sub) return;
-  await store.call('subscribe', {sub: sub.toJSON(), name: myName(), sports: mySports()});
+  await store.call('subscribe', {sub: sub.toJSON(), name: myName(), sports: mySports(), lang: T('dia', 'de')});
 }
 $('#pushSports').addEventListener('change', () => {
   localStorage.setItem('zg_sports', JSON.stringify([...document.querySelectorAll('#pushSports input:checked')].map(i => i.value)));
   clearTimeout(syncT);
-  syncT = setTimeout(async () => { try { if (await getSub()) { await pushSync(); status('Sportarta gspeicheret ✔'); } } catch (e) { status('Fehler: ' + e.message, true); } }, 600);
+  syncT = setTimeout(async () => { try { if (await getSub()) { await pushSync(); status(T('Sportarta gspeicheret ✔', 'Gespeichert')); } } catch (e) { status('Fehler: ' + e.message, true); } }, 600);
 });
 
 $('#pushOn').onclick = async () => {
-  const b = $('#pushOn'); b.disabled = true; b.textContent = '⏳ Moment …';
+  const b = $('#pushOn'); b.disabled = true; b.textContent = T('⏳ Moment …', 'Moment …');
   try {
     if (!myName() && !await askName()) return;
-    if (!mySports().length) throw new Error('Wähl mindestens oa Sportart.');
+    if (!mySports().length) throw new Error(T('Wähl mindestens oa Sportart.', 'Bitte mindestens eine Sportart wählen.'));
     const perm = await Notification.requestPermission();
-    if (perm !== 'granted') throw new Error('Popups ned erlaubt.');
+    if (perm !== 'granted') throw new Error(T('Popups ned erlaubt.', 'Benachrichtigungen nicht erlaubt.'));
     const reg = (await SW) || await navigator.serviceWorker.register('sw.js');
     await navigator.serviceWorker.ready;
     let sub = await reg.pushManager.getSubscription();
     sub = sub || await reg.pushManager.subscribe({userVisibleOnly: true, applicationServerKey: b64uBytes(PUSH_KEY)});
-    await store.call('subscribe', {sub: sub.toJSON(), name: myName(), sports: mySports()});
-    status('Popups iigschalta 🔔');
-  } catch (e) { status('Fehler: ' + e.message, true); alert('Hoppla: ' + e.message); }
-  finally { b.textContent = '🔔 Popups iischalta'; pushDraw(); }
+    await store.call('subscribe', {sub: sub.toJSON(), name: myName(), sports: mySports(), lang: T('dia', 'de')});
+    status(T('Popups iigschalta 🔔', 'Benachrichtigungen aktiviert'));
+  } catch (e) { status('Fehler: ' + e.message, true); alert(T('Hoppla: ', 'Fehler: ') + e.message); }
+  finally { b.textContent = T('🔔 Popups iischalta', 'Benachrichtigungen aktivieren'); pushDraw(); }
 };
 $('#pushOff').onclick = async () => {
   try {
     const sub = await getSub();
     if (sub) { await store.call('unsubscribe', {endpoint: sub.endpoint}).catch(() => {}); await sub.unsubscribe(); }
-    status('Popups usgschalta 🔕');
+    status(T('Popups usgschalta 🔕', 'Benachrichtigungen deaktiviert'));
   } catch (e) { status('Fehler: ' + e.message, true); }
   pushDraw();
 };
 $('#pushTest').onclick = async () => {
-  const b = $('#pushTest'); b.disabled = true; status('Schick Test-Popup …');
-  try { const sub = await getSub(); await store.call('test', {endpoint: sub.endpoint}); status('Test-Popup gschickt – kunnt glei 📣'); }
-  catch (e) { status('Fehler: ' + e.message, true); alert('Hoppla: ' + e.message); }
+  const b = $('#pushTest'); b.disabled = true; status(T('Schick Test-Popup …', 'Sende Testnachricht …'));
+  try { const sub = await getSub(); await store.call('test', {endpoint: sub.endpoint, lang: T('dia', 'de')}); status(T('Test-Popup gschickt – kunnt glei 📣', 'Testnachricht gesendet')); }
+  catch (e) { status('Fehler: ' + e.message, true); alert(T('Hoppla: ', 'Fehler: ') + e.message); }
   finally { b.disabled = false; }
 };
 window.addEventListener('hashchange', () => { load(true).then(() => { const el = document.getElementById(location.hash.slice(1)); if (el) { el.scrollIntoView({block: 'center'}); el.classList.add('flash'); } }); });
 
 /* ---------- Usseha & Intro ---------- */
-const THEME_COL = {'90er': '#000080', xp: '#0a5fe0', modern: '#175676'};
+const THEME_COL = {'90er': '#000080', modern: '#175676'};
 function themeDraw() {
   const t = document.documentElement.dataset.theme || '90er';
   document.querySelectorAll('[data-theme-set]').forEach(b => b.classList.toggle('on', b.dataset.themeSet === t));
@@ -858,11 +822,30 @@ function themeDraw() {
 $('#themes').addEventListener('click', e => {
   const b = e.target.closest('[data-theme-set]'); if (!b) return;
   document.documentElement.dataset.theme = b.dataset.themeSet; localStorage.setItem('zg_theme', b.dataset.themeSet); themeDraw();
+  applyLang(); hello(); render(); setDraw();
+  if (!$('#ovSet').hidden) $('#pushSports').querySelectorAll('label').forEach(l => { const i = l.querySelector('input'), s = SPORT[i.value]; l.lastChild.textContent = ' ' + s.e + ' ' + sLabel(s); });
+  if (draft && !$('#ovNew').hidden) { drawNew(); picker(); }
+  pushSync().catch(() => {});
 });
+/** Statische Texte: data-hd (Hochdeutsch) ↔ Original (Dialekt) */
+function applyLang() {
+  const hd = HD();
+  document.documentElement.lang = hd ? 'de' : 'de-AT';
+  document.querySelectorAll('[data-hd]').forEach(el => {
+    if (el.dataset.dia === undefined) el.dataset.dia = el.innerHTML;
+    el.innerHTML = hd ? el.dataset.hd : el.dataset.dia;
+  });
+  document.querySelectorAll('[data-hd-aria]').forEach(el => {
+    if (el.dataset.diaAria === undefined) el.dataset.diaAria = el.getAttribute('aria-label');
+    el.setAttribute('aria-label', hd ? el.dataset.hdAria : el.dataset.diaAria);
+  });
+  $('#send').textContent = T('📨 Abschicka!', 'Eintragen');
+  $('#nameIn').placeholder = 'z. B. Paul';
+}
 function openIntro() {
   if (INTRO_GIF) { $('#introGif').src = INTRO_GIF; $('#introGifBox').hidden = false; }
-  $('#a2hs').innerHTML = STANDALONE ? '✅ Liit scho uf\'m Home-Bildschirm. Super!'
-    : IS_IOS ? '📱 <b>iPhone:</b> unta uf <b>Teila ⬆️</b> → <b>„Zum Home-Bildschirm“</b>'
+  $('#a2hs').innerHTML = STANDALONE ? T('✅ Liit scho uf\'m Home-Bildschirm. Super!', 'Liegt bereits auf dem Home-Bildschirm.')
+    : IS_IOS ? T('📱 <b>iPhone:</b> unta uf <b>Teila ⬆️</b> → <b>„Zum Home-Bildschirm“</b>', '<b>iPhone:</b> <b>Teilen</b> → <b>„Zum Home-Bildschirm“</b>')
     : '📱 <b>Android:</b> Browser-Menü <b>⋮</b> → <b>„App installieren“</b> bzw. „Zum Startbildschirm hinzufügen“';
   $('#installBtn').hidden = !installEvt;
   openOv('#ovIntro');
@@ -871,7 +854,7 @@ let installEvt = null;
 window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); installEvt = e; if (!$('#ovIntro').hidden) $('#installBtn').hidden = false; });
 $('#installBtn').onclick = async () => { if (!installEvt) return; installEvt.prompt(); await installEvt.userChoice; installEvt = null; $('#installBtn').hidden = true; };
 $('#introBtn').onclick = () => { closeOv('#ovSet'); openIntro(); };
-themeDraw();
+themeDraw(); applyLang();
 
 /* ---------- Webring (Spaß) ---------- */
 $('#ringPrev').onclick = $('#ringNext').onclick = e => { e.preventDefault(); status('404 – Dr Webring isch 1999 igschlofa. 😴'); };

@@ -13,8 +13,7 @@ du tragst ii, wenn du gosch, und wer will, kunnt mit.
   <img src="docs/neu.png" width="260" alt="Neuer Termin als Lückentext">
 </p>
 <p>
-  <img src="docs/xp.png" width="200" alt="Design Windows XP">
-  <img src="docs/modern.png" width="200" alt="Design Langweilig">
+  <img src="docs/modern.png" width="200" alt="Design Langweilig (Hochdeutsch)">
 </p>
 
 ---
@@ -37,7 +36,7 @@ du tragst ii, wenn du gosch, und wer will, kunnt mit.
 - **🔔 Popups (Web Push)** bei neuen Terminen – pro Gerät einstellbar, für welche Sportarten. Eigene Termine lösen kein Popup aus.
   iPhone: ab iOS 16.4, **nur** wenn die App am Home-Bildschirm liegt. Android/Desktop: direkt im Browser.
 - **⚙️ Iistellige:** Name, Popups (an/aus, Sportarten, Test-Popup), Design
-- **🎨 Drei Designs:** 🌈 90er (Standard) · 🪟 Windows XP · 😐 Langweilig (modern, hell/dunkel, im Stil vom Fahrtenbuch)
+- **🎨 Zwei Designs:** 🌈 90er im Vorarlberger Dialekt (Standard) · 😐 Langweilig – modern, hell/dunkel, im Stil vom Fahrtenbuch, **auf Hochdeutsch** (auch die Popups)
 - **Begrüßung** beim ersten Öffnen: „Oa App statt zwölf WhatsApp-Gruppa“ + Anleitung Home-Bildschirm, optional mit GIF (`INTRO_GIF` in `index.html`). Später über ⚙️ → „Wia goht des?“
 - 90er-Look: WordArt, Laufschrift, Under Construction, Besucher-Zähler (= Einträge seit Anfang), Webring 😄
 
@@ -137,7 +136,7 @@ POST immer als `Content-Type: text/plain` (kein CORS-Preflight bei Apps Script).
 | dabei | `Anna, Ben` | |
 | status | leer / `abgsagt` | |
 
-Tab `Abos`: `endpoint, p256dh, auth, name, sports, erstellt, aktualisiert` – ein Eintrag pro Gerät.
+Tab `Abos`: `endpoint, p256dh, auth, name, sports, erstellt, aktualisiert, lang` (`dia`/`de`) – ein Eintrag pro Gerät.
 
 ## Entwicklung
 

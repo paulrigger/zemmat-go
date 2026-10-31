@@ -1,5 +1,5 @@
 /**
- * zemmat go – API v1.1 (Google Apps Script, gebunden an ein Google Sheet)
+ * zemmat go – API v1.2 (Google Apps Script, gebunden an ein Google Sheet)
  *
  * Einrichtung:
  *   1. Neues Google Sheet → Erweiterungen → Apps Script → diesen Code einfügen
@@ -12,7 +12,7 @@
  * POST (text/plain) {action:"create", k, event:{…}}       -> { ok, event }
  *                   {action:"join"|"leave", k, id, name}  -> { ok, event }
  *                   {action:"cancel", k, id, name}        -> { ok }   (nur Ersteller:in)
- *                   {action:"subscribe", k, sub, name, sports:[…]} -> { ok }  Push-Abo anlegen/ändern
+ *                   {action:"subscribe", k, sub, name, sports:[…], lang} -> { ok }  Push-Abo (lang: dia|de)
  *                   {action:"unsubscribe", k, endpoint}   -> { ok }
  *                   {action:"test", k, endpoint}          -> { ok, result }  Test-Popup an dieses Gerät
  * Fehler immer als { ok:false, error:"…" }
@@ -24,7 +24,7 @@
  *   PUSH_SECRET  gleiches Secret wie im Worker (SECRET)
  *   APP_URL      optional, Standard https://paulrigger.github.io/zemmat-go/
  */
-const VERSION = '1.1';
+const VERSION = '1.2';
 const TZ = 'Europe/Vienna';
 const SHEET = 'Events';
 const COLS = ['id', 'erstellt', 'von', 'datum', 'zeit', 'dauer', 'sport', 'sportText', 'wer', 'treffpunkt', 'drink', 'dabei', 'status'];
@@ -32,11 +32,14 @@ const SPORTS = ['mtb', 'rennrad', 'gravel', 'jogga', 'wandra', 'klettra', 'schit
 const DAUER = ['', 'h05', 'h1', 'h15', 'h2', 'h3', 'halb', 'ganz'];
 const MAX_OPEN = 300;
 const ABOS = 'Abos';
-const ABO_COLS = ['endpoint', 'p256dh', 'auth', 'name', 'sports', 'erstellt', 'aktualisiert'];
-const SPORT_TXT = { mtb: ['🚵', 'Mountainbika'], rennrad: ['🚴', 'Rennvelo fahra'], gravel: ['🚲', 'gravla'], jogga: ['🏃', 'jogga'],
-  wandra: ['🥾', 'wandra'], klettra: ['🧗', 'klettra'], schitour: ['⛷️', 'uf Schitour'], langlauf: ['🎿', 'langlaufa'], schwimma: ['🏊', 'schwimma'], anders: ['✨', ''] };
-const DAUER_TXT = { h05: 'a halbe Stund', h1: 'a Stund', h15: 'anderthalb Stund', h2: 'zwoa Stund', h3: 'drei Stund', halb: 'an halba Tag', ganz: 'an ganza Tag' };
-const WD = ['Sunntig', 'Mäntig', 'Zischtig', 'Mittwoch', 'Donnstig', 'Fritig', 'Samstig']; // Schutz gegen Spam: max. offene Termine
+const ABO_COLS = ['endpoint', 'p256dh', 'auth', 'name', 'sports', 'erstellt', 'aktualisiert', 'lang'];
+// [Emoji, Dialekt, Hochdeutsch]
+const SPORT_TXT = { mtb: ['🚵', 'Mountainbika', 'Mountainbiken'], rennrad: ['🚴', 'Rennvelo fahra', 'Rennrad fahren'], gravel: ['🚲', 'gravla', 'graveln'],
+  jogga: ['🏃', 'jogga', 'joggen'], wandra: ['🥾', 'wandra', 'wandern'], klettra: ['🧗', 'klettra', 'klettern'], schitour: ['⛷️', 'uf Schitour', 'auf Skitour'],
+  langlauf: ['🎿', 'langlaufa', 'langlaufen'], schwimma: ['🏊', 'schwimma', 'schwimmen'], anders: ['✨', '', ''] };
+const DAUER_TXT = { h05: ['a halbe Stund', 'eine halbe Stunde'], h1: ['a Stund', 'eine Stunde'], h15: ['anderthalb Stund', 'anderthalb Stunden'],
+  h2: ['zwoa Stund', 'zwei Stunden'], h3: ['drei Stund', 'drei Stunden'], halb: ['an halba Tag', 'einen halben Tag'], ganz: ['an ganza Tag', 'einen ganzen Tag'] };
+const WD = { dia: ['Sunntig', 'Mäntig', 'Zischtig', 'Mittwoch', 'Donnstig', 'Fritig', 'Samstig'], de: ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'] }; // Schutz gegen Spam: max. offene Termine
 
 const props_ = () => PropertiesService.getScriptProperties();
 
@@ -57,7 +60,11 @@ function tab_(name, cols) {
   return sh;
 }
 function sheet_() { return tab_(SHEET, COLS); }
-function abos_() { return tab_(ABOS, ABO_COLS); }
+function abos_() {
+  const sh = tab_(ABOS, ABO_COLS);
+  if (sh.getLastColumn() < ABO_COLS.length) sh.getRange(1, 1, 1, ABO_COLS.length).setValues([ABO_COLS]).setFontWeight('bold'); // neue Spalten nachziehen
+  return sh;
+}
 
 /** Einmalig ausführen. */
 function setup() {
@@ -237,7 +244,8 @@ function subscribe_(p) {
   const now = Utilities.formatDate(new Date(), TZ, "yyyy-MM-dd'T'HH:mm:ssXXX");
   const { sh, rows } = aboRows_();
   const hit = rows.find(r => r.endpoint === sub.endpoint);
-  const vals = [sub.endpoint, String(keys.p256dh), String(keys.auth), name_(p.name), sports, hit ? hit.erstellt : now, now];
+  const lang = p.lang === 'de' ? 'de' : 'dia';
+  const vals = [sub.endpoint, String(keys.p256dh), String(keys.auth), name_(p.name), sports, hit ? hit.erstellt : now, now, lang];
   if (hit) sh.getRange(hit.row, 1, 1, ABO_COLS.length).setValues([vals]);
   else {
     if (rows.length >= 1000) throw new Error('Z\'viel Abos');
@@ -252,27 +260,30 @@ function unsubscribe_(endpoint) {
   return { ok: true };
 }
 
-function dayLabel_(datum) {
+function dayLabel_(datum, lang) {
+  const de = lang === 'de', wd = WD[de ? 'de' : 'dia'];
   const d = new Date(datum + 'T12:00:00');
   const n = Math.round((new Date(datum + 'T00:00:00').getTime() - new Date(today_(0) + 'T00:00:00').getTime()) / 864e5);
   const dm = d.getDate() + '.' + (d.getMonth() + 1) + '.';
-  if (n === 0) return 'hüt';
-  if (n === 1) return 'morn (' + WD[d.getDay()].slice(0, 2) + ' ' + dm + ')';
-  if (n === 2) return 'übermorn (' + WD[d.getDay()].slice(0, 2) + ' ' + dm + ')';
-  return 'am ' + WD[d.getDay()] + ' ' + dm;
+  if (n === 0) return de ? 'heute' : 'hüt';
+  if (n === 1) return (de ? 'morgen' : 'morn') + ' (' + wd[d.getDay()].slice(0, 2) + ' ' + dm + ')';
+  if (n === 2) return (de ? 'übermorgen' : 'übermorn') + ' (' + wd[d.getDay()].slice(0, 2) + ' ' + dm + ')';
+  return 'am ' + wd[d.getDay()] + ' ' + dm;
 }
 
-function message_(ev) {
+function message_(ev, lang) {
+  const de = lang === 'de';
   const sp = SPORT_TXT[ev.sport] || SPORT_TXT.anders;
-  const t = ev.sport === 'anders' ? (ev.sportText || 'öppis macha') : sp[1];
+  const t = ev.sport === 'anders' ? (ev.sportText || (de ? 'etwas unternehmen' : 'öppis macha')) : sp[de ? 2 : 1];
   const w = ev.wer || { mode: 'i' };
   const pl = w.mode !== 'i';
   const wer = w.mode === 'i' ? ev.von : w.mode === 'mir' ? ev.von + ' & Co.' : (w.names || []).join(', ');
-  let body = dayLabel_(ev.datum) + ' um ' + ev.zeit + (ev.dauer && DAUER_TXT[ev.dauer] ? ' für ' + DAUER_TXT[ev.dauer] : '');
+  const verb = pl ? (de ? 'gehen' : 'gond') : (de ? 'geht' : 'goht');
+  let body = dayLabel_(ev.datum, lang) + ' um ' + ev.zeit + (ev.dauer && DAUER_TXT[ev.dauer] ? ' für ' + DAUER_TXT[ev.dauer][de ? 1 : 0] : '');
   if (ev.treffpunkt) body += '\n📍 ' + ev.treffpunkt;
-  body += '\nWer kunnt mit?' + (ev.drink ? ' 🍺' : '');
+  body += (de ? '\nWer kommt mit?' : '\nWer kunnt mit?') + (ev.drink ? ' 🍺' : '');
   const app = props_().getProperty('APP_URL') || 'https://paulrigger.github.io/zemmat-go/';
-  return { title: sp[0] + ' ' + wer + ' ' + (pl ? 'gond' : 'goht') + ' ' + t, body, url: app + '#e' + ev.id, tag: 'zg-' + ev.id };
+  return { title: sp[0] + ' ' + wer + ' ' + verb + ' ' + t, body, url: app + '#e' + ev.id, tag: 'zg-' + ev.id };
 }
 
 function push_(subs, payload) {
@@ -293,7 +304,10 @@ function notify_(ev) {
   const { rows } = aboRows_();
   const von = String(ev.von).toLowerCase();
   const subs = rows.filter(a => a.sports.split(',').indexOf(ev.sport) >= 0 && a.name.toLowerCase() !== von);
-  return push_(subs, message_(ev));
+  const de = subs.filter(a => a.lang === 'de'), dia = subs.filter(a => a.lang !== 'de');
+  if (dia.length) push_(dia, message_(ev, 'dia'));
+  if (de.length) push_(de, message_(ev, 'de'));
+  return { ok: true };
 }
 
 function test_(endpoint) {
@@ -302,7 +316,8 @@ function test_(endpoint) {
   if (!a) throw new Error('Abo nüm gfunda – Popups nomol iischalta');
   if (!props_().getProperty('PUSH_URL')) throw new Error('PUSH_URL fehlt in de Skripteigenschafta');
   const app = props_().getProperty('APP_URL') || 'https://paulrigger.github.io/zemmat-go/';
-  const j = push_([a], { title: '🔔 zemmat go', body: 'Hoi ' + (a.name || 'du') + '! Popups funktioniarand. 🎉', url: app, tag: 'zg-test' });
+  const body = a.lang === 'de' ? 'Hallo ' + (a.name || '') + ', Benachrichtigungen funktionieren.' : 'Hoi ' + (a.name || 'du') + '! Popups funktioniarand. 🎉';
+  const j = push_([a], { title: '🔔 zemmat go', body, url: app, tag: 'zg-test' });
   const res = j && j.results && j.results[0];
   if (!res || res.status < 200 || res.status >= 300) throw new Error('Push-Dienst seit ' + (res ? res.status + ' ' + (res.error || '') : 'nüt'));
   return { ok: true, result: res };
