@@ -218,6 +218,94 @@ footer{border-top:3px double var(--navy); text-align:center; padding:12px 8px 16
 [data-theme=modern] footer{border:0; color:var(--m-muted); font:13px var(--m-font)}
 [data-theme=modern] .lcd{background:none; border:0; color:var(--m-muted); font:inherit; letter-spacing:0; padding:0}
 [data-theme=modern] .err{font-family:var(--m-font)}
+/* ---------- Langweilig = iOS 2026 (Liquid Glass) ---------- */
+[data-theme=modern]{
+  --g-bg:#f2f2f7; --g-glass:rgba(255,255,255,.62); --g-glass2:rgba(255,255,255,.78); --g-edge:rgba(255,255,255,.75); --g-hair:rgba(60,60,67,.14);
+  --g-ink:#000; --g-sec:rgba(60,60,67,.6); --g-tint:#0a84ff; --g-red:#ff3b30; --g-green:#34c759; --g-fill:rgba(118,118,128,.12);
+  --g-shadow:0 8px 32px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.04);
+}
+@media (prefers-color-scheme:dark){[data-theme=modern]{
+  --g-bg:#000; --g-glass:rgba(44,44,46,.55); --g-glass2:rgba(44,44,46,.82); --g-edge:rgba(255,255,255,.14); --g-hair:rgba(84,84,88,.5);
+  --g-ink:#fff; --g-sec:rgba(235,235,245,.6); --g-tint:#0a84ff; --g-fill:rgba(118,118,128,.24); --g-shadow:0 8px 32px rgba(0,0,0,.5);
+}}
+html[data-theme=modern]{background:var(--g-bg)}
+[data-theme=modern] body{min-height:100vh; color:var(--g-ink); background:
+  radial-gradient(60% 40% at 0% 0%, rgba(10,132,255,.22), transparent 70%),
+  radial-gradient(50% 35% at 100% 20%, rgba(255,55,95,.14), transparent 70%),
+  radial-gradient(60% 40% at 50% 100%, rgba(48,209,88,.14), transparent 70%), var(--g-bg) fixed; font-family:var(--m-font)}
+[data-theme=modern] .wordart{font-size:34px; font-weight:800; letter-spacing:-.8px; color:var(--g-ink)}
+[data-theme=modern] .sub, [data-theme=modern] .hello{color:var(--g-sec)}
+[data-theme=modern] .hello b{color:var(--g-ink)}
+[data-theme=modern] #setBtn{background:var(--g-glass); -webkit-backdrop-filter:blur(20px) saturate(180%); backdrop-filter:blur(20px) saturate(180%);
+  box-shadow:inset 0 0 0 .5px var(--g-edge), var(--g-shadow); border-radius:999px; color:var(--g-ink)}
+[data-theme=modern] main h2{font-size:22px; font-weight:700; letter-spacing:-.4px; color:var(--g-ink)}
+[data-theme=modern] .demo{background:var(--g-glass); -webkit-backdrop-filter:blur(20px); backdrop-filter:blur(20px); box-shadow:inset 0 0 0 .5px var(--g-edge); border-radius:16px; font-size:13px}
+.ios-sec{display:none}
+[data-theme=modern] .ios-sec{display:block; background:none; color:var(--g-sec); font:600 13px var(--m-font); text-transform:uppercase; letter-spacing:.4px; margin:22px 4px 6px; padding:0}
+.ios-list{border-radius:22px; overflow:hidden; background:var(--g-glass); -webkit-backdrop-filter:blur(24px) saturate(180%); backdrop-filter:blur(24px) saturate(180%);
+  box-shadow:inset 0 0 0 .5px var(--g-edge), inset 0 1px 0 rgba(255,255,255,.35), var(--g-shadow)}
+.ios-row{all:unset; box-sizing:border-box; display:flex; align-items:center; gap:14px; width:100%; padding:12px 14px 12px 18px; cursor:pointer; position:relative; font-family:var(--m-font); color:var(--g-ink)}
+.ios-row + .ios-row::before{content:""; position:absolute; top:0; left:84px; right:0; border-top:.5px solid var(--g-hair)}
+.ios-row::after{content:""; position:absolute; left:0; top:12px; bottom:12px; width:4px; border-radius:0 4px 4px 0; background:var(--sc,var(--g-tint))}
+.ios-row:active{background:var(--g-fill)}
+.ios-row.flash{animation:iosflash 1.4s 2} @keyframes iosflash{50%{background:rgba(10,132,255,.14)}}
+.ios-time{display:flex; flex-direction:column; width:52px; flex:none; font-variant-numeric:tabular-nums}
+.ios-time b{font-size:17px; font-weight:600} .ios-time small{font-size:12px; color:var(--g-sec)}
+.ios-main{flex:1; min-width:0; display:flex; flex-direction:column; gap:1px}
+.ios-title{font-size:17px; font-weight:600; letter-spacing:-.2px; display:flex; align-items:center; gap:6px}
+.ios-sub{font-size:14px; color:var(--g-sec); white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.ios-new, .ios-tag{font:600 11px var(--m-font); font-style:normal; padding:2px 7px; border-radius:999px; background:rgba(10,132,255,.14); color:var(--g-tint)}
+.ios-tag{background:var(--g-fill); color:var(--g-sec)}
+.ios-acc{display:flex; align-items:center; gap:6px; flex:none}
+.ios-acc i{font-style:normal}
+.ios-count{min-width:22px; height:22px; border-radius:11px; background:var(--g-fill); color:var(--g-sec); font:600 13px/22px var(--m-font); text-align:center; padding:0 6px}
+.ios-ok{color:var(--g-green); font-weight:700}
+.ios-chev{color:var(--g-sec); font-size:22px; opacity:.6; margin-left:2px}
+.s-mtb{--sc:#ff9f0a} .s-rennrad{--sc:#ff375f} .s-gravel{--sc:#a2845e} .s-jogga{--sc:#30d158} .s-wandra{--sc:#64d2ff}
+.s-klettra{--sc:#bf5af2} .s-schitour{--sc:#5e5ce6} .s-langlauf{--sc:#40c8e0} .s-schwimma{--sc:#0a84ff} .s-anders{--sc:#8e8e93}
+.ios-empty{display:flex; flex-direction:column; align-items:center; gap:6px; padding:56px 20px; text-align:center; color:var(--g-sec); font-family:var(--m-font)}
+.ios-empty b{font-size:20px; color:var(--g-ink)}
+.ios-btn{all:unset; box-sizing:border-box; margin-top:14px; padding:13px 22px; border-radius:999px; background:var(--g-tint); color:#fff; font:600 17px var(--m-font); cursor:pointer; text-align:center;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.35), 0 6px 18px rgba(10,132,255,.35)}
+.ios-btn.wide{display:block; width:100%; margin:16px 0 4px}
+.ios-btn.tinted{background:rgba(10,132,255,.14); color:var(--g-tint); box-shadow:none}
+.ios-btn:active{transform:scale(.98)}
+[data-theme=modern] #plus{border-radius:50%; width:62px; height:62px; color:var(--g-ink); background:var(--g-glass2);
+  -webkit-backdrop-filter:blur(20px) saturate(180%); backdrop-filter:blur(20px) saturate(180%);
+  box-shadow:inset 0 0 0 .5px var(--g-edge), inset 0 1px 0 rgba(255,255,255,.6), 0 10px 30px rgba(0,0,0,.18); font:300 34px/1 var(--m-font)}
+/* Sheets */
+[data-theme=modern] .ov{background:rgba(0,0,0,.28)}
+.sheet{display:none}
+[data-theme=modern] .sheet, [data-theme=modern] #ovSet .win, [data-theme=modern] #ovName .win, [data-theme=modern] #ovIntro .win{display:block; background:var(--g-glass2);
+  -webkit-backdrop-filter:blur(40px) saturate(180%); backdrop-filter:blur(40px) saturate(180%); border-radius:28px 28px 0 0; box-shadow:inset 0 .5px 0 var(--g-edge), 0 -10px 40px rgba(0,0,0,.2)}
+.sheet-head{position:sticky; top:0; z-index:2; display:grid; grid-template-columns:1fr auto 1fr; align-items:center; padding:16px 16px 10px; font:600 17px var(--m-font); color:var(--g-ink)}
+.sheet-head > :last-child{justify-self:end} .sheet-head::before{content:""; position:absolute; top:6px; left:50%; width:36px; height:5px; margin-left:-18px; border-radius:3px; background:var(--g-hair)}
+.ios-txt{all:unset; cursor:pointer; color:var(--g-tint); font:17px var(--m-font)} .ios-txt.strong{font-weight:600}
+.ios-txt:disabled{opacity:.4}
+.sheet-body{padding:4px 16px calc(24px + env(safe-area-inset-bottom)); font-family:var(--m-font)}
+.grp{background:var(--g-glass); border-radius:18px; margin:14px 0; overflow:hidden; box-shadow:inset 0 0 0 .5px var(--g-edge)}
+.frow{all:unset; box-sizing:border-box; display:flex; align-items:center; justify-content:space-between; gap:12px; width:100%; min-height:48px; padding:8px 16px; position:relative; font:17px var(--m-font); color:var(--g-ink)}
+.frow + .frow::before, .frow + [hidden] + .frow::before{content:""; position:absolute; top:0; left:16px; right:0; border-top:.5px solid var(--g-hair)}
+.frow[hidden]{display:none}
+.frow > span:first-child{flex:none; color:var(--g-ink)}
+.frow .v{text-align:right; color:var(--g-sec)} .frow .v small{font-size:13px}
+.frow input:not([type=checkbox]), .frow select{all:unset; box-sizing:border-box; flex:1; min-width:0; text-align:right; font:17px var(--m-font); color:var(--g-sec); padding:4px 0}
+.frow > input:only-child{text-align:left; color:var(--g-ink)}
+.frow select{text-align-last:right; -webkit-appearance:none; appearance:none; cursor:pointer}
+.frow input::placeholder{color:var(--g-sec); opacity:.7}
+.frow.link{cursor:pointer; color:var(--g-tint)} .frow.link.danger{color:var(--g-red)} .frow.link:active{background:var(--g-fill)}
+.sw{-webkit-appearance:none; appearance:none; flex:none; width:51px; height:31px; border-radius:16px; background:var(--g-fill); position:relative; cursor:pointer; transition:background .2s; margin:0}
+.sw::after{content:""; position:absolute; top:2px; left:2px; width:27px; height:27px; border-radius:50%; background:#fff; box-shadow:0 3px 8px rgba(0,0,0,.15); transition:transform .2s}
+.sw:checked{background:var(--g-green)} .sw:checked::after{transform:translateX(20px)}
+.seg{display:inline-flex; background:var(--g-fill); border-radius:10px; padding:2px; gap:2px}
+.seg button{all:unset; cursor:pointer; padding:6px 14px; border-radius:8px; font:500 14px var(--m-font); color:var(--g-ink)}
+.seg button.on{background:var(--g-glass2); box-shadow:0 2px 6px rgba(0,0,0,.12), inset 0 0 0 .5px var(--g-edge); font-weight:600}
+.gfoot{margin:-6px 16px 10px; font:13px var(--m-font); color:var(--g-sec)} .gfoot.err{color:var(--g-red)} .gfoot:empty{display:none}
+.d-hero{padding:6px 4px 0} .d-hero h2{margin:0; font:800 30px/1.1 var(--m-font); letter-spacing:-.6px; color:var(--g-ink)}
+.d-hero h2::before{content:""; display:inline-block; width:12px; height:12px; border-radius:50%; background:var(--sc,var(--g-tint)); margin-right:10px; vertical-align:middle}
+.d-hero p{margin:4px 0 0; color:var(--g-sec); font-size:15px}
+.muted{color:var(--g-sec)}
+
 .themes{display:grid; grid-template-columns:repeat(2,1fr); gap:6px; margin-top:4px}
 .themes .b95{display:flex; flex-direction:column; align-items:center; gap:2px; font-size:13px; padding:8px 4px}
 .themes .b95 span{font-size:24px}
@@ -311,6 +399,41 @@ footer{border-top:3px double var(--navy); text-align:center; padding:12px 8px 16
   </div>
 </div>
 
+<!-- iOS: Formular -->
+<div class="ov" id="ovForm" hidden>
+  <div class="win sheet" role="dialog" aria-modal="true" aria-labelledby="tForm">
+    <div class="sheet-head"><button class="ios-txt" data-close>Abbrechen</button><b id="tForm">Neuer Termin</b><button class="ios-txt strong" id="fSave">Hinzufügen</button></div>
+    <div class="sheet-body">
+      <div class="grp">
+        <label class="frow"><span>Sportart</span><select id="fSport"></select></label>
+        <div class="frow" id="fSportTextRow" hidden><input id="fSportText" maxlength="40" placeholder="Was genau? z. B. Yoga"></div>
+      </div>
+      <div class="grp">
+        <label class="frow"><span>Datum</span><input type="date" id="fDate"></label>
+        <label class="frow"><span>Uhrzeit</span><input type="time" id="fTime" step="300"></label>
+        <label class="frow"><span>Dauer</span><select id="fDauer"></select></label>
+      </div>
+      <div class="grp">
+        <div class="frow"><span>Wer</span><div class="seg" id="fWer"><button type="button" data-v="i">Ich</button><button type="button" data-v="mir">Wir</button><button type="button" data-v="names">Namen</button></div></div>
+        <div class="frow" id="fNamesRow" hidden><input id="fNames" placeholder="z. B. Paul, Anna"></div>
+        <label class="frow"><span>Treffpunkt</span><input id="fTreff" maxlength="60" list="treffList" placeholder="Optional"></label>
+        <label class="frow"><span>Danach auf einen Drink</span><input type="checkbox" class="sw" id="fDrink"></label>
+      </div>
+      <datalist id="treffList"></datalist>
+      <p class="gfoot" id="fPreview"></p>
+      <p class="gfoot err" id="fErr"></p>
+    </div>
+  </div>
+</div>
+
+<!-- iOS: Detail -->
+<div class="ov" id="ovDetail" hidden>
+  <div class="win sheet" role="dialog" aria-modal="true" aria-labelledby="dTitle">
+    <div class="sheet-head"><span></span><b>Termin</b><button class="ios-txt strong" data-close>Fertig</button></div>
+    <div class="sheet-body" id="dBody"></div>
+  </div>
+</div>
+
 <!-- Iistellige -->
 <div class="ov" id="ovSet" hidden>
   <div class="win" role="dialog" aria-modal="true" aria-labelledby="tSet" style="max-width:500px">
@@ -346,7 +469,7 @@ footer{border-top:3px double var(--navy); text-align:center; padding:12px 8px 16
    API_URL = Apps-Script-Web-App (…/exec). Leer → Demo-Modus (localStorage).
    ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbz4xf-IjvvDWh2qYNFIw7fqRttaO1khWAzOT44ZKT8AsNx1l9ad6CIJeIroiMzmIew/exec';
-const VERSION = '1.3';
+const VERSION = '1.4';
 // Begrüßungs-GIF im Intro (z. B. Giphy-Link „…/giphy.gif“). Leer = ohne GIF.
 const INTRO_GIF = '';
 
@@ -530,6 +653,7 @@ function keyUi() {
 function render() {
   const now = new Date(), me = myName();
   const evs = EVENTS.filter(e => endOf(e) > now).sort((a, b) => startOf(a) - startOf(b));
+  if (HD()) return renderIOS(evs, me);
   if (!evs.length) {
     $('#list').innerHTML = `<div class="leerliste"><span class="e">🦗</span>${T('Do isch no nüt los.<br>Mach du da Afang!', 'Noch keine Termine.<br>Trag den ersten ein!')}<br><br><button class="b95 big" onclick="openNew()">${T('➕ I gang …', '+ Neuer Termin')}</button></div>`;
     return;
@@ -559,10 +683,13 @@ function render() {
   if (location.hash.startsWith('#e')) { const el = document.getElementById(location.hash.slice(1)); if (el && !el.dataset.done) { el.scrollIntoView({block: 'center'}); el.classList.add('flash'); el.dataset.done = 1; } }
 }
 
-$('#list').addEventListener('click', async ev => {
+$('#list').addEventListener('click', ev => {
+  const r = ev.target.closest('[data-open]'); if (r) return openDetail(r.dataset.open);
   const b = ev.target.closest('button[data-a]'); if (!b) return;
   const e = EVENTS.find(x => x.id === b.dataset.id); if (!e) return;
-  const a = b.dataset.a;
+  doAct(b.dataset.a, e, b);
+});
+async function doAct(a, e, b) {
   if (a === 'wa') return share(e);
   if (a === 'ics') return ics(e);
   const name = myName() || await askName(); if (!name) return;
@@ -572,8 +699,10 @@ $('#list').addEventListener('click', async ev => {
     const j = await store.call(a, {id: e.id, name});
     if (a === 'cancel') EVENTS = EVENTS.filter(x => x !== e); else Object.assign(e, j.event);
     render(); status(a === 'join' ? T('Super, du bisch dabei! 🎉', 'Du bist dabei.') : a === 'leave' ? T('Schad – vlicht s\'nögscht Mol.', 'Abgemeldet.') : T('Abgsagt.', 'Abgesagt.'));
+    if (!$('#ovDetail').hidden) { if (a === 'cancel') closeOv('#ovDetail'); else drawDetail(e); }
+    return true;
   } catch (x) { status('Fehler: ' + x.message, true); b.disabled = false; alert(T('Hoppla: ', 'Fehler: ') + x.message); }
-});
+}
 
 function link(e) { return location.origin + location.pathname + (KEY ? '?k=' + encodeURIComponent(KEY) : DEMO && qs.has('demo') ? '?demo' : '') + '#e' + e.id; }
 async function share(e) {
@@ -625,7 +754,7 @@ function closeOv(s) {
 document.querySelectorAll('.ov').forEach(o => {
   o.addEventListener('click', e => { if (e.target === o || e.target.closest('[data-close]')) closeOv('#' + o.id); });
 });
-document.addEventListener('keydown', e => { if (e.key === 'Escape') ['#ovName', '#ovNew', '#ovSet', '#ovIntro'].forEach(s => { if (!$(s).hidden) closeOv(s); }); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') ['#ovName', '#ovNew', '#ovSet', '#ovIntro', '#ovForm', '#ovDetail'].forEach(s => { if (!$(s).hidden) closeOv(s); }); });
 
 /* ---------- Neuer Termin: Lückentext ---------- */
 let draft = null, sel = null;
@@ -636,6 +765,7 @@ function freshDraft() {
 }
 async function openNew() {
   const n = myName() || await askName(); if (!n) return;
+  if (HD()) return openForm();
   draft = freshDraft(); sel = null; $('#newErr').textContent = ''; drawNew(); $('#pk').hidden = true; openOv('#ovNew');
 }
 window.openNew = openNew;
@@ -728,6 +858,112 @@ $('#send').onclick = async () => {
     const el = document.getElementById('e' + j.event.id); if (el) { el.scrollIntoView({block: 'center', behavior: 'smooth'}); el.classList.add('flash'); }
   } catch (x) { $('#newErr').textContent = T('Hoppla: ', 'Fehler: ') + x.message; status('Fehler: ' + x.message, true); }
   finally { b.disabled = false; b.textContent = T('📨 Abschicka!', 'Eintragen'); }
+};
+
+/* ---------- Langweilig: iOS-Liste, Formular, Detail ---------- */
+const DUR_SHORT = {h05: '30 Min.', h1: '1 Std.', h15: '1,5 Std.', h2: '2 Std.', h3: '3 Std.', halb: 'halber Tag', ganz: 'ganzer Tag'};
+function sportName(e) { const s = SPORT[e.sport] || SPORT.anders; return e.sport === 'anders' ? (e.sportText || 'Aktivität') : s.lh; }
+function werPlain(e) {
+  const w = e.wer || {mode: 'i'};
+  if (w.mode === 'names' && (w.names || []).length) return w.names.join(', ');
+  return e.von + (w.mode === 'mir' ? ' & Co.' : '');
+}
+function renderIOS(evs, me) {
+  if (!evs.length) {
+    $('#list').innerHTML = `<div class="ios-empty"><b>Keine Termine</b><span>Trag den ersten ein – die anderen sehen ihn sofort.</span><button class="ios-btn" onclick="openNew()">Neuer Termin</button></div>`;
+    return;
+  }
+  let h = '', last = '';
+  for (const e of evs) {
+    if (e.datum !== last) { if (last) h += '</div>'; h += `<h3 class="ios-sec">${esc(dayHeading(e.datum))}</h3><div class="ios-list">`; last = e.datum; }
+    const n = (e.dabei || []).length, joined = me && (e.dabei || []).some(x => same(x, me)), mine = me && same(e.von, me);
+    const isNew = Date.now() - new Date(e.erstellt).getTime() < 864e5;
+    const sub = [werPlain(e), e.treffpunkt].filter(Boolean).map(esc).join(' · ');
+    h += `<button class="ios-row s-${esc(e.sport)}" id="e${esc(e.id)}" data-open="${esc(e.id)}">
+      <span class="ios-time"><b>${e.zeit}</b><small>${e.dauer ? DUR_SHORT[e.dauer] : ''}</small></span>
+      <span class="ios-main"><span class="ios-title">${esc(sportName(e))}${isNew ? '<i class="ios-new">Neu</i>' : ''}${e.drink ? '<i class="ios-tag">Drink</i>' : ''}</span>
+        <span class="ios-sub">${sub}</span></span>
+      <span class="ios-acc">${joined || mine ? '<i class="ios-ok">✓</i>' : ''}${n ? `<i class="ios-count">${n}</i>` : ''}<i class="ios-chev">›</i></span>
+    </button>`;
+  }
+  $('#list').innerHTML = h + '</div>';
+  if (location.hash.startsWith('#e')) { const el = document.getElementById(location.hash.slice(1)); if (el && !el.dataset.done) { el.scrollIntoView({block: 'center'}); el.classList.add('flash'); el.dataset.done = 1; } }
+}
+
+let detailId = null;
+function openDetail(id) { const e = EVENTS.find(x => x.id === id); if (!e) return; detailId = id; drawDetail(e); openOv('#ovDetail'); }
+function drawDetail(e) {
+  const me = myName(), mine = me && same(e.von, me), joined = me && (e.dabei || []).some(x => same(x, me));
+  const end = endOf(e), endT = pad(end.getHours()) + ':' + pad(end.getMinutes());
+  const rows = [
+    ['Wann', esc(dayHeading(e.datum)) + '<br>' + e.zeit + (e.dauer ? ' – ' + endT + ' <small>(' + DUR_SHORT[e.dauer] + ')</small>' : ' Uhr')],
+    ['Wer', esc(werPlain(e))],
+    e.treffpunkt ? ['Treffpunkt', esc(e.treffpunkt)] : null,
+    ['Danach', e.drink ? 'Zeit für einen Drink' : '–'],
+    ['Dabei', (e.dabei || []).length ? esc(e.dabei.join(', ')) : '<span class="muted">Noch niemand</span>']
+  ].filter(Boolean);
+  $('#dBody').innerHTML = `<div class="d-hero s-${esc(e.sport)}"><h2 id="dTitle">${esc(sportName(e))}</h2><p>von ${esc(e.von)}</p></div>
+    <div class="grp">${rows.map(r => `<div class="frow"><span>${r[0]}</span><span class="v">${r[1]}</span></div>`).join('')}</div>
+    ${mine ? '' : `<button class="ios-btn wide${joined ? ' tinted' : ''}" data-d="${joined ? 'leave' : 'join'}">${joined ? 'Teilnahme zurückziehen' : 'Ich bin dabei'}</button>`}
+    <div class="grp">
+      <button class="frow link" data-d="wa">Teilen</button>
+      <button class="frow link" data-d="ics">Zum Kalender hinzufügen</button>
+      ${mine ? '<button class="frow link danger" data-d="cancel">Termin absagen</button>' : ''}
+    </div>`;
+}
+$('#dBody').addEventListener('click', ev => {
+  const b = ev.target.closest('[data-d]'); if (!b) return;
+  const e = EVENTS.find(x => x.id === detailId); if (e) doAct(b.dataset.d, e, b);
+});
+
+let fWer = 'i';
+function openForm() {
+  const d = freshDraft();
+  $('#fSport').innerHTML = Object.entries(SPORT).map(([k, s]) => `<option value="${k}">${esc(s.lh)}</option>`).join('');
+  $('#fSport').value = d.sport; $('#fSportText').value = d.sport === 'anders' ? d.sportText : '';
+  $('#fDauer').innerHTML = '<option value="">Offen</option>' + Object.keys(DAUER).map(k => `<option value="${k}">${DUR_SHORT[k]}</option>`).join('');
+  $('#fDauer').value = ''; $('#fDate').value = d.datum; $('#fDate').min = ymd(today0()); $('#fTime').value = d.zeit;
+  $('#fNames').value = ''; $('#fTreff').value = ''; $('#fDrink').checked = false; fWer = 'i'; $('#fErr').textContent = '';
+  let hist = []; try { hist = JSON.parse(localStorage.getItem('zg_treff')) || []; } catch (e) {}
+  $('#treffList').innerHTML = hist.map(t => `<option value="${esc(t)}">`).join('');
+  formSync(); openOv('#ovForm');
+}
+function formDraft() {
+  let wer = {mode: fWer, names: []};
+  if (fWer === 'names') {
+    const n = $('#fNames').value.split(/,|\bund\b|&|\+/).map(cleanName).filter(Boolean).slice(0, 8);
+    wer = n.length > 1 ? {mode: 'names', names: n} : n.length === 1 && !same(n[0], myName()) ? {mode: 'names', names: [myName(), n[0]]} : {mode: 'i', names: []};
+  }
+  const sport = $('#fSport').value;
+  return {wer, datum: $('#fDate').value, zeit: $('#fTime').value, dauer: $('#fDauer').value, sport,
+          sportText: sport === 'anders' ? $('#fSportText').value.trim().slice(0, 40) : '', treffpunkt: $('#fTreff').value.trim().slice(0, 60), drink: $('#fDrink').checked};
+}
+function formSync() {
+  $('#fSportTextRow').hidden = $('#fSport').value !== 'anders';
+  $('#fNamesRow').hidden = fWer !== 'names';
+  $('#fWer').querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.v === fWer));
+  const d = formDraft();
+  const ok = /^\d{4}-\d\d-\d\d$/.test(d.datum) && /^\d\d:\d\d$/.test(d.zeit);
+  $('#fPreview').textContent = ok ? [sportName(d), dayHeading(d.datum).replace(/^.* – /, ''), d.zeit + (d.dauer ? '–' + pad(endOf(d).getHours()) + ':' + pad(endOf(d).getMinutes()) : ' Uhr'), d.treffpunkt].filter(Boolean).join(' · ') : '';
+}
+['#fSport', '#fDate', '#fTime', '#fDauer', '#fNames', '#fTreff', '#fDrink', '#fSportText'].forEach(s => { $(s).addEventListener('input', formSync); $(s).addEventListener('change', formSync); });
+$('#fWer').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; fWer = b.dataset.v; formSync(); if (fWer === 'names') $('#fNames').focus(); });
+$('#fSave').onclick = async () => {
+  const d = formDraft(), name = myName(), err = $('#fErr'), b = $('#fSave');
+  if (!/^\d{4}-\d\d-\d\d$/.test(d.datum) || !/^\d\d:\d\d$/.test(d.zeit)) return err.textContent = 'Bitte Datum und Uhrzeit angeben.';
+  if (d.sport === 'anders' && !d.sportText) return err.textContent = 'Bitte die Aktivität angeben.';
+  if (endOf(d) < new Date()) return err.textContent = 'Der Zeitpunkt liegt in der Vergangenheit.';
+  b.disabled = true; err.textContent = '';
+  try {
+    const j = await store.call('create', {event: {...d, von: name}});
+    EVENTS.push(j.event);
+    localStorage.setItem('zg_last', JSON.stringify({sport: d.sport, sportText: d.sportText}));
+    if (d.treffpunkt) { let h = []; try { h = JSON.parse(localStorage.getItem('zg_treff')) || []; } catch (e) {} h = [d.treffpunkt, ...h.filter(t => t !== d.treffpunkt)].slice(0, 6); localStorage.setItem('zg_treff', JSON.stringify(h)); }
+    $('#cnt').textContent = String(Number($('#cnt').textContent) + 1).padStart(6, '0');
+    closeOv('#ovForm'); render();
+    const el = document.getElementById('e' + j.event.id); if (el) { el.scrollIntoView({block: 'center', behavior: 'smooth'}); el.classList.add('flash'); }
+  } catch (x) { err.textContent = 'Fehler: ' + x.message; }
+  finally { b.disabled = false; }
 };
 
 /* ---------- Iistellige & Push ---------- */
@@ -824,6 +1060,7 @@ $('#themes').addEventListener('click', e => {
   document.documentElement.dataset.theme = b.dataset.themeSet; localStorage.setItem('zg_theme', b.dataset.themeSet); themeDraw();
   applyLang(); hello(); render(); setDraw();
   if (!$('#ovSet').hidden) $('#pushSports').querySelectorAll('label').forEach(l => { const i = l.querySelector('input'), s = SPORT[i.value]; l.lastChild.textContent = ' ' + s.e + ' ' + sLabel(s); });
+  if (!HD()) { closeOv('#ovForm'); closeOv('#ovDetail'); } else if (!$('#ovNew').hidden) closeOv('#ovNew');
   if (draft && !$('#ovNew').hidden) { drawNew(); picker(); }
   pushSync().catch(() => {});
 });
@@ -864,7 +1101,7 @@ $('#ver').textContent = 'zemmat go ' + VERSION + (DEMO ? ' · DEMO' : '');
 $('#demo').hidden = !DEMO;
 hello(); load();
 if (!localStorage.getItem('zg_intro') && !qs.has('nointro')) openIntro();
-setInterval(() => { if (!document.hidden && $('#ovNew').hidden) load(true); }, 60000);
+setInterval(() => { if (!document.hidden && $('#ovNew').hidden && $('#ovForm').hidden) load(true); }, 60000);
 document.addEventListener('visibilitychange', () => { if (!document.hidden) load(true); });
 </script>
 </body>

@@ -36,7 +36,7 @@ du tragst ii, wenn du gosch, und wer will, kunnt mit.
 - **🔔 Popups (Web Push)** bei neuen Terminen – pro Gerät einstellbar, für welche Sportarten. Eigene Termine lösen kein Popup aus.
   iPhone: ab iOS 16.4, **nur** wenn die App am Home-Bildschirm liegt. Android/Desktop: direkt im Browser.
 - **⚙️ Iistellige:** Name, Popups (an/aus, Sportarten, Test-Popup), Design
-- **🎨 Zwei Designs:** 🌈 90er im Vorarlberger Dialekt (Standard) · 😐 Langweilig – modern, hell/dunkel, im Stil vom Fahrtenbuch, **auf Hochdeutsch** (auch die Popups)
+- **🎨 Zwei Designs:** 🌈 90er im Vorarlberger Dialekt (Standard) · 😐 Langweilig – eigene Oberfläche im iOS-2026-Stil (Liquid Glass, hell/dunkel): schlichte Terminliste, Detailansicht, Eingabeformular statt Lückentext, **auf Hochdeutsch** (auch die Popups)
 - **Begrüßung** beim ersten Öffnen: „Oa App statt zwölf WhatsApp-Gruppa“ + Anleitung Home-Bildschirm, optional mit GIF (`INTRO_GIF` in `index.html`). Später über ⚙️ → „Wia goht des?“
 - 90er-Look: WordArt, Laufschrift, Under Construction, Besucher-Zähler (= Einträge seit Anfang), Webring 😄
 
