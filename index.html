@@ -362,7 +362,6 @@ html[data-theme=modern]{background:var(--g-bg)}
   </main>
   <footer>
     <div><span data-hd="Einträge seit Beginn:">Iiträg sit Afang:</span> <span class="lcd" id="cnt">000000</span></div>
-    <div class="ring d90">« <a href="#" id="ringPrev">zrugg</a> | 🏔️ Vorarlberger Sport-Webring | <a href="#" id="ringNext">wiiter</a> »</div>
     <div class="d90">Best viewed with Netscape Navigator 3.0 @ 800×600 · Gmacht mit ❤️ in Vorarlberg</div>
     <div class="badges d90">
       <span class="badge"><b>HTML</b><i>3.2</i></span>
@@ -506,7 +505,7 @@ html[data-theme=modern]{background:var(--g-bg)}
    API_URL = Apps-Script-Web-App (…/exec). Leer → Demo-Modus (localStorage).
    ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbz4xf-IjvvDWh2qYNFIw7fqRttaO1khWAzOT44ZKT8AsNx1l9ad6CIJeIroiMzmIew/exec';
-const VERSION = '1.6.2';
+const VERSION = '1.6.3';
 // Begrüßungs-GIF im Intro (z. B. Giphy-Link „…/giphy.gif“). Leer = ohne GIF.
 const INTRO_GIF = '';
 
@@ -1228,8 +1227,6 @@ $('#installBtn').onclick = async () => { if (!installEvt) return; installEvt.pro
 $('#introBtn').onclick = () => { closeOv('#ovSet'); openIntro(); };
 themeDraw(); applyLang();
 
-/* ---------- Webring (Spaß) ---------- */
-$('#ringPrev').onclick = $('#ringNext').onclick = e => { e.preventDefault(); status('404 – Dr Webring isch 1999 igschlofa. 😴'); };
 
 /* ---------- Start ---------- */
 $('#ver').textContent = 'zemmat go ' + VERSION + (DEMO ? ' · DEMO' : '');
