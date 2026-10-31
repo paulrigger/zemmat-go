@@ -505,7 +505,7 @@ html[data-theme=modern]{background:var(--g-bg)}
    API_URL = Apps-Script-Web-App (…/exec). Leer → Demo-Modus (localStorage).
    ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbz4xf-IjvvDWh2qYNFIw7fqRttaO1khWAzOT44ZKT8AsNx1l9ad6CIJeIroiMzmIew/exec';
-const VERSION = '1.7';
+const VERSION = '1.8';
 // Begrüßungs-GIF im Intro (z. B. Giphy-Link „…/giphy.gif“). Leer = ohne GIF.
 const INTRO_GIF = '';
 
@@ -666,8 +666,8 @@ const demo = {
     if (action === 'join') { const e = find(); if (!e.dabei.some(n => same(n, p.name))) e.dabei.push(p.name); this.save(d); return {ok: true, event: e}; }
     if (action === 'leave') { const e = find(); e.dabei = e.dabei.filter(n => !same(n, p.name)); this.save(d); return {ok: true, event: e}; }
     if (action === 'chat') { const e = find(); e.chat = e.chat || []; const t = String(p.text || '').trim().slice(0, 500); if (!t) throw new Error('Nüt gschrieba'); e.chat.push({n: p.name, t, z: new Date().toISOString()}); this.save(d); return {ok: true, chat: e.chat}; }
-    if (action === 'update') { const e = find(); if (!same(e.von, p.name)) throw new Error('Nur ' + e.von + ' ka des ändra'); ['datum', 'zeit', 'dauer', 'sport', 'sportText', 'wer', 'treffpunkt', 'drink'].forEach(k => e[k] = p.event[k]); this.save(d); return {ok: true, event: e}; }
-    if (action === 'cancel') { const e = find(); if (!same(e.von, p.name)) throw new Error('Nur ' + e.von + ' ka des absaga'); d.events = d.events.filter(x => x !== e); this.save(d); return {ok: true}; }
+    if (action === 'update') { const e = find(); ['datum', 'zeit', 'dauer', 'sport', 'sportText', 'wer', 'treffpunkt', 'drink'].forEach(k => e[k] = p.event[k]); this.save(d); return {ok: true, event: e}; }
+    if (action === 'cancel') { const e = find(); d.events = d.events.filter(x => x !== e); this.save(d); return {ok: true}; }
     throw new Error('Unbekannte Aktion');
   }
 };
@@ -735,7 +735,7 @@ function render() {
         <button class="b95" data-a="chat" data-id="${esc(e.id)}">💬 Schwätza${chatBadge(e)}</button>
         <button class="b95" data-a="wa" data-id="${esc(e.id)}">${T('📣 Teila', 'Teilen')}</button>
         <button class="b95" data-a="ics" data-id="${esc(e.id)}">${T('📆 Kalender', 'Kalender')}</button>
-        ${mine ? `<button class="b95" data-a="edit" data-id="${esc(e.id)}">✏️ Ändra</button><button class="b95" data-a="cancel" data-id="${esc(e.id)}">${T('🗑️ Absaga', 'Absagen')}</button>` : ''}
+        <button class="b95" data-a="edit" data-id="${esc(e.id)}">✏️ Ändra</button><button class="b95" data-a="cancel" data-id="${esc(e.id)}">${T('🗑️ Absaga', 'Absagen')}</button>
       </div></div>`;
   }
   $('#list').innerHTML = h;
@@ -754,7 +754,14 @@ async function doAct(a, e, b) {
   if (a === 'wa') return share(e);
   if (a === 'ics') return ics(e);
   const name = myName() || await askName(); if (!name) return;
-  if (a === 'cancel' && !confirm(T('Würklich absaga? 😢', 'Termin wirklich absagen?'))) return;
+  if (a === 'cancel') {
+    const was = sportOf(e).t + ' ' + dayLabel(e.datum) + ' um ' + e.zeit;
+    if (HD()) { if (!confirm('Termin „' + sportName(e) + '“ wirklich für alle absagen?')) return; }
+    else {
+      if (!confirm('Würklich absaga? 😢\n\n' + was + (same(e.von, name) ? '' : '\n(iitraga vo ' + e.von + ')'))) return;
+      if (!confirm('Ganz sicher? 🤔\nDenn isch dä Termin für alli weg und die andra kriagand Bscheid.')) return;
+    }
+  }
   b.disabled = true; status(T('Schick …', 'Sende …'));
   try {
     const j = await store.call(a, {id: e.id, name});
@@ -1044,7 +1051,7 @@ function drawDetail(e) {
       <button class="frow link" data-d="chat"><span>Nachrichten</span><span class="v">${(e.chat || []).length || ''}${unread(e) ? ' <i class="ios-dot"></i>' : ''} ›</span></button>
       <button class="frow link" data-d="wa">Teilen</button>
       <button class="frow link" data-d="ics">Zum Kalender hinzufügen</button>
-      ${mine ? '<button class="frow link" data-d="edit">Bearbeiten</button><button class="frow link danger" data-d="cancel">Termin absagen</button>' : ''}
+      <button class="frow link" data-d="edit">Bearbeiten</button><button class="frow link danger" data-d="cancel">Termin absagen</button>
     </div>`;
 }
 $('#dBody').addEventListener('click', ev => {

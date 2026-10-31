@@ -1,5 +1,5 @@
 /**
- * zemmat go – API v1.4 (Google Apps Script, gebunden an ein Google Sheet)
+ * zemmat go – API v1.5 (Google Apps Script, gebunden an ein Google Sheet)
  *
  * Einrichtung:
  *   1. Neues Google Sheet → Erweiterungen → Apps Script → diesen Code einfügen
@@ -11,11 +11,11 @@
  * GET  ?action=list&k=…                                   -> { ok, version, events:[…], total }
  * POST (text/plain) {action:"create", k, event:{…}}       -> { ok, event }
  *                   {action:"join"|"leave", k, id, name}  -> { ok, event }
- *                   {action:"cancel", k, id, name}        -> { ok }   (nur Ersteller:in)
+ *                   {action:"cancel", k, id, name}        -> { ok }   (jede:r)
  *                   {action:"subscribe", k, sub, name, sports:[…], lang} -> { ok }  Push-Abo (lang: dia|de)
  *                   {action:"unsubscribe", k, endpoint}   -> { ok }
  *                   {action:"test", k, endpoint}          -> { ok, result }  Test-Popup an dieses Gerät
- *                   {action:"update", k, id, name, event:{…}} -> { ok, event }  nur Ersteller:in
+ *                   {action:"update", k, id, name, event:{…}} -> { ok, event }  (jede:r)
  *                   {action:"chat", k, id, name, text}    -> { ok, chat:[…] }  Chat-Nachricht zu einem Termin
  * Jeder Termin in list hat chat:[{n, t, z}] (Name, Text, Zeit).
  * Fehler immer als { ok:false, error:"…" }
@@ -27,7 +27,7 @@
  *   PUSH_SECRET  gleiches Secret wie im Worker (SECRET)
  *   APP_URL      optional, Standard https://paulrigger.github.io/zemmat-go/
  */
-const VERSION = '1.4';
+const VERSION = '1.5';
 const TZ = 'Europe/Vienna';
 const SHEET = 'Events';
 const COLS = ['id', 'erstellt', 'von', 'datum', 'zeit', 'dauer', 'sport', 'sportText', 'wer', 'treffpunkt', 'drink', 'dabei', 'status'];
@@ -122,7 +122,11 @@ function run_(p) {
       }
       case 'join':   return locked_(() => join_(p.id, p.name, true));
       case 'leave':  return locked_(() => join_(p.id, p.name, false));
-      case 'cancel': return locked_(() => cancel_(p.id, p.name));
+      case 'cancel': {
+        const r = locked_(() => cancel_(p.id, p.name));
+        if (r.ok) { try { notifyCancel_(r.event, name_(p.name)); } catch (x) { console.error('Push Absage: ' + x); } delete r.event; }
+        return r;
+      }
       default:       return { ok: false, error: 'Dia Aktion kenn i ned' };
     }
   } catch (err) {
@@ -232,9 +236,9 @@ function join_(id, name, add) {
 
 function cancel_(id, name) {
   const { sh, hit } = find_(id);
-  if (name_(name).toLowerCase() !== String(hit.ev.von).toLowerCase()) throw new Error('Nur ' + hit.ev.von + ' ka des absaga');
+  if (!name_(name)) throw new Error('Nama fehlt');
   sh.getRange(hit.row, COLS.indexOf('status') + 1).setValue('abgsagt');
-  return { ok: true };
+  return { ok: true, event: hit.ev };
 }
 
 /* ---------- Push ---------- */
@@ -397,7 +401,7 @@ function notifyChat_(ev, msg) {
 /* ---------- Ändern ---------- */
 function update_(id, name, e) {
   const { sh, hit } = find_(id);
-  if (name_(name).toLowerCase() !== String(hit.ev.von).toLowerCase()) throw new Error('Nur ' + hit.ev.von + ' ka des ändra');
+  if (!name_(name)) throw new Error('Nama fehlt');
   const f = fields_(e);
   const row = sh.getRange(hit.row, 1, 1, COLS.length);
   const fmt = c => c === 'zeit' ? 'HH:mm' : c === 'datum' ? 'yyyy-MM-dd' : "yyyy-MM-dd'T'HH:mm:ssXXX";
@@ -428,7 +432,30 @@ function notifyChange_(before, ev, by) {
   const app = props_().getProperty('APP_URL') || 'https://paulrigger.github.io/zemmat-go/';
   const mk = lang => {
     const m = message_(ev, lang);
-    return { title: (lang === 'de' ? '✏️ Geändert: ' : '✏️ Gändert: ') + m.title.replace(/^\S+ /, ''), body: m.body, url: app + '#e' + ev.id, tag: 'zg-' + ev.id };
+    const von = same_(by, ev.von) ? '' : (lang === 'de' ? ' (von ' : ' (vo ') + by + ')';
+    return { title: (lang === 'de' ? '✏️ Geändert: ' : '✏️ Gändert: ') + m.title.replace(/^\S+ /, '') + von, body: m.body, url: app + '#e' + ev.id, tag: 'zg-' + ev.id };
+  };
+  const de = subs.filter(a => a.lang === 'de'), dia = subs.filter(a => a.lang !== 'de');
+  if (dia.length) push_(dia, mk('dia'));
+  if (de.length) push_(de, mk('de'));
+}
+
+function same_(a, b) { return String(a || '').toLowerCase() === String(b || '').toLowerCase(); }
+
+/** Popup „abgesagt“ an alle Beteiligten außer der Person, die abgesagt hat */
+function notifyCancel_(ev, by) {
+  const people = {};
+  [ev.von].concat(ev.dabei || [], (ev.wer && ev.wer.names) || [], (chatMap_()[ev.id] || []).map(c => c.n))
+    .forEach(x => { if (x) people[String(x).toLowerCase()] = 1; });
+  delete people[String(by).toLowerCase()];
+  const { rows } = aboRows_();
+  const subs = rows.filter(a => people[a.name.toLowerCase()]);
+  if (!subs.length) return;
+  const app = props_().getProperty('APP_URL') || 'https://paulrigger.github.io/zemmat-go/';
+  const mk = lang => {
+    const m = message_(ev, lang), de = lang === 'de';
+    return { title: (de ? '❌ Abgesagt: ' : '❌ Abgsagt: ') + m.title.replace(/^\S+ /, ''),
+             body: dayLabel_(ev.datum, lang) + ' um ' + ev.zeit + (de ? ' – abgesagt von ' : ' – abgsagt vo ') + by, url: app, tag: 'zg-' + ev.id };
   };
   const de = subs.filter(a => a.lang === 'de'), dia = subs.filter(a => a.lang !== 'de');
   if (dia.length) push_(dia, mk('dia'));

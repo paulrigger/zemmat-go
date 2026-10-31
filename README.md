@@ -32,7 +32,7 @@ du tragst ii, wenn du gosch, und wer will, kunnt mit.
 - **📆 Kalender** – .ics-Datei zum Importieren
 - **💬 Chat pro Termin** – 90er: IRC-Look („Schwätza“), Langweilig: Nachrichten-Blasen. Ungelesene werden markiert, Popup an alle Beteiligten (Ersteller:in, Dabei, Mitschreibende) mit aktivierten Benachrichtigungen
 - **Kein Login:** Name wird beim ersten Mal abgefragt und lokal gespeichert
-- **✏️ Ändern** und **Absagen** kann nur, wer den Termin angelegt hat (Namensvergleich). Teilnehmer:innen und Chat bleiben beim Ändern erhalten; bei Änderung von Datum, Zeit, Ort, Sportart oder Dauer bekommen alle Beteiligten ein Popup
+- **✏️ Ändern** und **🗑️ Absagen** kann jede:r. Absagen im 90er-Design mit doppelter Rückfrage. Teilnehmer:innen und Chat bleiben beim Ändern erhalten; bei Änderung von Datum, Zeit, Ort, Sportart oder Dauer und bei Absagen bekommen alle Beteiligten ein Popup (mit Name, wer es war)
 - PWA: „Zum Home-Bildschirm“ hinzufügen
 - **🔔 Popups (Web Push)** bei neuen Terminen – pro Gerät einstellbar, für welche Sportarten. Eigene Termine lösen kein Popup aus.
   iPhone: ab iOS 16.4, **nur** wenn die App am Home-Bildschirm liegt. Android/Desktop: direkt im Browser.
@@ -99,7 +99,7 @@ Apps Script kann die Web-Push-Kryptografie (ECDH, ES256) nicht, deshalb übernim
 1. Gruppen-Link öffnen → **Teilen → Zum Home-Bildschirm** → App vom Home-Bildschirm starten.
 2. ⚙️ **Iistellige** → Sportarten wählen → **🔔 Popups iischalta** → erlauben → **📣 Test-Popup**.
 
-**Update auf API v1.4 (Chat + Ändern):** neuen `Code.gs` einfügen → `setup()` ausführen (legt Tab `Chat` an) → Bereitstellungen verwalten → ✏️ → Version: Neu.
+**Update auf API v1.5 (Chat, Ändern, Absagen für alle):** neuen `Code.gs` einfügen → `setup()` ausführen (legt Tab `Chat` an) → Bereitstellungen verwalten → ✏️ → Version: Neu.
 
 **Code-Änderungen an der API:** Bereitstellen → Bereitstellungen verwalten → ✏️ → Version „Neu“ (sonst bleibt die alte aktiv, URL bleibt gleich).
 **Ohne Schlüssel betreiben:** Skripteigenschaft `KEY` löschen.
@@ -112,8 +112,8 @@ Apps Script kann die Web-Push-Kryptografie (ECDH, ES256) nicht, deshalb übernim
 | `GET` | `?action=list&k=…` | `{ok, version, events:[…], total}` (ab gestern, ohne abgesagte) |
 | `POST` | `{action:"create", k, event:{von, datum, zeit, dauer, sport, sportText, wer, treffpunkt, drink}}` | `{ok, event}` |
 | `POST` | `{action:"join"\|"leave", k, id, name}` | `{ok, event}` |
-| `POST` | `{action:"update", k, id, name, event:{…}}` | `{ok, event}` – nur Ersteller:in |
-| `POST` | `{action:"cancel", k, id, name}` | `{ok}` – nur Ersteller:in |
+| `POST` | `{action:"update", k, id, name, event:{…}}` | `{ok, event}` – jede:r |
+| `POST` | `{action:"cancel", k, id, name}` | `{ok}` – jede:r |
 | `POST` | `{action:"subscribe", k, sub, name, sports:[…]}` | `{ok}` – Push-Abo anlegen/aktualisieren (Schlüssel: endpoint) |
 | `POST` | `{action:"unsubscribe", k, endpoint}` | `{ok}` |
 | `POST` | `{action:"test", k, endpoint}` | `{ok, result}` – Test-Popup an dieses Gerät |
