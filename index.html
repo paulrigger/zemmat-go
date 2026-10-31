@@ -203,7 +203,7 @@ footer{border-top:3px double var(--navy); text-align:center; padding:12px 8px 16
    API_URL = Apps-Script-Web-App (…/exec). Leer → Demo-Modus (localStorage).
    ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbz4xf-IjvvDWh2qYNFIw7fqRttaO1khWAzOT44ZKT8AsNx1l9ad6CIJeIroiMzmIew/exec';
-const VERSION = '1.0';
+const VERSION = '1.0.1';
 
 const qs = new URLSearchParams(location.search);
 if (qs.has('k')) { localStorage.setItem('zg_k', qs.get('k')); qs.delete('k'); history.replaceState(null, '', location.pathname + (qs.toString() ? '?' + qs : '') + location.hash); }
@@ -354,8 +354,18 @@ async function load(quiet) {
     render(); status('Dokument: Fertig'); $('#net').textContent = '🌐';
   } catch (e) {
     status('Fehler: ' + e.message, true); $('#net').textContent = '🔌';
-    if (!EVENTS.length) $('#list').innerHTML = `<p class="leerliste"><span class="e">🔌</span>Hoppla, d'Verbindig goht ned.<br><small>${esc(e.message)}</small></p>`;
+    if (/Schlüssel/.test(e.message)) $('#list').innerHTML = `<div class="leerliste"><span class="e">🔑</span>Do brucht's da Gruppa-Schlüssel.<br><small>Entweder da Link us dr WhatsApp-Gruppa uftua – oder Schlüssel (oder ganza Link) do iifüega:</small><br><br>
+      <input class="t95" id="keyIn" placeholder="Schlüssel oder Link" style="width:min(100%,280px)" autocapitalize="off" autocorrect="off"> <button class="b95 big" id="keyOk">🔓 Ine!</button></div>`, keyUi();
+    else if (!EVENTS.length) $('#list').innerHTML = `<p class="leerliste"><span class="e">🔌</span>Hoppla, d'Verbindig goht ned.<br><small>${esc(e.message)}</small></p>`;
   } finally { busy = false; }
+}
+function keyUi() {
+  const go = () => {
+    let v = $('#keyIn').value.trim(); const m = v.match(/[?&]k=([^&#\s]+)/); if (m) v = decodeURIComponent(m[1]);
+    v = v.replace(/[^A-Za-z0-9_-]/g, ''); if (!v) return $('#keyIn').focus();
+    localStorage.setItem('zg_k', v); location.reload();
+  };
+  $('#keyOk').onclick = go; $('#keyIn').addEventListener('keydown', e => { if (e.key === 'Enter') go(); });
 }
 function render() {
   const now = new Date(), me = myName();
