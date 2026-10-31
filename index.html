@@ -506,7 +506,7 @@ html[data-theme=modern]{background:var(--g-bg)}
    API_URL = Apps-Script-Web-App (…/exec). Leer → Demo-Modus (localStorage).
    ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbz4xf-IjvvDWh2qYNFIw7fqRttaO1khWAzOT44ZKT8AsNx1l9ad6CIJeIroiMzmIew/exec';
-const VERSION = '1.6.1';
+const VERSION = '1.6.2';
 // Begrüßungs-GIF im Intro (z. B. Giphy-Link „…/giphy.gif“). Leer = ohne GIF.
 const INTRO_GIF = '';
 
@@ -673,6 +673,17 @@ const demo = {
 };
 const store = DEMO ? demo : api;
 
+/* ---------- NEU = seit dem letzten Besuch ---------- */
+// Beim Öffnen gilt der Zeitpunkt des vorherigen Besuchs; neu ist, was danach eingetragen wurde.
+// Erster Besuch überhaupt: letzte 24 h. Kehrt man nach > 5 Min. zurück, beginnt ein neuer Besuch.
+let VISIT_FROM = Number(localStorage.getItem('zg_visit')) || Date.now() - 864e5, hiddenAt = 0;
+localStorage.setItem('zg_visit', Date.now());
+function isNewEv(e) { return !same(e.von, myName()) && new Date(e.erstellt).getTime() > VISIT_FROM; }
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) { hiddenAt = Date.now(); localStorage.setItem('zg_visit', hiddenAt); }
+  else if (hiddenAt && Date.now() - hiddenAt > 5 * 60e3) { VISIT_FROM = hiddenAt; localStorage.setItem('zg_visit', Date.now()); }
+});
+
 /* ---------- Status ---------- */
 function status(t, bad) { $('#st').textContent = t; $('#st').style.color = bad ? '#c00000' : ''; }
 
@@ -714,7 +725,7 @@ function render() {
   for (const e of evs) {
     if (e.datum !== last) { h += `<h3>📅 ${esc(dayHeading(e.datum))}</h3>`; last = e.datum; }
     const mine = me && same(e.von, me), joined = me && (e.dabei || []).some(n => same(n, me));
-    const isNew = Date.now() - new Date(e.erstellt).getTime() < 864e5;
+    const isNew = isNewEv(e);
     h += `<div class="ev" id="e${esc(e.id)}">${isNew ? '<span class="neu blink ecke">NEU!</span>' : ''}
       <div class="eb fibel">${fibel(e, false)}</div>
       <div class="act">
@@ -981,7 +992,7 @@ function renderIOS(evs, me) {
   for (const e of evs) {
     if (e.datum !== last) { if (last) h += '</div>'; h += `<h3 class="ios-sec">${esc(dayHeading(e.datum))}</h3><div class="ios-list">`; last = e.datum; }
     const n = (e.dabei || []).length, joined = me && (e.dabei || []).some(x => same(x, me)), mine = me && same(e.von, me);
-    const isNew = Date.now() - new Date(e.erstellt).getTime() < 864e5;
+    const isNew = isNewEv(e);
     const sub = [goersText(e), e.treffpunkt].filter(Boolean).map(esc).join(' · ');
     h += `<button class="ios-row s-${esc(e.sport)}" id="e${esc(e.id)}" data-open="${esc(e.id)}">
       <span class="ios-time"><b>${e.zeit}</b><small>${e.dauer ? DUR_SHORT[e.dauer] : ''}</small></span>
