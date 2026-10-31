@@ -505,7 +505,7 @@ html[data-theme=modern]{background:var(--g-bg)}
    API_URL = Apps-Script-Web-App (…/exec). Leer → Demo-Modus (localStorage).
    ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbz4xf-IjvvDWh2qYNFIw7fqRttaO1khWAzOT44ZKT8AsNx1l9ad6CIJeIroiMzmIew/exec';
-const VERSION = '1.9';
+const VERSION = '1.9.1';
 // Begrüßungs-GIF im Intro (z. B. Giphy-Link „…/giphy.gif“). Leer = ohne GIF.
 const INTRO_GIF = '';
 
@@ -640,7 +640,10 @@ const api = {
     if (action === 'list') r = await fetch(API_URL + '?action=list&k=' + encodeURIComponent(KEY), {cache: 'no-store'});
     else r = await fetch(API_URL, {method: 'POST', headers: {'Content-Type': 'text/plain;charset=utf-8'}, body: JSON.stringify({action, k: KEY, ...data})});
     const j = await r.json();
-    if (!j.ok) throw new Error(j.error || 'Fehler');
+    if (!j.ok) {
+      if (/Aktion kenn i ned|Unbekannte Aktion/.test(j.error || '')) throw new Error(T('Dr Server isch no alt – in Apps Script da neue Code.gs iifüega und „Version: Neu“ bereitstella.', 'Der Server ist veraltet – neuen Code.gs in Apps Script einfügen und als neue Version bereitstellen.'));
+      throw new Error(j.error || 'Fehler');
+    }
     return j;
   }
 };
