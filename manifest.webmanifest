@@ -1,0 +1,15 @@
+{
+  "name": "zemmat go",
+  "short_name": "zemmat go",
+  "description": "Mitanand an d'Luft – Bika, Jogga, Wandra, Klettra, Schitoura",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#008080",
+  "theme_color": "#000080",
+  "lang": "de-AT",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

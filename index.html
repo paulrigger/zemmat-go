@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>zemmat go ~ mitanand an d'Luft</title>
+<meta name="description" content="zemmat go: Statt zwölf WhatsApp-Gruppa – iitraga wenn du gosch, und wer will, kunnt mit.">
+<meta name="theme-color" content="#000080">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@0,400;0,700;1,400&display=swap">
+<meta name="apple-mobile-web-app-title" content="zemmat go">
+<style>
+:root{
+  --navy:#000080; --teal:#008080; --gray:#c0c0c0; --dark:#808080; --paper:#fffbea;
+  --fibel:"Comic Sans MS","Comic Neue","Chalkboard SE","Marker Felt",cursive;
+  --ui:Tahoma,"MS Sans Serif",Verdana,Geneva,sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; padding:12px 8px 90px; color:#000;
+  font:17px/1.45 "Times New Roman",Times,serif;
+  background:#007070 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Crect width='80' height='80' fill='%23007070'/%3E%3Cpath d='M0 70 L18 44 L28 56 L40 36 L60 70Z' fill='%23008a8a'/%3E%3Cpath d='M34 45 L40 36 L46 45 L42 43 L40 46 L38 43Z' fill='%23e8ffff'/%3E%3Ctext x='62' y='20' font-size='14' fill='%23ffff66'%3E*%3C/text%3E%3Ctext x='8' y='26' font-size='9' fill='%23ffffff'%3E%2B%3C/text%3E%3C/svg%3E");
+}
+a{color:#0000ee} a:visited{color:#551a8b}
+#page{
+  max-width:700px; margin:0 auto; background:var(--paper);
+  border:6px ridge var(--gray); box-shadow:8px 8px 0 rgba(0,0,0,.45);
+}
+header{text-align:center; padding:14px 10px 4px; background:
+  repeating-linear-gradient(0deg,transparent 0 22px,rgba(0,0,128,.07) 22px 23px);}
+.wordart{
+  display:inline-block; margin:6px 0 0; transform:rotate(-3deg) skewX(-6deg);
+  font:900 clamp(46px,13vw,78px)/1 Impact,"Arial Black","Helvetica Neue",sans-serif; letter-spacing:2px;
+  background:linear-gradient(180deg,#ff0000 0%,#ff8c00 22%,#ffd700 40%,#00c000 58%,#0050ff 78%,#8a2be2 100%);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+  filter:drop-shadow(3px 3px 0 #000) drop-shadow(1px 1px 0 #fff);
+}
+.sub{font:italic 19px var(--fibel); margin:8px 0 2px; color:var(--navy)}
+.sports{font:13px var(--ui); color:#444; margin:2px 0 6px}
+marquee{display:block; background:#000; color:#0f0; font:bold 15px "Courier New",monospace; padding:4px 0; border-top:2px solid #0f0; border-bottom:2px solid #0f0}
+.uc{background:repeating-linear-gradient(45deg,#111 0 12px,#ffcc00 12px 24px); padding:5px; text-align:center}
+.uc span{display:inline-block; background:#ffcc00; border:2px solid #000; padding:1px 10px; font:bold 13px var(--ui)}
+.hello{display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:6px; padding:8px 12px; border-bottom:3px double var(--navy); font-family:var(--fibel); font-size:18px}
+.demo{background:#ff0; border:2px dashed red; margin:10px 12px 0; padding:6px 10px; font:13px var(--ui)}
+main{padding:4px 12px 10px}
+h2{font:bold 26px var(--fibel); color:#c00000; margin:14px 0 4px; text-shadow:2px 2px 0 #ffd;}
+h3{font:bold 15px var(--ui); color:#fff; background:linear-gradient(90deg,var(--navy),#1084d0); padding:3px 8px; margin:20px 0 8px; letter-spacing:.5px}
+hr.rb{border:0; height:5px; margin:14px 0; background:linear-gradient(90deg,red,orange,yellow,lime,cyan,blue,violet,red)}
+.blink{animation:blink 1s steps(1) infinite} @keyframes blink{50%{visibility:hidden}}
+@media (prefers-reduced-motion:reduce){.blink{animation:none} marquee{white-space:normal}}
+
+/* Win95 */
+.b95{
+  font:14px var(--ui); color:#000; background:var(--gray); cursor:pointer;
+  border:2px solid; border-color:#fff #404040 #404040 #fff; box-shadow:inset -1px -1px #808080, inset 1px 1px #dfdfdf;
+  padding:7px 12px; min-height:36px; border-radius:0; -webkit-appearance:none; appearance:none;
+}
+.b95:active,.b95.on{border-color:#404040 #fff #fff #404040; box-shadow:inset 1px 1px #808080; background:#d4d4d4}
+.b95.on{font-weight:bold; background:#ffffcc}
+.b95:focus-visible{outline:1px dotted #000; outline-offset:-5px}
+.b95.big{font-size:17px; font-weight:bold; padding:9px 16px}
+.b95.mini{font-size:12px; padding:3px 8px; min-height:28px}
+.b95:disabled{color:#808080; text-shadow:1px 1px #fff; cursor:default}
+input.t95{font:16px var(--ui); padding:6px; border:2px solid; border-color:#404040 #fff #fff #404040; background:#fff; min-height:36px; border-radius:0; max-width:100%}
+
+/* Fibel / Bilderbuch */
+.fibel{font-family:var(--fibel); font-size:21px; line-height:2.5; word-spacing:2px}
+.bild{display:inline-flex; flex-direction:column; align-items:center; vertical-align:middle; line-height:1.05;
+  padding:3px 6px 2px; margin:0 1px; border:2px dotted #b9a76a; background:#fff; border-radius:6px}
+.bild .e{font-size:1.45em; font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif}
+.bild .w{font-size:.62em; color:#333; white-space:nowrap}
+button.luecke{font:inherit; color:inherit; cursor:pointer; background:#ffff99; border:2px solid; border-color:#fff #404040 #404040 #fff;
+  border-radius:0; text-decoration:none; -webkit-appearance:none; appearance:none}
+button.luecke .w{font-weight:bold; color:var(--navy); text-decoration:underline wavy #d00000; text-underline-offset:3px}
+button.satz{text-decoration:underline wavy #d00000; text-underline-offset:4px}
+button.luecke.sel{background:#aaffaa; border-color:#404040 #fff #fff #404040}
+button.luecke.leer{background:#f2f2f2; opacity:.75; font-style:italic}
+button.satz{display:inline; padding:2px 6px; line-height:2.4; text-align:left}
+.strike, .strike .w{text-decoration:line-through 3px #d00000 !important; opacity:.6}
+
+/* Events */
+.ev{position:relative; background:#fff; border:2px solid #000; box-shadow:5px 5px 0 var(--navy); margin:12px 0 22px; padding:0}
+.ev.flash{animation:flash 1.6s 2} @keyframes flash{50%{background:#ffff99}}
+.ev .eh{display:flex; justify-content:space-between; align-items:center; gap:8px; background:#e8e8e8; border-bottom:2px solid #000; padding:3px 8px; font:13px var(--ui)}
+.ev .eb{padding:4px 12px 2px}
+.ev .fibel{font-size:19px}
+.ev .bild{border-color:#ddd}
+.neu{background:red; color:#ff0; font:bold 11px var(--ui); padding:1px 5px; margin-left:4px}
+.dabei{font:15px var(--fibel); padding:4px 12px 8px}
+.dabei b{color:#006400}
+.ev .act{display:flex; flex-wrap:wrap; gap:6px; padding:0 12px 12px}
+.leerliste{text-align:center; font:20px var(--fibel); padding:26px 8px}
+.leerliste .e{font-size:54px; display:block}
+
+/* FAB */
+#plus{position:fixed; right:max(14px,env(safe-area-inset-right)); bottom:calc(40px + env(safe-area-inset-bottom)); width:76px; height:76px; padding:0;
+  font:bold 40px/1 var(--ui); z-index:20; display:flex; flex-direction:column; align-items:center; justify-content:center; box-shadow:inset -2px -2px #808080, inset 2px 2px #dfdfdf, 4px 4px 0 rgba(0,0,0,.5)}
+#plus small{font:bold 11px var(--ui); margin-top:2px}
+
+/* Statusleiste */
+#status{position:fixed; left:0; right:0; bottom:0; z-index:15; display:flex; gap:3px; padding:3px 3px calc(3px + env(safe-area-inset-bottom)); background:var(--gray); border-top:2px solid #fff; font:12px var(--ui)}
+#status > span{border:1px solid; border-color:#808080 #fff #fff #808080; padding:2px 6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+#status #st{flex:1}
+
+/* Fenster */
+.ov{position:fixed; inset:0; z-index:30; background:rgba(0,40,40,.55); display:flex; align-items:flex-start; justify-content:center; padding:max(14px,env(safe-area-inset-top)) 8px 20px; overflow-y:auto}
+.ov[hidden]{display:none}
+.win{width:100%; max-width:620px; background:var(--gray); border:2px solid; border-color:#dfdfdf #000 #000 #dfdfdf; box-shadow:inset -1px -1px #808080, inset 1px 1px #fff, 6px 6px 0 rgba(0,0,0,.5); padding:3px}
+.tb{display:flex; align-items:center; justify-content:space-between; background:linear-gradient(90deg,var(--navy),#1084d0); color:#fff; font:bold 14px var(--ui); padding:3px 3px 3px 6px}
+.tb .x{min-height:24px; width:28px; padding:0; font:bold 14px var(--ui); line-height:1}
+.wb{padding:10px}
+.wb .hint{font:13px var(--ui); margin:0 0 8px}
+.papier{background:var(--paper); border:2px solid; border-color:#808080 #fff #fff #808080; padding:8px 12px;
+  background-image:repeating-linear-gradient(0deg,transparent 0 51px,#cfe0ff 51px 52px)}
+.picker{margin-top:10px; background:#fff; border:2px solid; border-color:#808080 #fff #fff #808080; padding:10px}
+.picker .ttl{font:bold 13px var(--ui); margin:0 0 8px; color:var(--navy)}
+.picker .opts{display:flex; flex-wrap:wrap; gap:6px}
+.picker .row{display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin-top:10px; font:13px var(--ui)}
+.picker .sp{min-width:86px; flex-direction:column; display:inline-flex; align-items:center; font-size:12px}
+.picker .sp .e{font-size:26px; line-height:1.2}
+.btns{display:flex; flex-wrap:wrap; gap:8px; justify-content:flex-end; margin-top:12px}
+.err{color:#c00000; font:bold 13px var(--ui)}
+
+footer{border-top:3px double var(--navy); text-align:center; padding:12px 8px 16px; font:13px var(--ui)}
+.lcd{display:inline-block; background:#000; color:#ff2020; font:bold 18px "Courier New",monospace; letter-spacing:3px; padding:2px 8px; border:3px inset #888}
+.ring{margin:10px auto; display:inline-block; border:2px outset var(--gray); background:#eee; padding:4px 10px}
+.badges{margin-top:10px; display:flex; flex-wrap:wrap; gap:6px; justify-content:center}
+.badge{font:bold 10px/1 var(--ui); border:1px solid #000; display:inline-flex}
+.badge b{background:#000080; color:#fff; padding:3px 4px} .badge i{font-style:normal; background:#ffcc00; padding:3px 4px}
+@media (max-width:480px){
+  body{padding:0 0 90px} #page{border-width:4px; box-shadow:none}
+  .fibel{font-size:19px} .ev .fibel{font-size:17px}
+}
+</style>
+</head>
+<body>
+<div id="page">
+  <header>
+    <div class="wordart">zemmat go</div>
+    <p class="sub">~ mitanand an d'Luft ~</p>
+    <div class="sports">🚵 Bika · 🚴 Rennvelo · 🚲 Gravla · 🏃 Jogga · 🥾 Wandra · 🧗 Klettra · ⛷️ Schitoura</div>
+  </header>
+  <marquee scrollamount="5">+++ Hoi zemma! +++ Kei zwölf WhatsApp-Gruppa meh +++ Iitraga wenn du gosch – wer will, kunnt mit +++ Kei Login, kei Schmarra +++ Lustenauer usdrücklich willkomma +++</marquee>
+  <div class="uc"><span>🚧 UNDER CONSTRUCTION 🚧</span></div>
+  <div class="hello"><span id="hi">Hoi!</span><button class="b95 mini" id="nameBtn">Nama ändra</button></div>
+  <div class="demo" id="demo" hidden>⚠️ <b>DEMO-MODUS</b> – Iiträg landan nur uf dim eigna Gerät. Für die echte Version brucht's da Link us dr Gruppa.</div>
+  <main>
+    <h2>Was lauft? <span class="blink">✨</span></h2>
+    <div id="list"><p class="leerliste"><span class="e">⏳</span>Lada …</p></div>
+    <hr class="rb">
+  </main>
+  <footer>
+    <div>Iiträg sit Afang: <span class="lcd" id="cnt">000000</span></div>
+    <div class="ring">« <a href="#" id="ringPrev">zrugg</a> | 🏔️ Vorarlberger Sport-Webring | <a href="#" id="ringNext">wiiter</a> »</div>
+    <div>Best viewed with Netscape Navigator 3.0 @ 800×600 · Gmacht mit ❤️ in Vorarlberg</div>
+    <div class="badges">
+      <span class="badge"><b>HTML</b><i>3.2</i></span>
+      <span class="badge"><b>NO</b><i>LOGIN</i></span>
+      <span class="badge"><b>100%</b><i>DIALEKT</i></span>
+      <span class="badge"><b>SOURCE</b><i><a href="https://github.com/paulrigger/zemmat-go" style="color:#000">GitHub</a></i></span>
+    </div>
+  </footer>
+</div>
+
+<button class="b95" id="plus" aria-label="Neua Termin iitraga">+<small>NEU</small></button>
+<div id="status"><span id="st">Dokument: Fertig</span><span id="ver">zemmat go 1.0</span><span id="net">🌐</span></div>
+
+<!-- Neuer Termin -->
+<div class="ov" id="ovNew" hidden>
+  <div class="win" role="dialog" aria-modal="true" aria-labelledby="tNew">
+    <div class="tb"><span id="tNew">📝 Neu.txt – Was hosch vor?</span><button class="b95 x" data-close aria-label="Zuamacha">✕</button></div>
+    <div class="wb">
+      <p class="hint">👉 Tipp uf d'<u>gelba Wörter</u> zum Ändra. Da letschte Satz ka ma durchstricha.</p>
+      <div class="papier"><div id="lt" class="fibel"></div></div>
+      <div id="pk" class="picker" hidden></div>
+      <div class="err" id="newErr"></div>
+      <div class="btns"><button class="b95" data-close>Abbrecha</button><button class="b95 big" id="send">📨 Abschicka!</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- Name -->
+<div class="ov" id="ovName" hidden>
+  <div class="win" role="dialog" aria-modal="true" aria-labelledby="tName" style="max-width:420px">
+    <div class="tb"><span id="tName">👋 Wer bisch du?</span><button class="b95 x" data-close aria-label="Zuamacha">✕</button></div>
+    <div class="wb">
+      <p class="fibel" style="margin:0 0 6px;line-height:1.6">Wia hoaßt du? 🙂</p>
+      <p class="hint">Kei Login, kei Passwort. Nur dr Nama, dass die andra wissand wer kunnt.</p>
+      <input class="t95" id="nameIn" maxlength="24" autocomplete="nickname" placeholder="z. B. Paul" style="width:100%">
+      <div class="btns"><button class="b95 big" id="nameOk">Passt! 👍</button></div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* =====================================================================
+   zemmat go – Frontend v1.0
+   API_URL = Apps-Script-Web-App (…/exec). Leer → Demo-Modus (localStorage).
+   ===================================================================== */
+const API_URL = '';
+const VERSION = '1.0';
+
+const qs = new URLSearchParams(location.search);
+if (qs.has('k')) { localStorage.setItem('zg_k', qs.get('k')); qs.delete('k'); history.replaceState(null, '', location.pathname + (qs.toString() ? '?' + qs : '') + location.hash); }
+const KEY  = localStorage.getItem('zg_k') || '';
+const DEMO = !API_URL || qs.has('demo');
+
+/* ---------- Wörterbuach ---------- */
+const WD = ['Sunntig','Mäntig','Zischtig','Mittwoch','Donnstig','Fritig','Samstig'];
+const SPORT = {
+  mtb:      {e:'🚵', t:'Mountainbika',  l:'Mountainbike'},
+  rennrad:  {e:'🚴', t:'Rennvelo fahra', l:'Rennvelo'},
+  gravel:   {e:'🚲', t:'gravla',         l:'Gravel'},
+  jogga:    {e:'🏃', t:'jogga',          l:'Jogga'},
+  wandra:   {e:'🥾', t:'wandra',         l:'Wandra'},
+  klettra:  {e:'🧗', t:'klettra',        l:'Klettra'},
+  schitour: {e:'⛷️', t:'uf Schitour',    l:'Schitour'},
+  langlauf: {e:'🎿', t:'langlaufa',      l:'Langlauf'},
+  schwimma: {e:'🏊', t:'schwimma',       l:'Schwimma'},
+  anders:   {e:'✨', t:'',               l:'Öppis anders'}
+};
+const DAUER = {h05:['a halbe Stund',.5], h1:['a Stund',1], h15:['anderthalb Stund',1.5], h2:['zwoa Stund',2], h3:['drei Stund',3], halb:['an halba Tag',4], ganz:['an ganza Tag',9]};
+const ZEITEN = ['06:00','07:00','09:00','10:00','12:00','14:00','16:00','17:00','17:30','18:00','18:30','19:00'];
+
+/* ---------- Helfer ---------- */
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pad = n => String(n).padStart(2, '0');
+const ymd = d => d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+const addDays = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x; };
+const parseYmd = s => { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); };
+const today0 = () => { const d = new Date(); d.setHours(0, 0, 0, 0); return d; };
+const cleanName = s => String(s || '').replace(/[,<>]/g, '').replace(/\s+/g, ' ').trim().slice(0, 24);
+const same = (a, b) => String(a).toLowerCase() === String(b).toLowerCase();
+const myName = () => localStorage.getItem('zg_name') || '';
+
+function dayDiff(datum) { return Math.round((parseYmd(datum) - today0()) / 864e5); }
+function dayLabel(datum) {
+  const d = parseYmd(datum), n = dayDiff(datum);
+  if (n === 0) return 'hüt';
+  if (n === 1) return 'morn';
+  if (n === 2) return 'übermorn';
+  if (n === -1) return 'geschtr';
+  if (n > 2 && n < 7) return 'am ' + WD[d.getDay()];
+  return 'am ' + WD[d.getDay()].slice(0, 2) + ' ' + d.getDate() + '.' + (d.getMonth() + 1) + '.';
+}
+function dayHeading(datum) {
+  const d = parseYmd(datum), n = dayDiff(datum);
+  const pre = n === 0 ? 'Hüt – ' : n === 1 ? 'Morn – ' : n === 2 ? 'Übermorn – ' : '';
+  return pre + WD[d.getDay()] + ', ' + d.getDate() + '.' + (d.getMonth() + 1) + '.';
+}
+function clock(z) {
+  let [h, m] = (z || '12:00').split(':').map(Number); h = h % 12 || 12;
+  const half = m >= 15 && m < 45; if (m >= 45) h = h % 12 + 1;
+  return String.fromCodePoint((half ? 0x1F55C : 0x1F550) + h - 1);
+}
+function sportOf(ev) { const s = SPORT[ev.sport] || SPORT.anders; return {e: s.e, t: ev.sport === 'anders' ? (ev.sportText || 'öppis macha') : s.t}; }
+function plural(w) { return w && w.mode !== 'i'; }
+function werText(w) {
+  if (!w || w.mode === 'i') return 'I';
+  if (w.mode === 'mir') return 'Mir';
+  const n = (w.names || []).filter(Boolean);
+  return n.length < 2 ? (n[0] || 'Mir') : n.slice(0, -1).join(', ') + ' und ' + n[n.length - 1];
+}
+function startOf(ev) { const d = parseYmd(ev.datum); const [h, m] = ev.zeit.split(':').map(Number); d.setHours(h, m); return d; }
+function endOf(ev) { return new Date(startOf(ev).getTime() + ((DAUER[ev.dauer] || [0, 2])[1]) * 36e5); }
+
+/* ---------- Bilderbuch-Satz ---------- */
+function bild(k, e, t, edit, x = {}) {
+  const c = 'bild' + (edit ? ' luecke' : '') + (x.leer ? ' leer' : '') + (x.strike ? ' strike' : '') + (edit && k === sel ? ' sel' : '');
+  const inner = `<span class="e" aria-hidden="true">${e}</span><span class="w">${esc(t)}</span>`;
+  return edit ? `<button type="button" class="${c}" data-k="${k}">${inner}</button>` : `<span class="${c}">${inner}</span>`;
+}
+function fibel(ev, edit) {
+  const w = ev.wer || {mode: 'i'}, pl = plural(w), sp = sportOf(ev);
+  let h = bild('wer', w.mode === 'i' ? '🙋' : w.mode === 'mir' ? '👫' : '👥', werText(w), edit) + ' ' + (pl ? 'gond' : 'gang') + ' '
+        + bild('datum', '📅', dayLabel(ev.datum), edit) + ' um ' + bild('zeit', clock(ev.zeit), ev.zeit, edit);
+  if (ev.dauer || edit) h += ' ' + bild('dauer', '⏳', ev.dauer ? 'für ' + DAUER[ev.dauer][0] : 'wia lang?', edit, {leer: !ev.dauer});
+  h += ' ' + bild('sport', sp.e, sp.t, edit) + '.';
+  if (ev.treffpunkt || edit) h += ' Treffpunkt: ' + bild('treff', '📍', ev.treffpunkt || 'wo?', edit, {leer: !ev.treffpunkt}) + '.';
+  h += ' <b>Wer kunnt mit?</b>';
+  const dr = 'Nochher ' + (pl ? 'hond mir' : 'hon i') + ' o no Zit für an ';
+  const glas = `<span class="bild"><span class="e" aria-hidden="true">🍺</span><span class="w">Drink</span></span>`;
+  if (edit) h += ` <button type="button" class="luecke satz${ev.drink ? '' : ' strike'}" data-k="drink" aria-pressed="${!ev.drink}">${dr}${glas}.</button>`;
+  else if (ev.drink) h += ' ' + dr + glas + '.';
+  return h;
+}
+function plain(ev) {
+  const w = ev.wer || {mode: 'i'}, pl = plural(w), sp = sportOf(ev);
+  let s = `${werText(w)} ${pl ? 'gond' : 'gang'} ${dayLabel(ev.datum)} (${dayHeading(ev.datum)}) um ${ev.zeit}`
+        + (ev.dauer ? ' für ' + DAUER[ev.dauer][0] : '') + ` ${sp.t} ${sp.e}.`;
+  if (ev.treffpunkt) s += ` Treffpunkt: ${ev.treffpunkt}.`;
+  s += ' Wer kunnt mit?';
+  if (ev.drink) s += ` Nochher ${pl ? 'hond mir' : 'hon i'} o no Zit für an Drink 🍺.`;
+  return s;
+}
+
+/* ---------- Daten: API oder Demo ---------- */
+const api = {
+  async call(action, data = {}) {
+    let r;
+    if (action === 'list') r = await fetch(API_URL + '?action=list&k=' + encodeURIComponent(KEY), {cache: 'no-store'});
+    else r = await fetch(API_URL, {method: 'POST', headers: {'Content-Type': 'text/plain;charset=utf-8'}, body: JSON.stringify({action, k: KEY, ...data})});
+    const j = await r.json();
+    if (!j.ok) throw new Error(j.error || 'Fehler');
+    return j;
+  }
+};
+const demo = {
+  load() {
+    let d = null; try { d = JSON.parse(localStorage.getItem('zg_demo')); } catch (e) {}
+    if (!d) {
+      const t = today0(), id = () => Math.random().toString(36).slice(2, 10), now = new Date().toISOString();
+      d = {total: 41, events: [
+        {id: id(), erstellt: now, von: 'Paul', datum: ymd(addDays(t, 1)), zeit: '14:00', dauer: 'h1', sport: 'jogga', wer: {mode: 'i'}, treffpunkt: 'Rheinbrugg Lustenau', drink: false, dabei: ['Anna']},
+        {id: id(), erstellt: now, von: 'Mäx', datum: ymd(addDays(t, 1)), zeit: '18:00', dauer: '', sport: 'mtb', wer: {mode: 'names', names: ['Mäx', 'Lisi']}, treffpunkt: 'Karren Talstation', drink: true, dabei: []},
+        {id: id(), erstellt: '2026-01-01T00:00:00Z', von: 'Bernd', datum: ymd(addDays(t, 3)), zeit: '07:00', dauer: 'ganz', sport: 'schitour', wer: {mode: 'mir'}, treffpunkt: 'Parkplatz Bödele', drink: true, dabei: ['Paul', 'Vroni', 'Simon']}
+      ]};
+      this.save(d);
+    }
+    return d;
+  },
+  save(d) { localStorage.setItem('zg_demo', JSON.stringify(d)); },
+  async call(action, p = {}) {
+    await new Promise(r => setTimeout(r, 150));
+    const d = this.load(), find = () => { const e = d.events.find(x => x.id === p.id); if (!e) throw new Error('Termin nüm gfunda'); return e; };
+    if (action === 'list') return {ok: true, events: d.events, total: d.total};
+    if (action === 'create') { const e = {...p.event, id: Math.random().toString(36).slice(2, 10), erstellt: new Date().toISOString(), dabei: []}; d.events.push(e); d.total++; this.save(d); return {ok: true, event: e}; }
+    if (action === 'join') { const e = find(); if (!e.dabei.some(n => same(n, p.name))) e.dabei.push(p.name); this.save(d); return {ok: true, event: e}; }
+    if (action === 'leave') { const e = find(); e.dabei = e.dabei.filter(n => !same(n, p.name)); this.save(d); return {ok: true, event: e}; }
+    if (action === 'cancel') { const e = find(); if (!same(e.von, p.name)) throw new Error('Nur ' + e.von + ' ka des absaga'); d.events = d.events.filter(x => x !== e); this.save(d); return {ok: true}; }
+    throw new Error('Unbekannte Aktion');
+  }
+};
+const store = DEMO ? demo : api;
+
+/* ---------- Status ---------- */
+function status(t, bad) { $('#st').textContent = t; $('#st').style.color = bad ? '#c00000' : ''; }
+
+/* ---------- Liste ---------- */
+let EVENTS = [], busy = false;
+async function load(quiet) {
+  if (busy) return; busy = true;
+  if (!quiet) status('Verbinda mit zemmat-go.at …');
+  try {
+    const j = await store.call('list');
+    EVENTS = (j.events || []).filter(e => e.status !== 'abgsagt');
+    $('#cnt').textContent = String(j.total || 0).padStart(6, '0');
+    render(); status('Dokument: Fertig'); $('#net').textContent = '🌐';
+  } catch (e) {
+    status('Fehler: ' + e.message, true); $('#net').textContent = '🔌';
+    if (!EVENTS.length) $('#list').innerHTML = `<p class="leerliste"><span class="e">🔌</span>Hoppla, d'Verbindig goht ned.<br><small>${esc(e.message)}</small></p>`;
+  } finally { busy = false; }
+}
+function render() {
+  const now = new Date(), me = myName();
+  const evs = EVENTS.filter(e => endOf(e) > now).sort((a, b) => startOf(a) - startOf(b));
+  if (!evs.length) {
+    $('#list').innerHTML = `<div class="leerliste"><span class="e">🦗</span>Do isch no nüt los.<br>Mach du da Afang!<br><br><button class="b95 big" onclick="openNew()">➕ I gang …</button></div>`;
+    return;
+  }
+  let h = '', last = '';
+  for (const e of evs) {
+    if (e.datum !== last) { h += `<h3>📅 ${esc(dayHeading(e.datum))}</h3>`; last = e.datum; }
+    const mine = me && same(e.von, me), joined = me && (e.dabei || []).some(n => same(n, me));
+    const isNew = Date.now() - new Date(e.erstellt).getTime() < 864e5;
+    const dab = (e.dabei || []).length
+      ? `🙋 <b>Dabei:</b> ${esc(e.dabei.join(', '))} <small>(${e.dabei.length} ${e.dabei.length === 1 ? 'Person' : 'Lüt'})</small>`
+      : '🙋 Bis jetzt no niemert – gang mit!';
+    h += `<div class="ev" id="e${esc(e.id)}">
+      <div class="eh"><span>✍️ <b>${esc(e.von)}</b> schriebt:${isNew ? '<span class="neu blink">NEU!</span>' : ''}</span><span>${e.zeit} Uhr</span></div>
+      <div class="eb fibel">${fibel(e, false)}</div>
+      <div class="dabei">${dab}</div>
+      <div class="act">
+        ${mine ? '' : joined
+          ? `<button class="b95 on" data-a="leave" data-id="${esc(e.id)}">✅ I bin dabei · doch ned?</button>`
+          : `<button class="b95 big" data-a="join" data-id="${esc(e.id)}">🙋 I bin dabei!</button>`}
+        <button class="b95" data-a="wa" data-id="${esc(e.id)}">📣 Teila</button>
+        <button class="b95" data-a="ics" data-id="${esc(e.id)}">📆 Kalender</button>
+        ${mine ? `<button class="b95" data-a="cancel" data-id="${esc(e.id)}">🗑️ Absaga</button>` : ''}
+      </div></div>`;
+  }
+  $('#list').innerHTML = h;
+  if (location.hash.startsWith('#e')) { const el = document.getElementById(location.hash.slice(1)); if (el && !el.dataset.done) { el.scrollIntoView({block: 'center'}); el.classList.add('flash'); el.dataset.done = 1; } }
+}
+
+$('#list').addEventListener('click', async ev => {
+  const b = ev.target.closest('button[data-a]'); if (!b) return;
+  const e = EVENTS.find(x => x.id === b.dataset.id); if (!e) return;
+  const a = b.dataset.a;
+  if (a === 'wa') return share(e);
+  if (a === 'ics') return ics(e);
+  const name = myName() || await askName(); if (!name) return;
+  if (a === 'cancel' && !confirm('Würklich absaga? 😢')) return;
+  b.disabled = true; status('Schick …');
+  try {
+    const j = await store.call(a, {id: e.id, name});
+    if (a === 'cancel') EVENTS = EVENTS.filter(x => x !== e); else Object.assign(e, j.event);
+    render(); status(a === 'join' ? 'Super, du bisch dabei! 🎉' : a === 'leave' ? 'Schad – vlicht s\'nögscht Mol.' : 'Abgsagt.');
+  } catch (x) { status('Fehler: ' + x.message, true); b.disabled = false; alert('Hoppla: ' + x.message); }
+});
+
+function link(e) { return location.origin + location.pathname + (KEY ? '?k=' + encodeURIComponent(KEY) : DEMO && qs.has('demo') ? '?demo' : '') + '#e' + e.id; }
+async function share(e) {
+  const text = '✍️ ' + e.von + ': ' + plain(e) + '\n👉 zemmat go: ' + link(e);
+  if (navigator.share) { try { await navigator.share({text}); return; } catch (x) { if (x.name === 'AbortError') return; } }
+  window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
+}
+function ics(e) {
+  const f = d => d.getFullYear() + pad(d.getMonth() + 1) + pad(d.getDate()) + 'T' + pad(d.getHours()) + pad(d.getMinutes()) + '00';
+  const x = s => String(s).replace(/([,;\\])/g, '\\$1').replace(/\n/g, '\\n');
+  const sp = sportOf(e);
+  const body = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//zemmat go//DE', 'BEGIN:VEVENT',
+    'UID:' + e.id + '@zemmat-go', 'DTSTAMP:' + new Date().toISOString().replace(/[-:]/g, '').slice(0, 15) + 'Z',
+    'DTSTART:' + f(startOf(e)), 'DTEND:' + f(endOf(e)), 'SUMMARY:' + x(sp.e + ' ' + sp.t + ' mit ' + e.von),
+    e.treffpunkt ? 'LOCATION:' + x(e.treffpunkt) : '', 'DESCRIPTION:' + x(plain(e) + '\n' + link(e)), 'END:VEVENT', 'END:VCALENDAR'].filter(Boolean).join('\r\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([body], {type: 'text/calendar'})); a.download = 'zemmat-go-' + e.datum + '.ics'; a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+}
+
+/* ---------- Name ---------- */
+let nameResolve = null;
+function askName() {
+  return new Promise(res => {
+    nameResolve = res; $('#nameIn').value = myName(); openOv('#ovName'); setTimeout(() => $('#nameIn').focus(), 50);
+  });
+}
+function saveName() {
+  const n = cleanName($('#nameIn').value);
+  if (!n) { $('#nameIn').focus(); return; }
+  localStorage.setItem('zg_name', n); closeOv('#ovName'); hello(); render();
+  if (nameResolve) { nameResolve(n); nameResolve = null; }
+}
+$('#nameOk').onclick = saveName;
+$('#nameIn').addEventListener('keydown', e => { if (e.key === 'Enter') saveName(); });
+$('#nameBtn').onclick = () => askName();
+function hello() {
+  const n = myName();
+  $('#hi').innerHTML = n ? `Hoi <b>${esc(n)}</b>! 👋` : 'Hoi Fremda! 👋 <small>(no kei Nama)</small>';
+  $('#nameBtn').textContent = n ? 'Nama ändra' : 'Wia hoaßt du?';
+}
+
+/* ---------- Fenster ---------- */
+function openOv(s) { $(s).hidden = false; document.body.style.overflow = 'hidden'; }
+function closeOv(s) {
+  $(s).hidden = true; if ($('#ovNew').hidden && $('#ovName').hidden) document.body.style.overflow = '';
+  if (s === '#ovName' && nameResolve) { nameResolve(''); nameResolve = null; }
+}
+document.querySelectorAll('.ov').forEach(o => {
+  o.addEventListener('click', e => { if (e.target === o || e.target.closest('[data-close]')) closeOv('#' + o.id); });
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') ['#ovName', '#ovNew'].forEach(s => { if (!$(s).hidden) closeOv(s); }); });
+
+/* ---------- Neuer Termin: Lückentext ---------- */
+let draft = null, sel = null;
+function freshDraft() {
+  let last = {}; try { last = JSON.parse(localStorage.getItem('zg_last')) || {}; } catch (e) {}
+  return {wer: {mode: 'i', names: []}, datum: ymd(addDays(today0(), 1)), zeit: '18:00', dauer: '',
+          sport: SPORT[last.sport] ? last.sport : 'mtb', sportText: last.sportText || '', treffpunkt: '', drink: true};
+}
+async function openNew() {
+  const n = myName() || await askName(); if (!n) return;
+  draft = freshDraft(); sel = null; $('#newErr').textContent = ''; drawNew(); $('#pk').hidden = true; openOv('#ovNew');
+}
+window.openNew = openNew;
+$('#plus').onclick = openNew;
+function drawNew() { $('#lt').innerHTML = fibel(draft, true); }
+
+$('#lt').addEventListener('click', e => {
+  const b = e.target.closest('button[data-k]'); if (!b) return;
+  const k = b.dataset.k;
+  if (k === 'drink') { draft.drink = !draft.drink; sel = null; $('#pk').hidden = true; drawNew(); return; }
+  sel = sel === k ? null : k; drawNew(); picker();
+});
+
+function opt(label, on, attrs, cls = '') { return `<button type="button" class="b95${cls}${on ? ' on' : ''}" ${attrs}>${label}</button>`; }
+function picker() {
+  const pk = $('#pk');
+  if (!sel) { pk.hidden = true; return; }
+  let h = '';
+  if (sel === 'wer') {
+    const w = draft.wer, names = w.mode === 'names' ? w.names.join(', ') : myName() + ', ';
+    h = `<p class="ttl">Wer goht?</p><div class="opts">
+      ${opt('🙋 I', w.mode === 'i', 'data-set="wer" data-v="i"')}${opt('👫 Mir', w.mode === 'mir', 'data-set="wer" data-v="mir"')}</div>
+      <div class="row">👥 Mit Nama: <input class="t95" id="pkNames" value="${esc(names)}" placeholder="Paul, Anna" style="flex:1;min-width:150px">
+      <button type="button" class="b95" data-set="names">OK</button></div>`;
+  }
+  if (sel === 'datum') {
+    const t = today0();
+    h = '<p class="ttl">Wenn?</p><div class="opts">';
+    for (let i = 0; i < 9; i++) { const d = ymd(addDays(t, i)); h += opt(dayLabel(d).replace(/^am /, ''), draft.datum === d, `data-set="datum" data-v="${d}"`); }
+    h += `</div><div class="row">📅 Oder: <input type="date" class="t95" id="pkDate" min="${ymd(t)}" value="${draft.datum}"></div>`;
+  }
+  if (sel === 'zeit') {
+    h = '<p class="ttl">Um wia viel Uhr?</p><div class="opts">' + ZEITEN.map(z => opt(clock(z) + ' ' + z, draft.zeit === z, `data-set="zeit" data-v="${z}"`)).join('') + '</div>'
+      + `<div class="row">⌚ Genau: <input type="time" class="t95" id="pkTime" step="300" value="${draft.zeit}"></div>`;
+  }
+  if (sel === 'dauer') {
+    h = '<p class="ttl">Wia lang ungefähr?</p><div class="opts">' + opt('🤷 Egal / offa', !draft.dauer, 'data-set="dauer" data-v=""')
+      + Object.entries(DAUER).map(([k, v]) => opt(v[0], draft.dauer === k, `data-set="dauer" data-v="${k}"`)).join('') + '</div>';
+  }
+  if (sel === 'sport') {
+    h = '<p class="ttl">Was macha mir?</p><div class="opts">' + Object.entries(SPORT).filter(([k]) => k !== 'anders')
+      .map(([k, s]) => opt(`<span class="e">${s.e}</span>${s.l}`, draft.sport === k, `data-set="sport" data-v="${k}"`, ' sp')).join('') + '</div>'
+      + `<div class="row">✨ Öppis anders: <input class="t95" id="pkSport" maxlength="40" value="${esc(draft.sport === 'anders' ? draft.sportText : '')}" placeholder="z. B. Skitura, Yoga …" style="flex:1;min-width:140px">
+         <button type="button" class="b95" data-set="anders">OK</button></div>`;
+  }
+  if (sel === 'treff') {
+    let hist = []; try { hist = JSON.parse(localStorage.getItem('zg_treff')) || []; } catch (e) {}
+    h = `<p class="ttl">Wo trefft ma se?</p>${hist.length ? '<div class="opts">' + hist.map(t => opt('📍 ' + esc(t), draft.treffpunkt === t, `data-set="treff" data-v="${esc(t)}"`)).join('') + '</div>' : ''}
+      <div class="row"><input class="t95" id="pkTreff" maxlength="60" value="${esc(draft.treffpunkt)}" placeholder="z. B. Rheinbrugg, Karren Talstation" style="flex:1;min-width:160px">
+      <button type="button" class="b95" data-set="treffIn">OK</button>${draft.treffpunkt ? '<button type="button" class="b95" data-set="treff" data-v="">✕ weg</button>' : ''}</div>`;
+  }
+  pk.innerHTML = h; pk.hidden = false;
+  const inp = pk.querySelector('input');
+  if (inp && (sel === 'treff' || (sel === 'sport' && draft.sport === 'anders'))) setTimeout(() => inp.focus(), 30);
+  pk.querySelectorAll('input:not([type=date]):not([type=time])').forEach(i => i.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); i.parentElement.querySelector('button').click(); } }));
+  const dI = $('#pkDate'); if (dI) dI.onchange = () => { if (dI.value) { draft.datum = dI.value; done(); } };
+  const tI = $('#pkTime'); if (tI) tI.onchange = () => { if (/^\d\d:\d\d$/.test(tI.value)) { draft.zeit = tI.value; drawNew(); picker(); } };
+}
+function done() { sel = null; drawNew(); $('#pk').hidden = true; }
+$('#pk').addEventListener('click', e => {
+  const b = e.target.closest('button[data-set]'); if (!b) return;
+  const s = b.dataset.set, v = b.dataset.v;
+  if (s === 'wer') draft.wer = {mode: v, names: []};
+  if (s === 'names') {
+    const n = $('#pkNames').value.split(/,|\bund\b|&|\+/).map(cleanName).filter(Boolean).slice(0, 8);
+    draft.wer = n.length > 1 ? {mode: 'names', names: n} : n.length === 1 && !same(n[0], myName()) ? {mode: 'names', names: [myName(), n[0]]} : {mode: 'i', names: []};
+  }
+  if (s === 'datum') draft.datum = v;
+  if (s === 'zeit') draft.zeit = v;
+  if (s === 'dauer') draft.dauer = v;
+  if (s === 'sport') { draft.sport = v; draft.sportText = ''; }
+  if (s === 'anders') { const t = $('#pkSport').value.trim(); if (!t) return; draft.sport = 'anders'; draft.sportText = t.slice(0, 40); }
+  if (s === 'treff') draft.treffpunkt = v || '';
+  if (s === 'treffIn') draft.treffpunkt = $('#pkTreff').value.trim().slice(0, 60);
+  done();
+});
+
+$('#send').onclick = async () => {
+  const b = $('#send'), name = myName();
+  if (!name) return askName();
+  if (endOf(draft) < new Date()) { $('#newErr').textContent = '⏰ Dä Zitpunkt isch scho verbei.'; return; }
+  b.disabled = true; b.textContent = '⏳ Schick …'; $('#newErr').textContent = ''; status('Schick …');
+  try {
+    const j = await store.call('create', {event: {...draft, von: name}});
+    EVENTS.push(j.event);
+    localStorage.setItem('zg_last', JSON.stringify({sport: draft.sport, sportText: draft.sportText}));
+    if (draft.treffpunkt) { let h = []; try { h = JSON.parse(localStorage.getItem('zg_treff')) || []; } catch (e) {} h = [draft.treffpunkt, ...h.filter(t => t !== draft.treffpunkt)].slice(0, 6); localStorage.setItem('zg_treff', JSON.stringify(h)); }
+    $('#cnt').textContent = String(Number($('#cnt').textContent) + 1).padStart(6, '0');
+    closeOv('#ovNew'); render(); status('Iitraga! 🎉 Jetzt no teila.');
+    const el = document.getElementById('e' + j.event.id); if (el) { el.scrollIntoView({block: 'center', behavior: 'smooth'}); el.classList.add('flash'); }
+  } catch (x) { $('#newErr').textContent = 'Hoppla: ' + x.message; status('Fehler: ' + x.message, true); }
+  finally { b.disabled = false; b.textContent = '📨 Abschicka!'; }
+};
+
+/* ---------- Webring (Spaß) ---------- */
+$('#ringPrev').onclick = $('#ringNext').onclick = e => { e.preventDefault(); status('404 – Dr Webring isch 1999 igschlofa. 😴'); };
+
+/* ---------- Start ---------- */
+$('#ver').textContent = 'zemmat go ' + VERSION + (DEMO ? ' · DEMO' : '');
+$('#demo').hidden = !DEMO;
+hello(); load();
+setInterval(() => { if (!document.hidden && $('#ovNew').hidden) load(true); }, 60000);
+document.addEventListener('visibilitychange', () => { if (!document.hidden) load(true); });
+</script>
+</body>
+</html>
