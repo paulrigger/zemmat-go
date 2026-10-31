@@ -505,7 +505,7 @@ html[data-theme=modern]{background:var(--g-bg)}
    API_URL = Apps-Script-Web-App (…/exec). Leer → Demo-Modus (localStorage).
    ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbz4xf-IjvvDWh2qYNFIw7fqRttaO1khWAzOT44ZKT8AsNx1l9ad6CIJeIroiMzmIew/exec';
-const VERSION = '1.6.3';
+const VERSION = '1.6.4';
 // Begrüßungs-GIF im Intro (z. B. Giphy-Link „…/giphy.gif“). Leer = ohne GIF.
 const INTRO_GIF = '';
 
@@ -804,7 +804,8 @@ function hello() {
 }
 
 /* ---------- Fenster ---------- */
-function openOv(s) { $(s).hidden = false; document.body.style.overflow = 'hidden'; }
+let ovZ = 30;
+function openOv(s) { const o = $(s); o.style.zIndex = ++ovZ; o.hidden = false; document.body.style.overflow = 'hidden'; }
 function closeOv(s) {
   $(s).hidden = true; if (document.querySelectorAll('.ov:not([hidden])').length === 0) document.body.style.overflow = '';
   if (s === '#ovIntro') localStorage.setItem('zg_intro', '1');
@@ -814,7 +815,7 @@ function closeOv(s) {
 document.querySelectorAll('.ov').forEach(o => {
   o.addEventListener('click', e => { if (e.target === o || e.target.closest('[data-close]')) closeOv('#' + o.id); });
 });
-document.addEventListener('keydown', e => { if (e.key === 'Escape') ['#ovName', '#ovChat', '#ovNew', '#ovSet', '#ovIntro', '#ovForm', '#ovDetail'].forEach(s => { if (!$(s).hidden) closeOv(s); }); });
+document.addEventListener('keydown', e => { if (e.key !== 'Escape') return; const top = [...document.querySelectorAll('.ov:not([hidden])')].sort((a, b) => (+b.style.zIndex || 0) - (+a.style.zIndex || 0))[0]; if (top) closeOv('#' + top.id); });
 
 /* ---------- Neuer Termin: Lückentext ---------- */
 let draft = null, sel = null;
