@@ -1,5 +1,5 @@
 /**
- * zemmat go – API v1.5 (Google Apps Script, gebunden an ein Google Sheet)
+ * zemmat go – API v1.6 (Google Apps Script, gebunden an ein Google Sheet)
  *
  * Einrichtung:
  *   1. Neues Google Sheet → Erweiterungen → Apps Script → diesen Code einfügen
@@ -27,10 +27,10 @@
  *   PUSH_SECRET  gleiches Secret wie im Worker (SECRET)
  *   APP_URL      optional, Standard https://paulrigger.github.io/zemmat-go/
  */
-const VERSION = '1.5';
+const VERSION = '1.6';
 const TZ = 'Europe/Vienna';
 const SHEET = 'Events';
-const COLS = ['id', 'erstellt', 'von', 'datum', 'zeit', 'dauer', 'sport', 'sportText', 'wer', 'treffpunkt', 'drink', 'dabei', 'status'];
+const COLS = ['id', 'erstellt', 'von', 'datum', 'zeit', 'dauer', 'sport', 'sportText', 'wer', 'treffpunkt', 'drink', 'dabei', 'status', 'raus'];  // raus = Ersteller:in/Genannte, die sich abgemeldet haben
 const SPORTS = ['mtb', 'rennrad', 'gravel', 'jogga', 'wandra', 'klettra', 'schitour', 'langlauf', 'schwimma', 'anders'];
 const DAUER = ['', 'h05', 'h1', 'h15', 'h2', 'h3', 'halb', 'ganz'];
 const MAX_OPEN = 300;
@@ -64,7 +64,11 @@ function tab_(name, cols) {
   }
   return sh;
 }
-function sheet_() { return tab_(SHEET, COLS); }
+function sheet_() {
+  const sh = tab_(SHEET, COLS);
+  if (sh.getLastColumn() < COLS.length) sh.getRange(1, 1, 1, COLS.length).setValues([COLS]).setFontWeight('bold'); // neue Spalten nachziehen
+  return sh;
+}
 function chat_() { return tab_(CHAT, CHAT_COLS); }
 function abos_() {
   const sh = tab_(ABOS, ABO_COLS);
@@ -161,6 +165,7 @@ function toEvent_(r) {
   const w = String(o.wer || 'i');
   o.wer = w === 'i' || w === 'mir' ? { mode: w, names: [] } : { mode: 'names', names: w.split(',').map(s => s.trim()).filter(String) };
   o.status = String(o.status || '');
+  o.raus = String(o.raus || '').split(',').map(s => s.trim()).filter(String);
   return o;
 }
 function today_(offset) { return Utilities.formatDate(new Date(Date.now() + (offset || 0) * 864e5), TZ, 'yyyy-MM-dd'); }
@@ -226,11 +231,16 @@ function join_(id, name, add) {
   const { sh, hit } = find_(id);
   const ev = hit.ev;
   const lc = n.toLowerCase();
+  // „Gesetzt“ sind Ersteller:in bzw. die beim Anlegen genannten Namen
+  const base = (ev.wer.mode === 'names' && ev.wer.names.length ? ev.wer.names : [ev.von]).map(x => x.toLowerCase());
   let list = ev.dabei.filter(x => x.toLowerCase() !== lc);
-  if (add) list.push(n);
+  let raus = ev.raus.filter(x => x.toLowerCase() !== lc);
+  if (add) { if (base.indexOf(lc) < 0) list.push(n); }
+  else if (base.indexOf(lc) >= 0) raus.push(n);
   if (list.length > 50) throw new Error('Z\'viel Lüt 😅');
   sh.getRange(hit.row, COLS.indexOf('dabei') + 1).setValue(list.join(', '));
-  ev.dabei = list;
+  sh.getRange(hit.row, COLS.indexOf('raus') + 1).setNumberFormat('@').setValue(raus.join(', '));
+  ev.dabei = list; ev.raus = raus;
   return { ok: true, event: ev };
 }
 

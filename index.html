@@ -505,7 +505,7 @@ html[data-theme=modern]{background:var(--g-bg)}
    API_URL = Apps-Script-Web-App (…/exec). Leer → Demo-Modus (localStorage).
    ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbz4xf-IjvvDWh2qYNFIw7fqRttaO1khWAzOT44ZKT8AsNx1l9ad6CIJeIroiMzmIew/exec';
-const VERSION = '1.8';
+const VERSION = '1.9';
 // Begrüßungs-GIF im Intro (z. B. Giphy-Link „…/giphy.gif“). Leer = ohne GIF.
 const INTRO_GIF = '';
 
@@ -587,13 +587,15 @@ function werText(w) {
 function goers(ev) {
   const w = ev.wer || {mode: 'i'}, out = [];
   const add = n => { if (n && !out.some(x => same(x, n))) out.push(n); };
-  (w.mode === 'names' && (w.names || []).length ? w.names : [ev.von]).forEach(add);
+  const raus = ev.raus || [];
+  (w.mode === 'names' && (w.names || []).length ? w.names : [ev.von]).filter(n => !raus.some(r => same(r, n))).forEach(add);
   (ev.dabei || []).forEach(add);
   return out;
 }
 function joinNames(a) { return a.length < 2 ? (a[0] || '') : a.slice(0, -1).join(', ') + ' und ' + a[a.length - 1]; }
-function goersText(ev) { const g = goers(ev); return (ev.wer && ev.wer.mode === 'mir') ? joinNames([...g, 'Co.']) : joinNames(g); }
-function goersPlural(ev) { return goers(ev).length > 1 || (ev.wer && ev.wer.mode === 'mir'); }
+function goersText(ev) { const g = goers(ev); if (!g.length) return T('Niemert', 'Niemand'); return (ev.wer && ev.wer.mode === 'mir' && !(ev.raus || []).length) ? joinNames([...g, 'Co.']) : joinNames(g); }
+const imIn = (ev, me) => !!me && goers(ev).some(x => same(x, me));
+function goersPlural(ev) { return goers(ev).length > 1 || (ev.wer && ev.wer.mode === 'mir' && !(ev.raus || []).length); }
 function startOf(ev) { const d = parseYmd(ev.datum); const [h, m] = ev.zeit.split(':').map(Number); d.setHours(h, m); return d; }
 function endOf(ev) { return new Date(startOf(ev).getTime() + ((DAUER[ev.dauer] || [0, 2])[1]) * 36e5); }
 
@@ -663,8 +665,13 @@ const demo = {
     const d = this.load(), find = () => { const e = d.events.find(x => x.id === p.id); if (!e) throw new Error('Termin nüm gfunda'); return e; };
     if (action === 'list') return {ok: true, events: d.events, total: d.total};
     if (action === 'create') { const e = {...p.event, id: Math.random().toString(36).slice(2, 10), erstellt: new Date().toISOString(), dabei: []}; d.events.push(e); d.total++; this.save(d); return {ok: true, event: e}; }
-    if (action === 'join') { const e = find(); if (!e.dabei.some(n => same(n, p.name))) e.dabei.push(p.name); this.save(d); return {ok: true, event: e}; }
-    if (action === 'leave') { const e = find(); e.dabei = e.dabei.filter(n => !same(n, p.name)); this.save(d); return {ok: true, event: e}; }
+    if (action === 'join' || action === 'leave') {
+      const e = find(), w = e.wer || {}, base = (w.mode === 'names' && (w.names || []).length ? w.names : [e.von]);
+      e.dabei = (e.dabei || []).filter(n => !same(n, p.name)); e.raus = (e.raus || []).filter(n => !same(n, p.name));
+      if (action === 'join') { if (!base.some(n => same(n, p.name))) e.dabei.push(p.name); }
+      else if (base.some(n => same(n, p.name))) e.raus.push(p.name);
+      this.save(d); return {ok: true, event: e};
+    }
     if (action === 'chat') { const e = find(); e.chat = e.chat || []; const t = String(p.text || '').trim().slice(0, 500); if (!t) throw new Error('Nüt gschrieba'); e.chat.push({n: p.name, t, z: new Date().toISOString()}); this.save(d); return {ok: true, chat: e.chat}; }
     if (action === 'update') { const e = find(); ['datum', 'zeit', 'dauer', 'sport', 'sportText', 'wer', 'treffpunkt', 'drink'].forEach(k => e[k] = p.event[k]); this.save(d); return {ok: true, event: e}; }
     if (action === 'cancel') { const e = find(); d.events = d.events.filter(x => x !== e); this.save(d); return {ok: true}; }
@@ -724,12 +731,12 @@ function render() {
   let h = '', last = '';
   for (const e of evs) {
     if (e.datum !== last) { h += `<h3>📅 ${esc(dayHeading(e.datum))}</h3>`; last = e.datum; }
-    const mine = me && same(e.von, me), joined = me && (e.dabei || []).some(n => same(n, me));
+    const joined = imIn(e, me);
     const isNew = isNewEv(e);
     h += `<div class="ev" id="e${esc(e.id)}">${isNew ? '<span class="neu blink ecke">NEU!</span>' : ''}
       <div class="eb fibel">${fibel(e, false)}</div>
       <div class="act">
-        ${mine ? '' : joined
+        ${joined
           ? `<button class="b95 on" data-a="leave" data-id="${esc(e.id)}">${T('✅ I bin dabei · doch ned?', '✓ Dabei · absagen')}</button>`
           : `<button class="b95 big" data-a="join" data-id="${esc(e.id)}">${T('🙋 I bin dabei!', 'Ich bin dabei')}</button>`}
         <button class="b95" data-a="chat" data-id="${esc(e.id)}">💬 Schwätza${chatBadge(e)}</button>
@@ -754,7 +761,11 @@ async function doAct(a, e, b) {
   if (a === 'wa') return share(e);
   if (a === 'ics') return ics(e);
   const name = myName() || await askName(); if (!name) return;
-  if (a === 'cancel') {
+  if (a === 'leave' && goers(e).filter(x => !same(x, name)).length === 0) {
+    if (!confirm(T('Niemert sus isch dabei. 🤷\nTermin glei löscha?', 'Sonst ist niemand dabei.\nTermin gleich löschen?'))) return;
+    a = 'cancel';
+  }
+  if (a === 'cancel' && b.dataset.a !== 'leave' && b.dataset.d !== 'leave') {
     const was = sportOf(e).t + ' ' + dayLabel(e.datum) + ' um ' + e.zeit;
     if (HD()) { if (!confirm('Termin „' + sportName(e) + '“ wirklich für alle absagen?')) return; }
     else {
@@ -1018,14 +1029,14 @@ function renderIOS(evs, me) {
   let h = '', last = '';
   for (const e of evs) {
     if (e.datum !== last) { if (last) h += '</div>'; h += `<h3 class="ios-sec">${esc(dayHeading(e.datum))}</h3><div class="ios-list">`; last = e.datum; }
-    const n = (e.dabei || []).length, joined = me && (e.dabei || []).some(x => same(x, me)), mine = me && same(e.von, me);
+    const joined = imIn(e, me);
     const isNew = isNewEv(e);
     const sub = [goersText(e), e.treffpunkt].filter(Boolean).map(esc).join(' · ');
     h += `<button class="ios-row s-${esc(e.sport)}" id="e${esc(e.id)}" data-open="${esc(e.id)}">
       <span class="ios-time"><b>${e.zeit}</b><small>${e.dauer ? DUR_SHORT[e.dauer] : ''}</small></span>
       <span class="ios-main"><span class="ios-title">${esc(sportName(e))}${isNew ? '<i class="ios-new">Neu</i>' : ''}${e.drink ? '<i class="ios-tag">Drink</i>' : ''}${unread(e) ? '<i class="ios-dot" title="Neue Nachrichten"></i>' : ''}</span>
         <span class="ios-sub">${sub}</span></span>
-      <span class="ios-acc">${joined || mine ? '<i class="ios-ok">✓</i>' : ''}<i class="ios-count">${goers(e).length}</i><i class="ios-chev">›</i></span>
+      <span class="ios-acc">${joined ? '<i class="ios-ok">✓</i>' : ''}<i class="ios-count">${goers(e).length}</i><i class="ios-chev">›</i></span>
     </button>`;
   }
   $('#list').innerHTML = h + '</div>';
@@ -1035,7 +1046,7 @@ function renderIOS(evs, me) {
 let detailId = null;
 function openDetail(id) { const e = EVENTS.find(x => x.id === id); if (!e) return; detailId = id; drawDetail(e); openOv('#ovDetail'); }
 function drawDetail(e) {
-  const me = myName(), mine = me && same(e.von, me), joined = me && (e.dabei || []).some(x => same(x, me));
+  const me = myName(), joined = imIn(e, me);
   const end = endOf(e), endT = pad(end.getHours()) + ':' + pad(end.getMinutes());
   const rows = [
     ['Wann', esc(dayHeading(e.datum)) + '<br>' + e.zeit + (e.dauer ? ' – ' + endT + ' <small>(' + DUR_SHORT[e.dauer] + ')</small>' : ' Uhr')],
@@ -1046,7 +1057,7 @@ function drawDetail(e) {
   ].filter(Boolean);
   $('#dBody').innerHTML = `<div class="d-hero s-${esc(e.sport)}"><h2 id="dTitle">${esc(sportName(e))}</h2><p>${goers(e).length} ${goers(e).length === 1 ? 'Person' : 'Personen'}</p></div>
     <div class="grp">${rows.map(r => `<div class="frow"><span>${r[0]}</span><span class="v">${r[1]}</span></div>`).join('')}</div>
-    ${mine ? '' : `<button class="ios-btn wide${joined ? ' tinted' : ''}" data-d="${joined ? 'leave' : 'join'}">${joined ? 'Teilnahme zurückziehen' : 'Ich bin dabei'}</button>`}
+    <button class="ios-btn wide${joined ? ' tinted' : ''}" data-d="${joined ? 'leave' : 'join'}">${joined ? 'Teilnahme zurückziehen' : 'Ich bin dabei'}</button>
     <div class="grp">
       <button class="frow link" data-d="chat"><span>Nachrichten</span><span class="v">${(e.chat || []).length || ''}${unread(e) ? ' <i class="ios-dot"></i>' : ''} ›</span></button>
       <button class="frow link" data-d="wa">Teilen</button>

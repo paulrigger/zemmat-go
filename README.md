@@ -27,7 +27,7 @@ du tragst ii, wenn du gosch, und wer will, kunnt mit.
   - **Uhrzeit:** Schnellauswahl oder genaue Zeit (Uhr-Emoji passt zur Uhrzeit 🕑)
   - **Dauer** (optional), **Sportart** (oder „öppis anders“), **Treffpunkt** (optional, die letzten werden gemerkt)
   - **„Nochher hon i o no Zit für an Drink 🍺“** – Antippen streicht den Satz durch
-- **🙋 I bin dabei!** / doch ned – Teilnehmer:innen stehen beim Termin
+- **🙋 I bin dabei!** / doch ned – auch wer den Termin angelegt hat, kann sich abmelden. Sind andere dabei, bleibt der Termin; ist sonst niemand dabei, fragt die App, ob er gleich gelöscht werden soll
 - **📣 Teilen** (Share-Sheet bzw. WhatsApp) mit direktem Link auf den Termin
 - **📆 Kalender** – .ics-Datei zum Importieren
 - **💬 Chat pro Termin** – 90er: IRC-Look („Schwätza“), Langweilig: Nachrichten-Blasen. Ungelesene werden markiert, Popup an alle Beteiligten (Ersteller:in, Dabei, Mitschreibende) mit aktivierten Benachrichtigungen
@@ -99,7 +99,7 @@ Apps Script kann die Web-Push-Kryptografie (ECDH, ES256) nicht, deshalb übernim
 1. Gruppen-Link öffnen → **Teilen → Zum Home-Bildschirm** → App vom Home-Bildschirm starten.
 2. ⚙️ **Iistellige** → Sportarten wählen → **🔔 Popups iischalta** → erlauben → **📣 Test-Popup**.
 
-**Update auf API v1.5 (Chat, Ändern, Absagen für alle):** neuen `Code.gs` einfügen → `setup()` ausführen (legt Tab `Chat` an) → Bereitstellungen verwalten → ✏️ → Version: Neu.
+**Update auf API v1.6 (Chat, Ändern, Absagen, Abmelden):** neuen `Code.gs` einfügen → `setup()` ausführen (legt Tab `Chat` an) → Bereitstellungen verwalten → ✏️ → Version: Neu.
 
 **Code-Änderungen an der API:** Bereitstellen → Bereitstellungen verwalten → ✏️ → Version „Neu“ (sonst bleibt die alte aktiv, URL bleibt gleich).
 **Ohne Schlüssel betreiben:** Skripteigenschaft `KEY` löschen.
@@ -139,6 +139,7 @@ POST immer als `Content-Type: text/plain` (kein CORS-Preflight bei Apps Script).
 | treffpunkt | `Rheinbrugg` | optional |
 | drink | `ja` / leer | |
 | dabei | `Anna, Ben` | |
+| raus | `Paul` | Ersteller:in/Genannte, die sich abgemeldet haben |
 | status | leer / `abgsagt` | |
 
 Tab `Chat`: `id, event, zeit, name, text`. In `list` hat jeder Termin `chat:[{n, t, z}]` (letzte 100).
