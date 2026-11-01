@@ -1,11 +1,11 @@
-/* zemmat go – Service Worker (nur Push, kein Offline-Cache) */
+/* zämm go – Service Worker (nur Push, kein Offline-Cache) */
 self.addEventListener('install', () => self.skipWaiting());
 self.addEventListener('activate', e => e.waitUntil(self.clients.claim()));
 
 self.addEventListener('push', e => {
   let d = {};
   try { d = e.data ? e.data.json() : {}; } catch (x) { d = { body: e.data && e.data.text() }; }
-  e.waitUntil(self.registration.showNotification(d.title || 'zemmat go', {
+  e.waitUntil(self.registration.showNotification(d.title || 'zämm go', {
     body: d.body || 'Neua Termin!',
     icon: 'icon-192.png',
     badge: 'icon-192.png',

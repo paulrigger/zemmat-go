@@ -1,5 +1,5 @@
 /**
- * zemmat go – API v1.7 (Google Apps Script, gebunden an ein Google Sheet)
+ * zämm go – API v1.7 (Google Apps Script, gebunden an ein Google Sheet)
  *
  * Einrichtung:
  *   1. Neues Google Sheet → Erweiterungen → Apps Script → diesen Code einfügen
@@ -366,7 +366,7 @@ function test_(endpoint) {
   if (!props_().getProperty('PUSH_URL')) throw new Error('PUSH_URL fehlt in da Skripteigenschafta');
   const app = props_().getProperty('APP_URL') || 'https://paulrigger.github.io/zemmat-go/';
   const body = a.lang === 'de' ? 'Hallo ' + (a.name || '') + ', Benachrichtigungen funktionieren.' : 'Hoi ' + (a.name || 'du') + '! Popups funktioniarand. 🎉';
-  const j = push_([a], { title: '🔔 zemmat go', body, url: app, tag: 'zg-test' });
+  const j = push_([a], { title: '🔔 zämm go', body, url: app, tag: 'zg-test' });
   const res = j && j.results && j.results[0];
   if (!res || res.status < 200 || res.status >= 300) throw new Error('Push-Dienst seit ' + (res ? res.status + ' ' + (res.error || '') : 'nüt'));
   return { ok: true, result: res };

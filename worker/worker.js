@@ -1,5 +1,5 @@
 /**
- * zemmat go – Push-Worker v1.0 (Cloudflare Workers, kein Build, keine Abhängigkeiten)
+ * zämm go – Push-Worker v1.0 (Cloudflare Workers, kein Build, keine Abhängigkeiten)
  *
  * Verschickt Web-Push-Nachrichten (RFC 8291 aes128gcm + RFC 8292 VAPID) an die
  * Abos, die Apps Script mitschickt. Der Worker speichert selbst nichts.
@@ -120,7 +120,7 @@ export default {
         'Settings → Variables and Secrets → Add → Type: Secret → Name: VAPID_JWK\n' +
         'Danach Deploy und diese Seite neu laden.\n\n' + await newJwk() + '\n',
         { headers: { 'content-type': 'text/plain; charset=utf-8' } });
-      return json({ ok: true, service: 'zemmat go push', key: b64u(pubFromJwk(jwk)), secret: env.SECRET ? 'gesetzt' : 'FEHLT' });
+      return json({ ok: true, service: 'zämm go push', key: b64u(pubFromJwk(jwk)), secret: env.SECRET ? 'gesetzt' : 'FEHLT' });
     }
     if (req.method === 'GET' && url.pathname === '/key') {
       return jwk ? json({ ok: true, key: b64u(pubFromJwk(jwk)) }) : json({ ok: false, error: 'VAPID_JWK fehlt' }, 500);

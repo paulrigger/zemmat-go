@@ -1,4 +1,6 @@
-# 🏔️ zemmat go
+# 🏔️ zämm go
+
+> Früher „zemmat go“ – Adresse und Repo heißen aus Kompatibilitätsgründen weiterhin `zemmat-go`.
 
 Statt zwölf WhatsApp-Gruppa für Bika, Rennvelo, Gravla, Jogga, Wandra, Klettra und Schitoura gibt's eine Seite:
 du tragst ii, wenn du gosch, und wer will, kunnt mit.
@@ -64,7 +66,7 @@ Apps Script kann die Web-Push-Kryptografie (ECDH, ES256) nicht, deshalb übernim
 
 ## Einrichtung (einmalig, ~5 Minuten)
 
-1. Neues **Google Sheet** anlegen, z. B. „zemmat go“.
+1. Neues **Google Sheet** anlegen, z. B. „zämm go“.
 2. **Erweiterungen → Apps Script** → Inhalt von [`api/Code.gs`](api/Code.gs) einfügen.
    Unter Projekteinstellungen „appsscript.json im Editor anzeigen“ aktivieren und [`api/appsscript.json`](api/appsscript.json) übernehmen.
 3. Funktion **`setup`** ausführen (Berechtigungen bestätigen) → im Ausführungsprotokoll stehen **Schlüssel** und **Gruppen-Link**.

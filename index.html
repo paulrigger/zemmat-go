@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>zemmat go</title>
-<meta name="description" content="zemmat go: Statt zwölf WhatsApp-Gruppa – iitraga wenn du gosch, und wer will, kunnt mit.">
+<title>zämm go</title>
+<meta name="description" content="zämm go: Statt zwölf WhatsApp-Gruppa – iitraga wenn du gosch, und wer will, kunnt mit.">
 <meta name="theme-color" content="#000080">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png">
@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@0,400;0,700;1,400&display=swap">
-<meta name="apple-mobile-web-app-title" content="zemmat go">
+<meta name="apple-mobile-web-app-title" content="zämm go">
 <script>try{var t=localStorage.getItem('zg_theme');document.documentElement.dataset.theme=t==='modern'?'modern':'90er'}catch(e){}</script>
 <style>
 :root{
@@ -390,7 +390,7 @@ html[data-theme=modern]{background:var(--g-bg)}
 <body>
 <div id="page">
   <header>
-    <div class="wordart">zemmat go</div>
+    <div class="wordart">zämm go</div>
     <div class="sports">🚵 Bika · 🚴 Rennvelo · 🚲 Gravla · 🏃 Jogga · 🥾 Wandra · 🧗 Klettra · ⛷️ Schitoura</div>
   </header>
   <marquee class="d90" scrollamount="5">+++ Hoi zemma! +++ Kei zwölf WhatsApp-Gruppa meh +++ Iitraga wenn du gosch – wer will, kunnt mit +++ Kei Login, kei Schmarra +++ Lustenauer usdrücklich willkomma +++</marquee>
@@ -414,7 +414,7 @@ html[data-theme=modern]{background:var(--g-bg)}
 </div>
 
 <button class="b95" id="plus" aria-label="Neua Termin iitraga" data-hd-aria="Neuen Termin eintragen">+<small>NEU</small></button>
-<div id="status"><span id="st">Dokument: Fertig</span><span id="ver">zemmat go 1.0</span><span id="net">🌐</span></div>
+<div id="status"><span id="st">Dokument: Fertig</span><span id="ver">zämm go 1.0</span><span id="net">🌐</span></div>
 
 <!-- Neuer Termin -->
 <div class="ov" id="ovNew" hidden>
@@ -496,7 +496,7 @@ html[data-theme=modern]{background:var(--g-bg)}
 <!-- Dialog (ersetzt confirm/alert) -->
 <div class="ov dlg-ov" id="ovDlg" hidden>
   <div class="win dlg" role="alertdialog" aria-modal="true" aria-labelledby="dlgT" aria-describedby="dlgM">
-    <div class="tb"><span id="dlgT">zemmat go</span><button class="b95 x" data-dlg="0" aria-label="Zuamacha">✕</button></div>
+    <div class="tb"><span id="dlgT">zämm go</span><button class="b95 x" data-dlg="0" aria-label="Zuamacha">✕</button></div>
     <div class="dlg-body"><span class="dlg-ico" id="dlgI">⚠️</span><div class="dlg-msg" id="dlgM"></div></div>
     <div class="dlg-btns"><button class="b95 big" data-dlg="1" id="dlgOk">Jo</button><button class="b95" data-dlg="0" id="dlgNo">Na</button></div>
   </div>
@@ -565,11 +565,11 @@ html[data-theme=modern]{background:var(--g-bg)}
 
 <script>
 /* =====================================================================
-   zemmat go – Frontend v1.0
+   zämm go – Frontend v1.0
    API_URL = Apps-Script-Web-App (…/exec). Leer → Demo-Modus (localStorage).
    ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbz4xf-IjvvDWh2qYNFIw7fqRttaO1khWAzOT44ZKT8AsNx1l9ad6CIJeIroiMzmIew/exec';
-const VERSION = '1.11.1';
+const VERSION = '1.12';
 // Begrüßungs-GIF im Intro (z. B. Giphy-Link „…/giphy.gif“). Leer = ohne GIF.
 const INTRO_GIF = '';
 
@@ -765,7 +765,7 @@ function ask(msg, o = {}) {
   return new Promise(res => {
     if (dlgRes) dlgRes(false);
     dlgRes = res;
-    $('#dlgT').textContent = o.title || (HD() ? 'zemmat go' : 'zemmat go – Achtung!');
+    $('#dlgT').textContent = o.title || (HD() ? 'zämm go' : 'zämm go – Achtung!');
     $('#dlgI').textContent = o.icon || '⚠️';
     $('#dlgM').innerHTML = esc(msg).replace(/\n/g, '<br>');
     $('#dlgOk').textContent = o.ok || T('Jo', 'OK');
@@ -789,7 +789,7 @@ function status(t, bad) { $('#st').textContent = t; $('#st').style.color = bad ?
 let EVENTS = [], busy = false;
 async function load(quiet) {
   if (busy) return; busy = true; // eslint-disable-line
-  if (!quiet) status(T('Verbinda mit zemmat-go.at …', 'Lade …'));
+  if (!quiet) status(T('Verbinda mit zaemm-go.at …', 'Lade …'));
   try {
     const j = await store.call('list');
     EVENTS = (j.events || []).filter(e => e.status !== 'abgsagt');
@@ -876,7 +876,7 @@ async function doAct(a, e, b) {
 
 function link(e) { return location.origin + location.pathname + (KEY ? '?k=' + encodeURIComponent(KEY) : DEMO && qs.has('demo') ? '?demo' : '') + '#e' + e.id; }
 async function share(e) {
-  const text = '✍️ ' + e.von + ': ' + plain(e) + '\n👉 zemmat go: ' + link(e);
+  const text = '✍️ ' + e.von + ': ' + plain(e) + '\n👉 zämm go: ' + link(e);
   if (navigator.share) { try { await navigator.share({text}); return; } catch (x) { if (x.name === 'AbortError') return; } }
   window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
 }
@@ -884,12 +884,12 @@ function ics(e) {
   const f = d => d.getFullYear() + pad(d.getMonth() + 1) + pad(d.getDate()) + 'T' + pad(d.getHours()) + pad(d.getMinutes()) + '00';
   const x = s => String(s).replace(/([,;\\])/g, '\\$1').replace(/\n/g, '\\n');
   const sp = sportOf(e);
-  const body = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//zemmat go//DE', 'BEGIN:VEVENT',
+  const body = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//zaemm go//DE', 'BEGIN:VEVENT',
     'UID:' + e.id + '@zemmat-go', 'DTSTAMP:' + new Date().toISOString().replace(/[-:]/g, '').slice(0, 15) + 'Z',
     'DTSTART:' + f(startOf(e)), 'DTEND:' + f(endOf(e)), 'SUMMARY:' + x(sp.e + ' ' + sp.t + ' mit ' + e.von),
     e.treffpunkt ? 'LOCATION:' + x(e.treffpunkt) : '', 'DESCRIPTION:' + x(plain(e) + '\n' + link(e)), 'END:VEVENT', 'END:VCALENDAR'].filter(Boolean).join('\r\n');
   const a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob([body], {type: 'text/calendar'})); a.download = 'zemmat-go-' + e.datum + '.ics'; a.click();
+  a.href = URL.createObjectURL(new Blob([body], {type: 'text/calendar'})); a.download = 'zaemm-go-' + e.datum + '.ics'; a.click();
   setTimeout(() => URL.revokeObjectURL(a.href), 5000);
 }
 
@@ -1257,8 +1257,8 @@ async function pushDraw() {
   on.hidden = false; on.disabled = true; off.hidden = test.hidden = true;
   if (DEMO) return say('Im Demo-Modus gibt es keine Benachrichtigungen.');
   if (!CAN_PUSH) return IS_IOS && !STANDALONE
-    ? say(T('📱 Uf\'m iPhone gond Popups nur, wenn zemmat go uf\'m <b>Home-Bildschirm</b> isch:<br>Unta uf <b>Teila ⬆️</b> → <b>„Zum Home-Bildschirm“</b> → d\'App vo dött ufmacha und do nomol iischalta.',
-            'Auf dem iPhone funktionieren Benachrichtigungen nur, wenn zemmat go auf dem <b>Home-Bildschirm</b> liegt:<br><b>Teilen</b> → <b>„Zum Home-Bildschirm“</b> → App von dort öffnen und hier aktivieren.'))
+    ? say(T('📱 Uf\'m iPhone gond Popups nur, wenn zämm go uf\'m <b>Home-Bildschirm</b> isch:<br>Unta uf <b>Teila ⬆️</b> → <b>„Zum Home-Bildschirm“</b> → d\'App vo dött ufmacha und do nomol iischalta.',
+            'Auf dem iPhone funktionieren Benachrichtigungen nur, wenn zämm go auf dem <b>Home-Bildschirm</b> liegt:<br><b>Teilen</b> → <b>„Zum Home-Bildschirm“</b> → App von dort öffnen und hier aktivieren.'))
     : say('Dieser Browser unterstützt keine Benachrichtigungen.', 'bad');
   if (!PUSH_KEY) return say('Benachrichtigungen sind auf dem Server noch nicht eingerichtet.', 'bad');
   if (Notification.permission === 'denied') return say('Benachrichtigungen sind <b>blockiert</b>. Bitte in den Einstellungen des Geräts bzw. Browsers erlauben.', 'bad');
@@ -1384,7 +1384,7 @@ themeDraw(); applyLang();
 
 
 /* ---------- Start ---------- */
-$('#ver').textContent = 'zemmat go ' + VERSION + (DEMO ? ' · DEMO' : '');
+$('#ver').textContent = 'zämm go ' + VERSION + (DEMO ? ' · DEMO' : '');
 $('#demo').hidden = !DEMO;
 hello(); load().then(hashChat);
 if (!localStorage.getItem('zg_intro') && !qs.has('nointro')) openIntro();
