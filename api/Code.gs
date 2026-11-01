@@ -1,5 +1,5 @@
 /**
- * zemmat go – API v1.6 (Google Apps Script, gebunden an ein Google Sheet)
+ * zemmat go – API v1.7 (Google Apps Script, gebunden an ein Google Sheet)
  *
  * Einrichtung:
  *   1. Neues Google Sheet → Erweiterungen → Apps Script → diesen Code einfügen
@@ -12,7 +12,8 @@
  * POST (text/plain) {action:"create", k, event:{…}}       -> { ok, event }
  *                   {action:"join"|"leave", k, id, name}  -> { ok, event }
  *                   {action:"cancel", k, id, name}        -> { ok }   (jede:r)
- *                   {action:"subscribe", k, sub, name, sports:[…], lang} -> { ok }  Push-Abo (lang: dia|de)
+ *                   {action:"subscribe", k, sub, name, sports:[…], lang, opts:[…]} -> { ok }  Push-Abo
+ *                     opts: joinMine, joinIn, chatMine, chatIn, chg  (Mine = selbst angelegt, In = dabei)
  *                   {action:"unsubscribe", k, endpoint}   -> { ok }
  *                   {action:"test", k, endpoint}          -> { ok, result }  Test-Popup an dieses Gerät
  *                   {action:"update", k, id, name, event:{…}} -> { ok, event }  (jede:r)
@@ -27,7 +28,7 @@
  *   PUSH_SECRET  gleiches Secret wie im Worker (SECRET)
  *   APP_URL      optional, Standard https://paulrigger.github.io/zemmat-go/
  */
-const VERSION = '1.6';
+const VERSION = '1.7';
 const TZ = 'Europe/Vienna';
 const SHEET = 'Events';
 const COLS = ['id', 'erstellt', 'von', 'datum', 'zeit', 'dauer', 'sport', 'sportText', 'wer', 'treffpunkt', 'drink', 'dabei', 'status', 'raus'];  // raus = Ersteller:in/Genannte, die sich abgemeldet haben
@@ -37,7 +38,9 @@ const MAX_OPEN = 300;
 const ABOS = 'Abos';
 const CHAT = 'Chat';
 const CHAT_COLS = ['id', 'event', 'zeit', 'name', 'text'];
-const ABO_COLS = ['endpoint', 'p256dh', 'auth', 'name', 'sports', 'erstellt', 'aktualisiert', 'lang'];
+const ABO_COLS = ['endpoint', 'p256dh', 'auth', 'name', 'sports', 'erstellt', 'aktualisiert', 'lang', 'opts'];
+const OPTS = ['joinMine', 'joinIn', 'chatMine', 'chatIn', 'chg'];
+const OPTS_DEFAULT = ['joinMine', 'chatMine', 'chatIn', 'chg'];
 // [Emoji, Dialekt, Hochdeutsch]
 const SPORT_TXT = { mtb: ['🚵', 'Mountainbika', 'Mountainbiken'], rennrad: ['🚴', 'Rennvelo fahra', 'Rennrad fahren'], gravel: ['🚲', 'gravla', 'graveln'],
   jogga: ['🏃', 'jogga', 'joggen'], wandra: ['🥾', 'wandra', 'wandern'], klettra: ['🧗', 'klettra', 'klettern'], schitour: ['⛷️', 'uf Schitour', 'auf Skitour'],
@@ -124,8 +127,14 @@ function run_(p) {
         if (r.ok) { try { notifyChat_(r.event, r.msg); } catch (x) { console.error('Push Chat: ' + x); } delete r.event; delete r.msg; }
         return r;
       }
-      case 'join':   return locked_(() => join_(p.id, p.name, true));
-      case 'leave':  return locked_(() => join_(p.id, p.name, false));
+      case 'join':
+      case 'leave': {
+        const add = p.action === 'join';
+        const r = locked_(() => join_(p.id, p.name, add));
+        if (r.ok && r.changed) { try { notifyJoin_(r.event, name_(p.name), add); } catch (x) { console.error('Push An/Ab: ' + x); } }
+        delete r.changed;
+        return r;
+      }
       case 'cancel': {
         const r = locked_(() => cancel_(p.id, p.name));
         if (r.ok) { try { notifyCancel_(r.event, name_(p.name)); } catch (x) { console.error('Push Absage: ' + x); } delete r.event; }
@@ -240,8 +249,9 @@ function join_(id, name, add) {
   if (list.length > 50) throw new Error('Z\'viel Lüt 😅');
   sh.getRange(hit.row, COLS.indexOf('dabei') + 1).setValue(list.join(', '));
   sh.getRange(hit.row, COLS.indexOf('raus') + 1).setNumberFormat('@').setValue(raus.join(', '));
+  const changed = list.join() !== ev.dabei.join() || raus.join() !== ev.raus.join();
   ev.dabei = list; ev.raus = raus;
-  return { ok: true, event: ev };
+  return { ok: true, event: ev, changed };
 }
 
 function cancel_(id, name) {
@@ -283,7 +293,8 @@ function subscribe_(p) {
   const { sh, rows } = aboRows_();
   const hit = rows.find(r => r.endpoint === sub.endpoint);
   const lang = p.lang === 'de' ? 'de' : 'dia';
-  const vals = [sub.endpoint, String(keys.p256dh), String(keys.auth), name_(p.name), sports, hit ? hit.erstellt : now, now, lang];
+  const opts = Array.isArray(p.opts) ? (p.opts.filter(o => OPTS.indexOf(o) >= 0).join(',') || '-') : (hit ? hit.opts : '');
+  const vals = [sub.endpoint, String(keys.p256dh), String(keys.auth), name_(p.name), sports, hit ? hit.erstellt : now, now, lang, opts];
   if (hit) sh.getRange(hit.row, 1, 1, ABO_COLS.length).setValues([vals]);
   else {
     if (rows.length >= 1000) throw new Error('Z\'viel Abos');
@@ -390,12 +401,7 @@ function chatPost_(id, name, text) {
 
 /** Popup an alle, die beim Termin beteiligt sind (Ersteller:in, Dabei, Namen, Chat), außer Absender:in */
 function notifyChat_(ev, msg) {
-  const people = {};
-  [ev.von].concat(ev.dabei || [], (ev.wer && ev.wer.names) || [], (chatMap_()[ev.id] || []).map(c => c.n))
-    .forEach(x => { if (x) people[String(x).toLowerCase()] = 1; });
-  delete people[msg.n.toLowerCase()];
-  const { rows } = aboRows_();
-  const subs = rows.filter(a => people[a.name.toLowerCase()]);
+  const subs = recipients_(ev, msg.n, 'chat');
   if (!subs.length) return;
   const app = props_().getProperty('APP_URL') || 'https://paulrigger.github.io/zemmat-go/';
   const sp = SPORT_TXT[ev.sport] || SPORT_TXT.anders;
@@ -432,12 +438,7 @@ function notifyChange_(before, ev, by) {
   if (before.sport !== ev.sport || before.sportText !== ev.sportText) what.push('sport');
   if (before.dauer !== ev.dauer) what.push('dauer');
   if (!what.length) return;                       // nur Kleinigkeiten (z. B. Drink) → kein Popup
-  const people = {};
-  [ev.von].concat(ev.dabei || [], (ev.wer && ev.wer.names) || [], (ev.chat || []).map(c => c.n))
-    .forEach(x => { if (x) people[String(x).toLowerCase()] = 1; });
-  delete people[String(by).toLowerCase()];
-  const { rows } = aboRows_();
-  const subs = rows.filter(a => people[a.name.toLowerCase()]);
+  const subs = recipients_(ev, by, 'chg');
   if (!subs.length) return;
   const app = props_().getProperty('APP_URL') || 'https://paulrigger.github.io/zemmat-go/';
   const mk = lang => {
@@ -454,12 +455,7 @@ function same_(a, b) { return String(a || '').toLowerCase() === String(b || '').
 
 /** Popup „abgesagt“ an alle Beteiligten außer der Person, die abgesagt hat */
 function notifyCancel_(ev, by) {
-  const people = {};
-  [ev.von].concat(ev.dabei || [], (ev.wer && ev.wer.names) || [], (chatMap_()[ev.id] || []).map(c => c.n))
-    .forEach(x => { if (x) people[String(x).toLowerCase()] = 1; });
-  delete people[String(by).toLowerCase()];
-  const { rows } = aboRows_();
-  const subs = rows.filter(a => people[a.name.toLowerCase()]);
+  const subs = recipients_(ev, by, 'chg');
   if (!subs.length) return;
   const app = props_().getProperty('APP_URL') || 'https://paulrigger.github.io/zemmat-go/';
   const mk = lang => {
@@ -470,4 +466,59 @@ function notifyCancel_(ev, by) {
   const de = subs.filter(a => a.lang === 'de'), dia = subs.filter(a => a.lang !== 'de');
   if (dia.length) push_(dia, mk('dia'));
   if (de.length) push_(de, mk('de'));
+}
+
+/* ---------- Wer bekommt welches Popup? ---------- */
+/** Alle, die gehen: gesetzte Namen bzw. Ersteller:in (ohne raus) + dabei */
+function goersSrv_(ev) {
+  const raus = (ev.raus || []).map(x => x.toLowerCase());
+  const base = (ev.wer && ev.wer.mode === 'names' && ev.wer.names.length ? ev.wer.names : [ev.von]).filter(x => raus.indexOf(String(x).toLowerCase()) < 0);
+  const out = [];
+  base.concat(ev.dabei || []).forEach(x => { const l = String(x).toLowerCase(); if (l && out.indexOf(l) < 0) out.push(l); });
+  return out;
+}
+function opts_(a) {
+  if (!a.opts) return OPTS_DEFAULT;          // altes Abo ohne Einstellung → Standard
+  return a.opts === '-' ? [] : a.opts.split(',');
+}
+/** kind: 'join' | 'chat' | 'chg' – Abos passend zu Rolle (eigener Termin / dabei) und Einstellungen */
+function recipients_(ev, by, kind) {
+  const goers = goersSrv_(ev);
+  const chatters = kind === 'join' ? [] : (chatMap_()[ev.id] || ev.chat || []).map(c => String(c.n).toLowerCase());
+  const lby = String(by || '').toLowerCase();
+  const { rows } = aboRows_();
+  return rows.filter(a => {
+    const n = a.name.toLowerCase();
+    if (!n || n === lby) return false;
+    const o = opts_(a), mine = n === String(ev.von).toLowerCase(), inn = goers.indexOf(n) >= 0 || chatters.indexOf(n) >= 0;
+    if (kind === 'chg') return o.indexOf('chg') >= 0 && (mine || inn);
+    if (mine) return o.indexOf(kind + 'Mine') >= 0;
+    if (inn) return o.indexOf(kind + 'In') >= 0;
+    return false;
+  });
+}
+function pushLang_(subs, mk) {
+  const de = subs.filter(a => a.lang === 'de'), dia = subs.filter(a => a.lang !== 'de');
+  if (dia.length) push_(dia, mk('dia'));
+  if (de.length) push_(de, mk('de'));
+}
+function sportShort_(ev, lang) {
+  const sp = SPORT_TXT[ev.sport] || SPORT_TXT.anders;
+  return sp[0] + ' ' + (ev.sport === 'anders' ? ev.sportText : sp[lang === 'de' ? 2 : 1]) + ' ' + dayLabel_(ev.datum, lang).replace(/ \(.*\)$/, '') + ' um ' + ev.zeit;
+}
+
+/** Popup bei An-/Abmeldung */
+function notifyJoin_(ev, by, add) {
+  const subs = recipients_(ev, by, 'join');
+  if (!subs.length) return;
+  const n = goersSrv_(ev).length;
+  const app = props_().getProperty('APP_URL') || 'https://paulrigger.github.io/zemmat-go/';
+  pushLang_(subs, lang => {
+    const de = lang === 'de';
+    return {
+      title: add ? '🙋 ' + by + (de ? ' ist dabei' : ' isch dabei') : '🚶 ' + by + (de ? ' ist nicht mehr dabei' : ' isch nüm dabei'),
+      body: sportShort_(ev, lang) + (de ? ' – jetzt ' + n + (n === 1 ? ' Person' : ' Personen') : ' – jetzt ' + n + (n === 1 ? ' Person' : ' Lüt')),
+      url: app + '#e' + ev.id, tag: 'zg-join-' + ev.id
+    };
+  });
 }

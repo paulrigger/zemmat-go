@@ -35,6 +35,7 @@ du tragst ii, wenn du gosch, und wer will, kunnt mit.
 - **✏️ Ändern** und **🗑️ Absagen** kann jede:r. Absagen im 90er-Design mit doppelter Rückfrage. Teilnehmer:innen und Chat bleiben beim Ändern erhalten; bei Änderung von Datum, Zeit, Ort, Sportart oder Dauer und bei Absagen bekommen alle Beteiligten ein Popup (mit Name, wer es war)
 - PWA: „Zum Home-Bildschirm“ hinzufügen
 - **🔔 Popups (Web Push)** bei neuen Terminen – pro Gerät einstellbar, für welche Sportarten. Eigene Termine lösen kein Popup aus.
+  Einstellbar pro Gerät: **neue Termine** (nach Sportart), **An- und Abmeldungen** (bei eigenen Terminen / bei Terminen, bei denen ich dabei bin), **Chat-Nachrichten** (eigene / dabei), **Änderungen und Absagen**
   iPhone: ab iOS 16.4, **nur** wenn die App am Home-Bildschirm liegt. Android/Desktop: direkt im Browser.
 - **⚙️ Einstellungen** (immer Hochdeutsch): Name, Benachrichtigungen (an/aus, Sportarten, Test), Design
 - **🎨 Zwei Designs:** 🌈 90er im Vorarlberger Dialekt (Standard) · 😐 Langweilig – eigene Oberfläche im iOS-2026-Stil (Liquid Glass, hell/dunkel): schlichte Terminliste, Detailansicht, Eingabeformular statt Lückentext, **auf Hochdeutsch** (auch die Popups)
@@ -99,7 +100,7 @@ Apps Script kann die Web-Push-Kryptografie (ECDH, ES256) nicht, deshalb übernim
 1. Gruppen-Link öffnen → **Teilen → Zum Home-Bildschirm** → App vom Home-Bildschirm starten.
 2. ⚙️ **Iistellige** → Sportarten wählen → **🔔 Popups iischalta** → erlauben → **📣 Test-Popup**.
 
-**Update auf API v1.6 (Chat, Ändern, Absagen, Abmelden):** neuen `Code.gs` einfügen → `setup()` ausführen (legt Tab `Chat` an) → Bereitstellungen verwalten → ✏️ → Version: Neu.
+**Update auf API v1.7 (Chat, Ändern, Absagen, Abmelden, Popup-Optionen):** neuen `Code.gs` einfügen → `setup()` ausführen (legt Tab `Chat` an) → Bereitstellungen verwalten → ✏️ → Version: Neu.
 
 **Code-Änderungen an der API:** Bereitstellen → Bereitstellungen verwalten → ✏️ → Version „Neu“ (sonst bleibt die alte aktiv, URL bleibt gleich).
 **Ohne Schlüssel betreiben:** Skripteigenschaft `KEY` löschen.
@@ -144,7 +145,7 @@ POST immer als `Content-Type: text/plain` (kein CORS-Preflight bei Apps Script).
 
 Tab `Chat`: `id, event, zeit, name, text`. In `list` hat jeder Termin `chat:[{n, t, z}]` (letzte 100).
 
-Tab `Abos`: `endpoint, p256dh, auth, name, sports, erstellt, aktualisiert, lang` (`dia`/`de`) – ein Eintrag pro Gerät.
+Tab `Abos`: `endpoint, p256dh, auth, name, sports, erstellt, aktualisiert, lang` (`dia`/`de`), `opts` (`joinMine, joinIn, chatMine, chatIn, chg`; leer = Standard, `-` = keine) – ein Eintrag pro Gerät.
 
 ## Entwicklung
 
