@@ -365,6 +365,17 @@ html[data-theme=modern]{background:var(--g-bg)}
 .chk.one{grid-template-columns:1fr}
 [data-theme=modern] .opt-h{font:600 12px var(--m-font); color:var(--g-sec); text-transform:uppercase; letter-spacing:.4px}
 
+/* Laden: 90er = Sanduhr, Langweilig = iOS-Aktivitätsanzeige */
+.loading .spin{display:none}
+[data-theme=modern] .loading{display:flex; flex-direction:column; align-items:center; gap:12px; padding:60px 0; font:15px var(--m-font); color:var(--g-sec)}
+[data-theme=modern] .loading .e{display:none}
+[data-theme=modern] .loading .spin{display:block; width:30px; height:30px; animation:iosspin 1s steps(12) infinite;
+  background:conic-gradient(from 0deg, transparent 0 8%, var(--g-ink)); opacity:.55;
+  -webkit-mask:repeating-conic-gradient(#000 0 14deg, transparent 14deg 30deg), radial-gradient(circle, transparent 42%, #000 43%);
+  -webkit-mask-composite:source-in; mask:repeating-conic-gradient(#000 0 14deg, transparent 14deg 30deg) intersect, radial-gradient(circle, transparent 42%, #000 43%)}
+@keyframes iosspin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){[data-theme=modern] .loading .spin{animation-duration:3s}}
+
 .themes{display:grid; grid-template-columns:repeat(2,1fr); gap:6px; margin-top:4px}
 .themes .b95{display:flex; flex-direction:column; align-items:center; gap:2px; font-size:13px; padding:8px 4px}
 .themes .b95 span{font-size:24px}
@@ -387,7 +398,7 @@ html[data-theme=modern]{background:var(--g-bg)}
   <div class="demo" id="demo" hidden data-hd="⚠️ <b>DEMO-MODUS</b> – Einträge werden nur auf diesem Gerät gespeichert. Für die echte Version brauchst du den Link aus der Gruppe.">⚠️ <b>DEMO-MODUS</b> – Iiträg landan nur uf dim eigna Gerät. Für die echte Version brucht's da Link us dr Gruppa.</div>
   <main>
     <h2 data-hd="Was steht an?">Was lauft? <span class="blink d90">✨</span></h2>
-    <div id="list"><p class="leerliste"><span class="e">⏳</span>Lada …</p></div>
+    <div id="list"><div class="leerliste loading"><span class="e">⏳</span><i class="spin" aria-hidden="true"></i><span data-hd="Lädt …">Lada …</span></div></div>
     <hr class="rb">
   </main>
   <footer>
@@ -558,7 +569,7 @@ html[data-theme=modern]{background:var(--g-bg)}
    API_URL = Apps-Script-Web-App (…/exec). Leer → Demo-Modus (localStorage).
    ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbz4xf-IjvvDWh2qYNFIw7fqRttaO1khWAzOT44ZKT8AsNx1l9ad6CIJeIroiMzmIew/exec';
-const VERSION = '1.11';
+const VERSION = '1.11.1';
 // Begrüßungs-GIF im Intro (z. B. Giphy-Link „…/giphy.gif“). Leer = ohne GIF.
 const INTRO_GIF = '';
 
