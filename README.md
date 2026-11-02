@@ -31,6 +31,7 @@ du tragst ii, wenn du gosch, und wer will, kunnt mit.
   - **„Nochher hon i o no Zit für an Drink 🍺“** – Antippen streicht den Satz durch
 - **🙋 I bin dabei!** / doch ned – auch wer den Termin angelegt hat, kann sich abmelden. Sind andere dabei, bleibt der Termin; ist sonst niemand dabei, fragt die App, ob er gleich gelöscht werden soll
 - **📣 Teilen** (Share-Sheet bzw. WhatsApp) mit direktem Link auf den Termin
+- **📲 App teilen** – kurzer Einladungstext + Gruppen-Link (mit Schlüssel)
 - **📆 Kalender** – .ics-Datei zum Importieren
 - **💬 Chat pro Termin** – 90er: IRC-Look („Schwätza“), Langweilig: Nachrichten-Blasen. Ungelesene werden markiert, Popup an alle Beteiligten (Ersteller:in, Dabei, Mitschreibende) mit aktivierten Benachrichtigungen
 - **Kein Login:** Name wird beim ersten Mal abgefragt und lokal gespeichert

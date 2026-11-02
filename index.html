@@ -376,6 +376,10 @@ html[data-theme=modern]{background:var(--g-bg)}
 @keyframes iosspin{to{transform:rotate(360deg)}}
 @media (prefers-reduced-motion:reduce){[data-theme=modern] .loading .spin{animation-duration:3s}}
 
+.hello-btns{display:flex; gap:6px; flex-wrap:wrap; justify-content:flex-end}
+[data-theme=modern] #appShare{background:var(--g-glass); -webkit-backdrop-filter:blur(20px) saturate(180%); backdrop-filter:blur(20px) saturate(180%);
+  box-shadow:inset 0 0 0 .5px var(--g-edge), var(--g-shadow); border-radius:999px; color:var(--g-tint)}
+
 .themes{display:grid; grid-template-columns:repeat(2,1fr); gap:6px; margin-top:4px}
 .themes .b95{display:flex; flex-direction:column; align-items:center; gap:2px; font-size:13px; padding:8px 4px}
 .themes .b95 span{font-size:24px}
@@ -394,7 +398,7 @@ html[data-theme=modern]{background:var(--g-bg)}
     <div class="sports">🚵 Bika · 🚴 Rennvelo · 🚲 Gravla · 🏃 Jogga · 🥾 Wandra · 🧗 Klettra · ⛷️ Schitoura</div>
   </header>
   <marquee class="d90" scrollamount="5">+++ Hoi zemma! +++ Kei zwölf WhatsApp-Gruppa meh +++ Iitraga wenn du gosch – wer will, kunnt mit +++ Kei Login, kei Schmarra +++ Lustenauer usdrücklich willkomma +++</marquee>
-  <div class="hello"><span id="hi">Hoi!</span><button class="b95 mini" id="setBtn">⚙️ Einstellungen</button></div>
+  <div class="hello"><span id="hi">Hoi!</span><span class="hello-btns"><button class="b95 mini" id="appShare" data-hd="App teilen">📲 App teila</button><button class="b95 mini" id="setBtn">⚙️ Einstellungen</button></span></div>
   <div class="demo" id="demo" hidden data-hd="⚠️ <b>DEMO-MODUS</b> – Einträge werden nur auf diesem Gerät gespeichert. Für die echte Version brauchst du den Link aus der Gruppe.">⚠️ <b>DEMO-MODUS</b> – Iiträg landan nur uf dim eigna Gerät. Für die echte Version brucht's da Link us dr Gruppa.</div>
   <main>
     <h2 data-hd="Was steht an?">Was lauft? <span class="blink d90">✨</span></h2>
@@ -569,7 +573,7 @@ html[data-theme=modern]{background:var(--g-bg)}
    API_URL = Apps-Script-Web-App (…/exec). Leer → Demo-Modus (localStorage).
    ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbz4xf-IjvvDWh2qYNFIw7fqRttaO1khWAzOT44ZKT8AsNx1l9ad6CIJeIroiMzmIew/exec';
-const VERSION = '1.12';
+const VERSION = '1.13';
 // Begrüßungs-GIF im Intro (z. B. Giphy-Link „…/giphy.gif“). Leer = ohne GIF.
 const INTRO_GIF = '';
 
@@ -875,6 +879,18 @@ async function doAct(a, e, b) {
 }
 
 function link(e) { return location.origin + location.pathname + (KEY ? '?k=' + encodeURIComponent(KEY) : DEMO && qs.has('demo') ? '?demo' : '') + '#e' + e.id; }
+/** App teilen: Text + Gruppen-Link (mit Schlüssel) */
+function appLink() { return location.origin + location.pathname + (KEY ? '?k=' + encodeURIComponent(KEY) : ''); }
+async function shareApp() {
+  const text = T(
+    '🏔️ zämm go – statt zwölf WhatsApp-Gruppa!\nDo siehsch, wer wenn zum Bika, Jogga, Wandra, Klettra oder uf Schitour goht – und kasch eifach mitgo. Kei Login, nur dä Nama.\n\n📲 Link ufmacha und uf da Home-Bildschirm lega:\n',
+    '🏔️ zämm go – statt zwölf WhatsApp-Gruppen.\nHier siehst du, wer wann zum Biken, Joggen, Wandern, Klettern oder auf Skitour geht – und kannst einfach mitkommen. Kein Login, nur dein Name.\n\nLink öffnen und zum Home-Bildschirm hinzufügen:\n') + appLink();
+  if (navigator.share) { try { await navigator.share({title: 'zämm go', text}); return; } catch (x) { if (x.name === 'AbortError') return; } }
+  try { await navigator.clipboard.writeText(text); } catch (x) {}
+  window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
+}
+$('#appShare').onclick = shareApp;
+
 async function share(e) {
   const text = '✍️ ' + e.von + ': ' + plain(e) + '\n👉 zämm go: ' + link(e);
   if (navigator.share) { try { await navigator.share({text}); return; } catch (x) { if (x.name === 'AbortError') return; } }
