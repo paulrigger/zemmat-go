@@ -433,6 +433,33 @@ html:not([data-theme=modern]) body{padding-bottom:150px}
 .v-btns .b95{font-size:13px; padding:5px 10px; min-height:32px}
 @media (max-width:360px){.v-bike{width:120px; height:86px}}
 
+/* ---------- 12 WordArt-Stile, Wechsel monatlich (Vorschau: ?wa=1…12) ---------- */
+.wordart > span{display:inline-block; white-space:pre}
+html:not([data-theme=modern]) .wordart.wa-1 {} /* Regenbogen = Grundstil */
+html:not([data-theme=modern]) .wordart.wa-2 {background:linear-gradient(180deg,#fff 0%,#c8c8c8 30%,#5a5a5a 50%,#e8e8e8 52%,#9a9a9a 75%,#fff 100%); -webkit-background-clip:text; background-clip:text;
+  -webkit-text-stroke:1.5px #222; filter:drop-shadow(3px 4px 0 #111)}
+html:not([data-theme=modern]) .wordart.wa-3 {background:linear-gradient(0deg,#b00000 0%,#ff3000 35%,#ff9a00 65%,#fff200 100%); -webkit-background-clip:text; background-clip:text;
+  filter:drop-shadow(0 0 6px #ff6a00) drop-shadow(0 0 2px #ffcc00) drop-shadow(2px 2px 0 #400); transform:rotate(-2deg)}
+html:not([data-theme=modern]) .wordart.wa-4 {background:linear-gradient(180deg,#fff 0%,#bdf3ff 40%,#3fb6e8 100%); -webkit-background-clip:text; background-clip:text; transform:rotate(-3deg) skewX(-10deg);
+  filter:drop-shadow(1px 1px 0 #1b6f99) drop-shadow(1px 1px 0 #1b6f99) drop-shadow(1px 1px 0 #145a7d) drop-shadow(1px 1px 0 #0e4762) drop-shadow(1px 1px 0 #0a3549) drop-shadow(3px 3px 2px rgba(0,0,0,.4))}
+html:not([data-theme=modern]) .wordart.wa-5 {background:none; color:#0050ff; transform:none; margin:14px 0 14px; filter:drop-shadow(2px 2px 0 #ffd700) drop-shadow(2px 2px 0 #000)}
+html:not([data-theme=modern]) .wordart.wa-5 > span{transform:translateY(calc(sin(var(--i) * 1.1rad) * 14px)); color:hsl(calc(200 + var(--i) * 18) 90% 45%)}
+html:not([data-theme=modern]) .wordart.wa-6 {background:none; color:#d4145a; transform:none; margin-bottom:32px; filter:drop-shadow(2px 3px 0 #2b0a3d)}
+html:not([data-theme=modern]) .wordart.wa-6 > span{transform:translateY(calc(pow(var(--d), 2) * 3.2px)) rotate(calc(var(--d) * 7deg))}
+html:not([data-theme=modern]) .wordart.wa-7 {background:none; color:transparent; -webkit-text-stroke:2.5px #000080; transform:skewX(-12deg); filter:drop-shadow(5px 5px 0 #ff69b4)}
+html:not([data-theme=modern]) .wordart.wa-8 {background:linear-gradient(180deg,#fff6c2 0%,#ffd700 30%,#b8860b 55%,#ffe066 75%,#8b5a00 100%); -webkit-background-clip:text; background-clip:text; transform:rotate(-2deg);
+  filter:drop-shadow(1px 1px 0 #5a3a00) drop-shadow(1px 1px 0 #5a3a00) drop-shadow(1px 1px 0 #3d2700) drop-shadow(2px 3px 2px rgba(0,0,0,.45))}
+html:not([data-theme=modern]) .wordart.wa-9 {background:#120024; color:#fff; padding:6px 14px 10px; border-radius:6px; transform:rotate(-2deg); filter:none; border:3px solid #ff2bd6;
+  text-shadow:0 0 4px #fff, 0 0 10px #ff2bd6, 0 0 20px #ff2bd6, 0 0 34px #b100ff; box-shadow:0 0 14px #ff2bd6, inset 0 0 10px #ff2bd6}
+html:not([data-theme=modern]) .wordart.wa-10 {background:linear-gradient(180deg,#9ef 0%,#36f 50%,#80f 100%); -webkit-background-clip:text; background-clip:text; transform:perspective(220px) rotateX(28deg) scaleY(1.15);
+  filter:drop-shadow(0 2px 0 #20125e) drop-shadow(0 2px 0 #20125e) drop-shadow(0 4px 3px rgba(0,0,0,.5))}
+html:not([data-theme=modern]) .wordart.wa-11 {background:none; color:#ffe600; font-family:"Comic Sans MS","Comic Neue",var(--fibel); font-weight:900; -webkit-text-stroke:3px #000; paint-order:stroke fill;
+  transform:none; filter:drop-shadow(4px 4px 0 #e00000)}
+html:not([data-theme=modern]) .wordart.wa-11 > span{transform:rotate(calc((mod(var(--i), 2) * 2 - 1) * 8deg)) translateY(calc((mod(var(--i), 2) * 2 - 1) * 4px))}
+html:not([data-theme=modern]) .wordart.wa-12 {background:repeating-linear-gradient(180deg,#ff7a00 0 9px,#ffc400 9px 18px,#8b3a0f 18px 27px); -webkit-background-clip:text; background-clip:text;
+  transform:skewX(-14deg); filter:drop-shadow(3px 3px 0 #3b1a05) drop-shadow(-1px -1px 0 #fff3c4)}
+[data-theme=modern] .wordart > span{transform:none !important; color:inherit !important}
+
 .themes{display:grid; grid-template-columns:repeat(2,1fr); gap:6px; margin-top:4px}
 .themes .b95{display:flex; flex-direction:column; align-items:center; gap:2px; font-size:13px; padding:8px 4px}
 .themes .b95 span{font-size:24px}
@@ -652,7 +679,7 @@ html:not([data-theme=modern]) body{padding-bottom:150px}
    API_URL = Apps-Script-Web-App (…/exec). Leer → Demo-Modus (localStorage).
    ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbz4xf-IjvvDWh2qYNFIw7fqRttaO1khWAzOT44ZKT8AsNx1l9ad6CIJeIroiMzmIew/exec';
-const VERSION = '1.15';
+const VERSION = '1.16';
 // Begrüßungs-GIF im Intro (z. B. Giphy-Link „…/giphy.gif“). Leer = ohne GIF.
 const INTRO_GIF = '';
 
@@ -1550,6 +1577,17 @@ $('#vNo').onclick = () => {
 $('#vTag').onclick = () => openNew();
 document.querySelector('.v-bike').addEventListener('click', () => { if ($('#vreni').classList.contains('talk')) vQuiet(); else openNew(); });
 setTimeout(vreniShow, 1000);
+
+/* ---------- WordArt: jeden Monat ein anderer Stil ---------- */
+function wordArt() {
+  const el = $('.wordart'), txt = 'zämm go', d = new Date();
+  const n = Math.min(12, Math.max(1, Number(qs.get('wa')) || ((d.getFullYear() * 12 + d.getMonth()) % 12) + 1));
+  const mid = (txt.length - 1) / 2;
+  el.innerHTML = [...txt].map((c, i) => `<span style="--i:${i};--d:${(i - mid).toFixed(1)}">${c}</span>`).join('');
+  el.className = 'wordart wa-' + n;
+  el.setAttribute('aria-label', txt);
+}
+wordArt();
 
 /* ---------- Start ---------- */
 $('#ver').textContent = 'zämm go ' + VERSION + (DEMO ? ' · DEMO' : '');
