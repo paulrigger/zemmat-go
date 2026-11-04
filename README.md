@@ -40,6 +40,9 @@ du tragst ii, wenn du gosch, und wer will, kunnt mit.
 - **🔔 Popups (Web Push)** bei neuen Terminen – pro Gerät einstellbar, für welche Sportarten. Eigene Termine lösen kein Popup aus.
   Einstellbar pro Gerät: **neue Termine** (nach Sportart), **An- und Abmeldungen** (bei eigenen Terminen / bei Terminen, bei denen ich dabei bin), **Chat-Nachrichten** (eigene / dabei), **Änderungen und Absagen**
   iPhone: ab iOS 16.4, **nur** wenn die App am Home-Bildschirm liegt. Android/Desktop: direkt im Browser.
+- **🚲 Velo-Vreni** (90er-Design): fährt rein, macht ein Wheelie, das Vorderrad wird zum Gesicht – und sie bietet an, die Benachrichtigungen einzuschalten (bzw. erklärt am iPhone den Home-Bildschirm). „Spöter“ = 7 Tage Ruhe. Zum Herzeigen: `?vreni`
+
+  <img src="docs/velo-vreni.gif" width="300" alt="Velo-Vreni">
 - **⚙️ Einstellungen** (immer Hochdeutsch): Name, Benachrichtigungen (an/aus, Sportarten, Test), Design
 - **🎨 Zwei Designs:** 🌈 90er im Vorarlberger Dialekt (Standard) · 😐 Langweilig – eigene Oberfläche im iOS-2026-Stil (Liquid Glass, hell/dunkel): schlichte Terminliste, Detailansicht, Eingabeformular statt Lückentext, **auf Hochdeutsch** (auch die Popups)
 - **Begrüßung** beim ersten Öffnen: „Oa App statt zwölf WhatsApp-Gruppa“ + Anleitung Home-Bildschirm, optional mit GIF (`INTRO_GIF` in `index.html`). Später über ⚙️ → „Wia goht des?“

@@ -386,6 +386,47 @@ html[data-theme=modern]{background:var(--g-bg)}
 @keyframes updblink{50%{background:#ff00ff; color:#fff}}
 [data-theme=modern] .upd{font:600 14px var(--m-font); border:0; border-radius:999px; background:var(--g-tint); color:#fff; box-shadow:0 8px 24px rgba(10,132,255,.35); animation:none}
 
+/* Velo-Vreni */
+#vreni{position:fixed; left:8px; bottom:calc(34px + env(safe-area-inset-bottom)); z-index:24; display:flex; align-items:flex-end; pointer-events:none}
+#vreni[hidden]{display:none}
+[data-theme=modern] #vreni{display:none}
+.v-bike{flex:none; overflow:visible; transform:translateX(-120vw); filter:drop-shadow(3px 3px 0 rgba(0,0,0,.35))}
+#vreni.ride .v-bike{transform:translateX(0); transition:transform 1.4s cubic-bezier(.2,.8,.3,1)}
+#vreni.leave .v-bike{transform:translateX(120vw); transition:transform 1.2s cubic-bezier(.6,0,.9,.4)}
+.v-bike .tire{fill:none; stroke:#111; stroke-width:4}
+.v-bike .spokes line{stroke:#888; stroke-width:1.2}
+.v-bike .hub{fill:#555}
+.v-bike .frame{fill:none; stroke:#e01010; stroke-width:4; stroke-linejoin:round; stroke-linecap:round}
+.v-bike .seat{stroke:#222; stroke-width:5; stroke-linecap:round}
+.v-bike .bar{fill:none; stroke:#222; stroke-width:3.5; stroke-linecap:round; stroke-linejoin:round}
+.v-bike .crank{fill:#ffd700; stroke:#222; stroke-width:1.5}
+.v-rear .spokes{transform-box:view-box; transform-origin:30px 72px}
+.v-front .spokes{transform-box:view-box; transform-origin:108px 72px}
+#vreni.ride:not(.wheelie) .spokes{animation:vspin .35s linear infinite}
+#vreni.leave .spokes{animation:vspin .3s linear infinite}
+@keyframes vspin{to{transform:rotate(360deg)}}
+.v-all{transform-box:view-box; transform-origin:30px 72px; transition:transform .5s cubic-bezier(.3,1.6,.6,1)}
+#vreni.wheelie .v-all{transform:rotate(-32deg)}
+.v-face{opacity:0; transform-box:view-box; transform-origin:108px 72px; transform:rotate(32deg) scale(.3); transition:opacity .4s, transform .5s cubic-bezier(.3,1.6,.6,1)}
+#vreni.face .v-face{opacity:1; transform:rotate(32deg) scale(1)}
+#vreni.face .v-front .spokes{opacity:0; transition:opacity .3s}
+.v-face .skin{fill:#ffe066; stroke:#111; stroke-width:1.5}
+.v-face .eye{fill:#111}
+.v-face .mouth{fill:none; stroke:#111; stroke-width:2.2; stroke-linecap:round}
+.v-face .cheek{fill:#ff7aa2; opacity:.7}
+#vreni.talk .v-wink{animation:vwink 3s 1s infinite}
+.v-wink{transform-box:fill-box; transform-origin:center}
+@keyframes vwink{0%,90%,100%{transform:scaleY(1)} 94%{transform:scaleY(.1)}}
+.v-bubble{position:relative; margin:0 0 70px -6px; max-width:min(250px, calc(100vw - 175px)); background:#fffbd0; border:2px solid #000; border-radius:14px; padding:10px 12px;
+  font:15px/1.35 var(--fibel); box-shadow:4px 4px 0 rgba(0,0,0,.4); opacity:0; transform:scale(.6); transform-origin:bottom left; transition:opacity .25s, transform .35s cubic-bezier(.3,1.6,.6,1); pointer-events:none}
+.v-bubble::before{content:""; position:absolute; left:-14px; bottom:18px; border:8px solid transparent; border-right:12px solid #000}
+.v-bubble::after{content:""; position:absolute; left:-9px; bottom:20px; border:6px solid transparent; border-right:9px solid #fffbd0}
+#vreni.talk .v-bubble{opacity:1; transform:scale(1); pointer-events:auto}
+.v-bubble p{margin:0 0 8px}
+.v-btns{display:flex; gap:6px; flex-wrap:wrap}
+.v-btns .b95{font-size:13px; padding:5px 10px; min-height:32px}
+@media (max-width:360px){.v-bike{width:120px; height:86px}}
+
 .themes{display:grid; grid-template-columns:repeat(2,1fr); gap:6px; margin-top:4px}
 .themes .b95{display:flex; flex-direction:column; align-items:center; gap:2px; font-size:13px; padding:8px 4px}
 .themes .b95 span{font-size:24px}
@@ -424,6 +465,30 @@ html[data-theme=modern]{background:var(--g-bg)}
 </div>
 
 <button class="upd" id="upd" hidden></button>
+
+<!-- Velo-Vreni: 90er-Assistentin -->
+<div id="vreni" hidden aria-live="polite">
+  <svg class="v-bike" viewBox="0 0 140 100" width="150" height="107" aria-hidden="true">
+    <g class="v-all">
+      <g class="v-wheel v-rear"><circle cx="30" cy="72" r="20" class="tire"/><g class="spokes"><line x1="30" y1="52" x2="30" y2="92"/><line x1="10" y1="72" x2="50" y2="72"/><line x1="16" y1="58" x2="44" y2="86"/><line x1="44" y1="58" x2="16" y2="86"/></g><circle cx="30" cy="72" r="3" class="hub"/></g>
+      <g class="v-wheel v-front"><circle cx="108" cy="72" r="20" class="tire"/>
+        <g class="spokes"><line x1="108" y1="52" x2="108" y2="92"/><line x1="88" y1="72" x2="128" y2="72"/><line x1="94" y1="58" x2="122" y2="86"/><line x1="122" y1="58" x2="94" y2="86"/></g>
+        <g class="v-face"><circle cx="108" cy="72" r="17" class="skin"/>
+          <ellipse cx="101" cy="67" rx="3.2" ry="4.2" class="eye"/><ellipse cx="115" cy="67" rx="3.2" ry="4.2" class="eye v-wink"/>
+          <circle cx="102" cy="65.5" r="1.1" fill="#fff"/><circle cx="116" cy="65.5" r="1.1" fill="#fff" class="v-wink"/>
+          <path d="M99 76 Q108 85 117 76" class="mouth"/><circle cx="96" cy="75" r="2.5" class="cheek"/><circle cx="120" cy="75" r="2.5" class="cheek"/></g>
+        <circle cx="108" cy="72" r="3" class="hub spokes"/></g>
+      <path d="M30 72 L62 72 L55 40 Z M55 40 L95 42 L62 72 M95 42 L108 72" class="frame"/>
+      <path d="M50 35 L62 35" class="seat"/><path d="M55 40 L56 35" class="frame"/>
+      <path d="M95 42 L92 31 L101 29" class="bar"/>
+      <circle cx="62" cy="72" r="5" class="crank"/>
+    </g>
+  </svg>
+  <div class="v-bubble" role="dialog" aria-labelledby="vText">
+    <p id="vText"></p>
+    <div class="v-btns"><button class="b95 big" id="vYes">Jo, gern! 👍</button><button class="b95" id="vNo">Spöter</button></div>
+  </div>
+</div>
 <button class="b95" id="plus" aria-label="Neua Termin iitraga" data-hd-aria="Neuen Termin eintragen">+<small>NEU</small></button>
 <div id="status"><span id="st">Dokument: Fertig</span><span id="ver">zämm go 1.0</span><span id="net">🌐</span></div>
 
@@ -580,7 +645,7 @@ html[data-theme=modern]{background:var(--g-bg)}
    API_URL = Apps-Script-Web-App (…/exec). Leer → Demo-Modus (localStorage).
    ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbz4xf-IjvvDWh2qYNFIw7fqRttaO1khWAzOT44ZKT8AsNx1l9ad6CIJeIroiMzmIew/exec';
-const VERSION = '1.13.1';
+const VERSION = '1.14';
 // Begrüßungs-GIF im Intro (z. B. Giphy-Link „…/giphy.gif“). Leer = ohne GIF.
 const INTRO_GIF = '';
 
@@ -1277,7 +1342,8 @@ $('#setNameBtn').onclick = () => askName();
 async function pushDraw() {
   const info = $('#pushInfo'), on = $('#pushOn'), off = $('#pushOff'), test = $('#pushTest');
   const say = (t, cls) => { info.innerHTML = t; info.className = 'info' + (cls ? ' ' + cls : ''); };
-  on.hidden = false; on.disabled = true; off.hidden = test.hidden = true;
+  on.hidden = false; off.hidden = test.hidden = true;
+  on.disabled = DEMO || !CAN_PUSH || !PUSH_KEY || Notification.permission === 'denied';
   if (DEMO) return say('Im Demo-Modus gibt es keine Benachrichtigungen.');
   if (!CAN_PUSH) return IS_IOS && !STANDALONE
     ? say(T('📱 Uf\'m iPhone gond Popups nur, wenn zämm go uf\'m <b>Home-Bildschirm</b> isch:<br>Unta uf <b>Teila ⬆️</b> → <b>„Zum Home-Bildschirm“</b> → d\'App vo dött ufmacha und do nomol iischalta.',
@@ -1422,6 +1488,45 @@ $('#upd').onclick = () => { location.reload(); };
 checkUpdate();
 setInterval(() => { if (!document.hidden) checkUpdate(); }, 10 * 60e3);
 document.addEventListener('visibilitychange', () => { if (!document.hidden) checkUpdate(); });
+
+/* ---------- Velo-Vreni (nur 90er) ---------- */
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+async function vreniShow(force) {
+  const v = $('#vreni');
+  if (HD() || !v.hidden || DEMO && !force) return;
+  if (!force) {
+    if (Number(localStorage.getItem('zg_vreni_later') || 0) > Date.now()) return;
+    if (!$('#ovIntro').hidden || document.querySelector('.ov:not([hidden])')) return;
+    if (CAN_PUSH && (!PUSH_KEY || Notification.permission === 'denied' || await getSub())) return;
+    if (!CAN_PUSH && !(IS_IOS && !STANDALONE)) return;      // Browser ohne Push → nicht nerven
+  }
+  $('#vText').innerHTML = (CAN_PUSH || force && !IS_IOS)
+    ? 'Hoi, i bin d\'<b>Velo-Vreni</b>! 🚲<br>Du hosch d\'Benachrichtigunga no ned iigschaltet. Söll i dr helfa?'
+    : 'Hoi, i bin d\'<b>Velo-Vreni</b>! 🚲<br>Für Benachrichtigunga muasch mi zerscht uf da <b>Home-Bildschirm</b> lega: unta uf <b>Teila ⬆️</b> → <b>„Zum Home-Bildschirm“</b>.';
+  $('#vYes').textContent = CAN_PUSH ? 'Jo, gern! 👍' : 'Alls klar 👍';
+  v.className = ''; v.hidden = false;
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) { v.className = 'ride wheelie face talk'; return; }
+  v.classList.add('ride');        await sleep(1500);
+  v.classList.add('wheelie');     await sleep(600);
+  v.classList.add('face');        await sleep(700);
+  v.classList.add('talk');
+}
+async function vreniBye(later) {
+  const v = $('#vreni'); if (v.hidden) return;
+  if (later) localStorage.setItem('zg_vreni_later', Date.now() + 7 * 864e5);
+  v.classList.remove('talk'); await sleep(250);
+  v.classList.remove('face', 'wheelie'); await sleep(400);
+  v.classList.add('leave'); await sleep(1300);
+  v.hidden = true; v.className = '';
+}
+$('#vYes').onclick = () => {
+  vreniBye(false);
+  if (!CAN_PUSH) { localStorage.setItem('zg_vreni_later', Date.now() + 3 * 864e5); return; }
+  openSet();
+  if (!$('#pushOn').disabled && !$('#pushOn').hidden) $('#pushOn').click();   // direkt im Tipp → Erlaubnis-Abfrage zulässig
+};
+$('#vNo').onclick = () => vreniBye(true);
+setTimeout(() => vreniShow(qs.has('vreni')), qs.has('vreni') ? 600 : 2500);
 
 /* ---------- Start ---------- */
 $('#ver').textContent = 'zämm go ' + VERSION + (DEMO ? ' · DEMO' : '');
