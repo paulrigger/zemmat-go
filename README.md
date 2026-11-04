@@ -40,7 +40,7 @@ du tragst ii, wenn du gosch, und wer will, kunnt mit.
 - **🔔 Popups (Web Push)** bei neuen Terminen – pro Gerät einstellbar, für welche Sportarten. Eigene Termine lösen kein Popup aus.
   Einstellbar pro Gerät: **neue Termine** (nach Sportart), **An- und Abmeldungen** (bei eigenen Terminen / bei Terminen, bei denen ich dabei bin), **Chat-Nachrichten** (eigene / dabei), **Änderungen und Absagen**
   iPhone: ab iOS 16.4, **nur** wenn die App am Home-Bildschirm liegt. Android/Desktop: direkt im Browser.
-- **🚲 Velo-Vreni** (90er-Design): fährt rein, macht ein Wheelie, das Vorderrad wird zum Gesicht – und sie bietet an, die Benachrichtigungen einzuschalten (bzw. erklärt am iPhone den Home-Bildschirm). „Spöter“ = 7 Tage Ruhe. Zum Herzeigen: `?vreni`
+- **🚲 Velo-Vreni** (90er-Design, ersetzt das ➕): fährt nach 1 s rein, macht ein Wheelie, das Vorderrad wird zum Gesicht – und fragt „Söll i an neua Termin iitraga?“. Sind Benachrichtigungen noch nicht aktiv, fragt sie zuerst danach („Spöter“ = 7 Tage Ruhe). Danach parkt sie unten links: antippen = neuer Termin. Zum Herzeigen der Benachrichtigungs-Frage: `?vreni`
 
   <img src="docs/velo-vreni.gif" width="300" alt="Velo-Vreni">
 - **⚙️ Einstellungen** (immer Hochdeutsch): Name, Benachrichtigungen (an/aus, Sportarten, Test), Design

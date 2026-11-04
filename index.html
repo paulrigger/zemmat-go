@@ -422,6 +422,12 @@ html[data-theme=modern]{background:var(--g-bg)}
 .v-bubble::before{content:""; position:absolute; left:-14px; bottom:18px; border:8px solid transparent; border-right:12px solid #000}
 .v-bubble::after{content:""; position:absolute; left:-9px; bottom:20px; border:6px solid transparent; border-right:9px solid #fffbd0}
 #vreni.talk .v-bubble{opacity:1; transform:scale(1); pointer-events:auto}
+html:not([data-theme=modern]) #plus{display:none}
+html:not([data-theme=modern]) body{padding-bottom:150px}
+#vreni.face .v-bike{pointer-events:auto; cursor:pointer}
+.v-tag{position:absolute; left:58px; bottom:96px; font:bold 12px var(--ui) !important; padding:3px 8px !important; min-height:0 !important; opacity:0; pointer-events:none; transform:rotate(-6deg); transition:opacity .3s}
+#vreni.face:not(.talk) .v-tag{opacity:1; pointer-events:auto; animation:vtag 2.4s ease-in-out infinite}
+@keyframes vtag{50%{transform:rotate(-6deg) translateY(-4px)}}
 .v-bubble p{margin:0 0 8px}
 .v-btns{display:flex; gap:6px; flex-wrap:wrap}
 .v-btns .b95{font-size:13px; padding:5px 10px; min-height:32px}
@@ -484,6 +490,7 @@ html[data-theme=modern]{background:var(--g-bg)}
       <circle cx="62" cy="72" r="5" class="crank"/>
     </g>
   </svg>
+  <button class="v-tag b95" id="vTag" aria-label="Neua Termin iitraga">➕ NEU</button>
   <div class="v-bubble" role="dialog" aria-labelledby="vText">
     <p id="vText"></p>
     <div class="v-btns"><button class="b95 big" id="vYes">Jo, gern! 👍</button><button class="b95" id="vNo">Spöter</button></div>
@@ -645,7 +652,7 @@ html[data-theme=modern]{background:var(--g-bg)}
    API_URL = Apps-Script-Web-App (…/exec). Leer → Demo-Modus (localStorage).
    ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbz4xf-IjvvDWh2qYNFIw7fqRttaO1khWAzOT44ZKT8AsNx1l9ad6CIJeIroiMzmIew/exec';
-const VERSION = '1.14';
+const VERSION = '1.15';
 // Begrüßungs-GIF im Intro (z. B. Giphy-Link „…/giphy.gif“). Leer = ohne GIF.
 const INTRO_GIF = '';
 
@@ -1438,6 +1445,7 @@ $('#themes').addEventListener('click', e => {
   const b = e.target.closest('[data-theme-set]'); if (!b) return;
   document.documentElement.dataset.theme = b.dataset.themeSet; localStorage.setItem('zg_theme', b.dataset.themeSet); themeDraw();
   applyLang(); hello(); render(); setDraw();
+  if (HD()) vreniHide(); else { const v = $('#vreni'); v.hidden = false; v.className = 'ride wheelie face'; }
   if (!HD()) { closeOv('#ovForm'); closeOv('#ovDetail'); } else if (!$('#ovNew').hidden) closeOv('#ovNew');
   if (draft && !$('#ovNew').hidden) { drawNew(); picker(); }
   pushSync().catch(() => {});
@@ -1489,44 +1497,59 @@ checkUpdate();
 setInterval(() => { if (!document.hidden) checkUpdate(); }, 10 * 60e3);
 document.addEventListener('visibilitychange', () => { if (!document.hidden) checkUpdate(); });
 
-/* ---------- Velo-Vreni (nur 90er) ---------- */
+/* ---------- Velo-Vreni (nur 90er): ersetzt das ➕ ---------- */
 const sleep = ms => new Promise(r => setTimeout(r, ms));
-async function vreniShow(force) {
-  const v = $('#vreni');
-  if (HD() || !v.hidden || DEMO && !force) return;
-  if (!force) {
-    if (Number(localStorage.getItem('zg_vreni_later') || 0) > Date.now()) return;
-    if (!$('#ovIntro').hidden || document.querySelector('.ov:not([hidden])')) return;
-    if (CAN_PUSH && (!PUSH_KEY || Notification.permission === 'denied' || await getSub())) return;
-    if (!CAN_PUSH && !(IS_IOS && !STANDALONE)) return;      // Browser ohne Push → nicht nerven
+let vMode = 'new', vTimer = null;
+async function vNeedsPush() {
+  if (DEMO || Number(localStorage.getItem('zg_vreni_later') || 0) > Date.now()) return false;
+  if (CAN_PUSH) return !!PUSH_KEY && Notification.permission !== 'denied' && !(await getSub());
+  return IS_IOS && !STANDALONE;
+}
+function vSay(mode) {
+  vMode = mode;
+  if (mode === 'push') {
+    $('#vText').innerHTML = CAN_PUSH
+      ? 'Hoi, i bin d\'<b>Velo-Vreni</b>! 🚲<br>Du hosch d\'Benachrichtigunga no ned iigschaltet. Söll i dr helfa?'
+      : 'Hoi, i bin d\'<b>Velo-Vreni</b>! 🚲<br>Für Benachrichtigunga muasch mi zerscht uf da <b>Home-Bildschirm</b> lega: unta uf <b>Teila ⬆️</b> → <b>„Zum Home-Bildschirm“</b>.';
+    $('#vYes').textContent = CAN_PUSH ? 'Jo, gern! 👍' : 'Alls klar 👍';
+    $('#vNo').textContent = 'Spöter';
+  } else {
+    $('#vText').innerHTML = (myName() ? 'Hoi ' + esc(myName()) + '! ' : 'Hoi! ') + 'I bin d\'<b>Velo-Vreni</b>. 🚲<br>Söll i an neua Termin iitraga?';
+    $('#vYes').textContent = '➕ Jo, iitraga!';
+    $('#vNo').textContent = 'Na, nur luaga';
   }
-  $('#vText').innerHTML = (CAN_PUSH || force && !IS_IOS)
-    ? 'Hoi, i bin d\'<b>Velo-Vreni</b>! 🚲<br>Du hosch d\'Benachrichtigunga no ned iigschaltet. Söll i dr helfa?'
-    : 'Hoi, i bin d\'<b>Velo-Vreni</b>! 🚲<br>Für Benachrichtigunga muasch mi zerscht uf da <b>Home-Bildschirm</b> lega: unta uf <b>Teila ⬆️</b> → <b>„Zum Home-Bildschirm“</b>.';
-  $('#vYes').textContent = CAN_PUSH ? 'Jo, gern! 👍' : 'Alls klar 👍';
+  $('#vreni').classList.add('talk');
+  clearTimeout(vTimer); vTimer = setTimeout(vQuiet, 12000);
+}
+function vQuiet() { clearTimeout(vTimer); $('#vreni').classList.remove('talk'); }
+async function vreniShow() {
+  const v = $('#vreni');
+  if (HD() || !v.hidden) return;
   v.className = ''; v.hidden = false;
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches) { v.className = 'ride wheelie face talk'; return; }
-  v.classList.add('ride');        await sleep(1500);
-  v.classList.add('wheelie');     await sleep(600);
-  v.classList.add('face');        await sleep(700);
-  v.classList.add('talk');
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) v.className = 'ride wheelie face';
+  else {
+    v.classList.add('ride');    await sleep(1500);
+    v.classList.add('wheelie'); await sleep(600);
+    v.classList.add('face');    await sleep(600);
+  }
+  if (document.querySelector('.ov:not([hidden])')) return;     // z. B. Begrüßung offen → nur parken
+  vSay(qs.has('vreni') || await vNeedsPush() ? 'push' : 'new');
 }
-async function vreniBye(later) {
-  const v = $('#vreni'); if (v.hidden) return;
-  if (later) localStorage.setItem('zg_vreni_later', Date.now() + 7 * 864e5);
-  v.classList.remove('talk'); await sleep(250);
-  v.classList.remove('face', 'wheelie'); await sleep(400);
-  v.classList.add('leave'); await sleep(1300);
-  v.hidden = true; v.className = '';
-}
+function vreniHide() { const v = $('#vreni'); vQuiet(); v.hidden = true; v.className = ''; }
 $('#vYes').onclick = () => {
-  vreniBye(false);
+  vQuiet();
+  if (vMode === 'new') return openNew();
   if (!CAN_PUSH) { localStorage.setItem('zg_vreni_later', Date.now() + 3 * 864e5); return; }
   openSet();
-  if (!$('#pushOn').disabled && !$('#pushOn').hidden) $('#pushOn').click();   // direkt im Tipp → Erlaubnis-Abfrage zulässig
+  if (!$('#pushOn').disabled && !$('#pushOn').hidden) $('#pushOn').click();   // im Tipp → Erlaubnis-Abfrage zulässig
 };
-$('#vNo').onclick = () => vreniBye(true);
-setTimeout(() => vreniShow(qs.has('vreni')), qs.has('vreni') ? 600 : 2500);
+$('#vNo').onclick = () => {
+  if (vMode === 'push') { localStorage.setItem('zg_vreni_later', Date.now() + 7 * 864e5); return vSay('new'); }
+  vQuiet();
+};
+$('#vTag').onclick = () => openNew();
+document.querySelector('.v-bike').addEventListener('click', () => { if ($('#vreni').classList.contains('talk')) vQuiet(); else openNew(); });
+setTimeout(vreniShow, 1000);
 
 /* ---------- Start ---------- */
 $('#ver').textContent = 'zämm go ' + VERSION + (DEMO ? ' · DEMO' : '');
