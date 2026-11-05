@@ -680,7 +680,7 @@ html:not([data-theme=modern]) .wordart.wa-12 {background:repeating-linear-gradie
    API_URL = Apps-Script-Web-App (…/exec). Leer → Demo-Modus (localStorage).
    ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbz4xf-IjvvDWh2qYNFIw7fqRttaO1khWAzOT44ZKT8AsNx1l9ad6CIJeIroiMzmIew/exec';
-const VERSION = '1.17';
+const VERSION = '1.17.1';
 // Begrüßungs-GIF im Intro (z. B. Giphy-Link „…/giphy.gif“). Leer = ohne GIF.
 const INTRO_GIF = '';
 
@@ -1556,7 +1556,9 @@ async function vreniShow() {
   v.className = ''; v.hidden = false;
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) v.className = 'ride wheelie face';
   else {
-    v.classList.add('ride');    await sleep(2100);
+    void v.offsetWidth;                                         // Startposition links außerhalb erst rendern …
+    await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+    v.classList.add('ride');                                    // … dann losfahren    await sleep(2100);
     v.classList.add('wheelie'); await sleep(600);
     v.classList.add('face');    await sleep(600);
   }
@@ -1607,6 +1609,7 @@ async function vReenter() {
   v.classList.remove('wheelie'); v.classList.add('rolling'); await sleep(400);
   v.classList.add('leave'); await sleep(1300);
   v.className = 'face'; void v.offsetWidth;                // links außerhalb, ohne Übergang
+  await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
   v.classList.add('ride', 'rolling'); await sleep(2100);
   v.classList.remove('rolling'); v.classList.add('wheelie'); await sleep(500);
   vBusy = false;
