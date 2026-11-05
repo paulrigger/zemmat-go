@@ -387,11 +387,12 @@ html[data-theme=modern]{background:var(--g-bg)}
 [data-theme=modern] .upd{font:600 14px var(--m-font); border:0; border-radius:999px; background:var(--g-tint); color:#fff; box-shadow:0 8px 24px rgba(10,132,255,.35); animation:none}
 
 /* Velo-Vreni */
-#vreni{position:fixed; left:8px; bottom:calc(34px + env(safe-area-inset-bottom)); z-index:24; display:flex; align-items:flex-end; pointer-events:none}
+#vreni{position:fixed; right:6px; bottom:calc(34px + env(safe-area-inset-bottom)); z-index:24; display:flex; flex-direction:row-reverse; align-items:flex-end; pointer-events:none}
+.v-move{transform-origin:50% 70%}
 #vreni[hidden]{display:none}
 [data-theme=modern] #vreni{display:none}
 .v-bike{flex:none; overflow:visible; transform:translateX(-120vw); filter:drop-shadow(3px 3px 0 rgba(0,0,0,.35))}
-#vreni.ride .v-bike{transform:translateX(0); transition:transform 1.4s cubic-bezier(.2,.8,.3,1)}
+#vreni.ride .v-bike{transform:translateX(0); transition:transform 2s cubic-bezier(.25,.7,.3,1)}
 #vreni.leave .v-bike{transform:translateX(120vw); transition:transform 1.2s cubic-bezier(.6,0,.9,.4)}
 .v-bike .tire{fill:none; stroke:#111; stroke-width:4}
 .v-bike .spokes line{stroke:#888; stroke-width:1.2}
@@ -402,7 +403,7 @@ html[data-theme=modern]{background:var(--g-bg)}
 .v-bike .crank{fill:#ffd700; stroke:#222; stroke-width:1.5}
 .v-rear .spokes{transform-box:view-box; transform-origin:30px 72px}
 .v-front .spokes{transform-box:view-box; transform-origin:108px 72px}
-#vreni.ride:not(.wheelie) .spokes{animation:vspin .35s linear infinite}
+#vreni.ride:not(.wheelie) .spokes, #vreni.rolling .spokes{animation:vspin .35s linear infinite}
 #vreni.leave .spokes{animation:vspin .3s linear infinite}
 @keyframes vspin{to{transform:rotate(360deg)}}
 .v-all{transform-box:view-box; transform-origin:30px 72px; transition:transform .5s cubic-bezier(.3,1.6,.6,1)}
@@ -417,16 +418,16 @@ html[data-theme=modern]{background:var(--g-bg)}
 #vreni.talk .v-wink{animation:vwink 3s 1s infinite}
 .v-wink{transform-box:fill-box; transform-origin:center}
 @keyframes vwink{0%,90%,100%{transform:scaleY(1)} 94%{transform:scaleY(.1)}}
-.v-bubble{position:relative; margin:0 0 70px -6px; max-width:min(250px, calc(100vw - 175px)); background:#fffbd0; border:2px solid #000; border-radius:14px; padding:10px 12px;
-  font:15px/1.35 var(--fibel); box-shadow:4px 4px 0 rgba(0,0,0,.4); opacity:0; transform:scale(.6); transform-origin:bottom left; transition:opacity .25s, transform .35s cubic-bezier(.3,1.6,.6,1); pointer-events:none}
-.v-bubble::before{content:""; position:absolute; left:-14px; bottom:18px; border:8px solid transparent; border-right:12px solid #000}
-.v-bubble::after{content:""; position:absolute; left:-9px; bottom:20px; border:6px solid transparent; border-right:9px solid #fffbd0}
+.v-bubble{position:relative; margin:0 -6px 70px 0; max-width:min(250px, calc(100vw - 175px)); background:#fffbd0; border:2px solid #000; border-radius:14px; padding:10px 12px;
+  font:15px/1.35 var(--fibel); box-shadow:4px 4px 0 rgba(0,0,0,.4); opacity:0; transform:scale(.6); transform-origin:bottom right; transition:opacity .25s, transform .35s cubic-bezier(.3,1.6,.6,1); pointer-events:none}
+.v-bubble::before{content:""; position:absolute; right:-14px; bottom:18px; border:8px solid transparent; border-left:12px solid #000}
+.v-bubble::after{content:""; position:absolute; right:-9px; bottom:20px; border:6px solid transparent; border-left:9px solid #fffbd0}
 #vreni.talk .v-bubble{opacity:1; transform:scale(1); pointer-events:auto}
 html:not([data-theme=modern]) #plus{display:none}
 html:not([data-theme=modern]) body{padding-bottom:150px}
 #vreni.face .v-bike{pointer-events:auto; cursor:pointer}
-.v-tag{position:absolute; left:58px; bottom:96px; font:bold 12px var(--ui) !important; padding:3px 8px !important; min-height:0 !important; opacity:0; pointer-events:none; transform:rotate(-6deg); transition:opacity .3s}
-#vreni.face:not(.talk) .v-tag{opacity:1; pointer-events:auto; animation:vtag 2.4s ease-in-out infinite}
+.v-tag{position:absolute; right:40px; bottom:100px; font:bold 12px var(--ui) !important; padding:3px 8px !important; min-height:0 !important; opacity:0; pointer-events:none; transform:rotate(-6deg); transition:opacity .3s}
+#vreni.face:not(.talk):not(.rolling) .v-tag{opacity:1; pointer-events:auto; animation:vtag 2.4s ease-in-out infinite}
 @keyframes vtag{50%{transform:rotate(-6deg) translateY(-4px)}}
 .v-bubble p{margin:0 0 8px}
 .v-btns{display:flex; gap:6px; flex-wrap:wrap}
@@ -501,7 +502,7 @@ html:not([data-theme=modern]) .wordart.wa-12 {background:repeating-linear-gradie
 
 <!-- Velo-Vreni: 90er-Assistentin -->
 <div id="vreni" hidden aria-live="polite">
-  <svg class="v-bike" viewBox="0 0 140 100" width="150" height="107" aria-hidden="true">
+  <div class="v-move"><svg class="v-bike" viewBox="0 0 140 100" width="150" height="107" aria-hidden="true">
     <g class="v-all">
       <g class="v-wheel v-rear"><circle cx="30" cy="72" r="20" class="tire"/><g class="spokes"><line x1="30" y1="52" x2="30" y2="92"/><line x1="10" y1="72" x2="50" y2="72"/><line x1="16" y1="58" x2="44" y2="86"/><line x1="44" y1="58" x2="16" y2="86"/></g><circle cx="30" cy="72" r="3" class="hub"/></g>
       <g class="v-wheel v-front"><circle cx="108" cy="72" r="20" class="tire"/>
@@ -516,7 +517,7 @@ html:not([data-theme=modern]) .wordart.wa-12 {background:repeating-linear-gradie
       <path d="M95 42 L92 31 L101 29" class="bar"/>
       <circle cx="62" cy="72" r="5" class="crank"/>
     </g>
-  </svg>
+  </svg></div>
   <button class="v-tag b95" id="vTag" aria-label="Neua Termin iitraga">➕ NEU</button>
   <div class="v-bubble" role="dialog" aria-labelledby="vText">
     <p id="vText"></p>
@@ -679,7 +680,7 @@ html:not([data-theme=modern]) .wordart.wa-12 {background:repeating-linear-gradie
    API_URL = Apps-Script-Web-App (…/exec). Leer → Demo-Modus (localStorage).
    ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbz4xf-IjvvDWh2qYNFIw7fqRttaO1khWAzOT44ZKT8AsNx1l9ad6CIJeIroiMzmIew/exec';
-const VERSION = '1.16';
+const VERSION = '1.17';
 // Begrüßungs-GIF im Intro (z. B. Giphy-Link „…/giphy.gif“). Leer = ohne GIF.
 const INTRO_GIF = '';
 
@@ -1555,7 +1556,7 @@ async function vreniShow() {
   v.className = ''; v.hidden = false;
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) v.className = 'ride wheelie face';
   else {
-    v.classList.add('ride');    await sleep(1500);
+    v.classList.add('ride');    await sleep(2100);
     v.classList.add('wheelie'); await sleep(600);
     v.classList.add('face');    await sleep(600);
   }
@@ -1577,6 +1578,48 @@ $('#vNo').onclick = () => {
 $('#vTag').onclick = () => openNew();
 document.querySelector('.v-bike').addEventListener('click', () => { if ($('#vreni').classList.contains('talk')) vQuiet(); else openNew(); });
 setTimeout(vreniShow, 1000);
+
+/* Vreni lebt: alle paar Sekunden eine Runde, ab und zu neu einfahren */
+const V_REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
+let vBusy = false, vNextEntry = Date.now() + 60e3 + Math.random() * 60e3;
+function vIdle() {
+  const v = $('#vreni');
+  return !V_REDUCED && !vBusy && !v.hidden && v.classList.contains('wheelie') && !v.classList.contains('talk')
+    && !document.hidden && !document.querySelector('.ov:not([hidden])');
+}
+async function vLap() {
+  const v = $('#vreni'); vBusy = true;
+  v.classList.remove('wheelie'); v.classList.add('rolling'); await sleep(450);
+  const a = $('.v-move').animate([
+    {transform: 'translateX(0) scaleX(1)'},
+    {transform: 'translateX(0) scaleX(-1)', offset: .1},
+    {transform: 'translateX(-150px) scaleX(-1)', offset: .46},
+    {transform: 'translateX(-150px) scaleX(1)', offset: .56},
+    {transform: 'translateX(0) scaleX(1)', offset: .94},
+    {transform: 'translateX(0) scaleX(1)'}
+  ], {duration: 3000, easing: 'ease-in-out'});
+  await a.finished;
+  v.classList.remove('rolling'); v.classList.add('wheelie'); await sleep(500);
+  vBusy = false;
+}
+async function vReenter() {
+  const v = $('#vreni'); vBusy = true;
+  v.classList.remove('wheelie'); v.classList.add('rolling'); await sleep(400);
+  v.classList.add('leave'); await sleep(1300);
+  v.className = 'face'; void v.offsetWidth;                // links außerhalb, ohne Übergang
+  v.classList.add('ride', 'rolling'); await sleep(2100);
+  v.classList.remove('rolling'); v.classList.add('wheelie'); await sleep(500);
+  vBusy = false;
+}
+(function vLoop() {
+  setTimeout(async () => {
+    if (vIdle()) {
+      if (Date.now() > vNextEntry) { vNextEntry = Date.now() + 60e3 + Math.random() * 60e3; await vReenter(); }
+      else await vLap();
+    }
+    vLoop();
+  }, 6000 + Math.random() * 5000);
+})();
 
 /* ---------- WordArt: jeden Monat ein anderer Stil ---------- */
 function wordArt() {
