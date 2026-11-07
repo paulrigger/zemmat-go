@@ -34,6 +34,7 @@ du tragst ii, wenn du gosch, und wer will, kunnt mit.
 - **📲 App teilen** – kurzer Einladungstext + Gruppen-Link (mit Schlüssel)
 - **📆 Kalender** – .ics-Datei zum Importieren
 - **⚡ Sofort-Anzeige:** Dabei/Doch ned, Anlegen, Ändern, Absagen und Chat erscheinen sofort, gespeichert wird im Hintergrund. Bei Fehlern wird der alte Stand wiederhergestellt (beim Anlegen/Ändern öffnet sich der Editor mit den Eingaben wieder; Chat-Nachrichten lassen sich per Tipp erneut senden)
+- **💬 Reaktionen & Löschen im Chat:** lange drücken (am PC Rechtsklick) → 👍 ❤️ 😂 😮 😢 🙏 🔥 bzw. eigene Nachricht löschen; Reaktions-Chips antippen = eigene Reaktion an/aus
 - **💬 Chat pro Termin** – 90er: IRC-Look („Schwätza“), Langweilig: Nachrichten-Blasen. Ungelesene werden markiert, Popup an alle Beteiligten (Ersteller:in, Dabei, Mitschreibende) mit aktivierten Benachrichtigungen
 - **Kein Login:** Name wird beim ersten Mal abgefragt und lokal gespeichert
 - **✏️ Ändern** und **🗑️ Absagen** kann jede:r. Absagen im 90er-Design mit doppelter Rückfrage. Teilnehmer:innen und Chat bleiben beim Ändern erhalten; bei Änderung von Datum, Zeit, Ort, Sportart oder Dauer und bei Absagen bekommen alle Beteiligten ein Popup (mit Name, wer es war)
@@ -110,7 +111,7 @@ Apps Script kann die Web-Push-Kryptografie (ECDH, ES256) nicht, deshalb übernim
 1. Gruppen-Link öffnen → **Teilen → Zum Home-Bildschirm** → App vom Home-Bildschirm starten.
 2. ⚙️ **Iistellige** → Sportarten wählen → **🔔 Popups iischalta** → erlauben → **📣 Test-Popup**.
 
-**Update auf API v1.7 (Chat, Ändern, Absagen, Abmelden, Popup-Optionen):** neuen `Code.gs` einfügen → `setup()` ausführen (legt Tab `Chat` an) → Bereitstellungen verwalten → ✏️ → Version: Neu.
+**Update auf API v1.8 (Chat inkl. Reaktionen/Löschen, Ändern, Absagen, Abmelden, Popup-Optionen):** neuen `Code.gs` einfügen → `setup()` ausführen (legt Tab `Chat` an) → Bereitstellungen verwalten → ✏️ → Version: Neu.
 
 **Code-Änderungen an der API:** Bereitstellen → Bereitstellungen verwalten → ✏️ → Version „Neu“ (sonst bleibt die alte aktiv, URL bleibt gleich).
 **Ohne Schlüssel betreiben:** Skripteigenschaft `KEY` löschen.
@@ -129,6 +130,8 @@ Apps Script kann die Web-Push-Kryptografie (ECDH, ES256) nicht, deshalb übernim
 | `POST` | `{action:"unsubscribe", k, endpoint}` | `{ok}` |
 | `POST` | `{action:"test", k, endpoint}` | `{ok, result}` – Test-Popup an dieses Gerät |
 | `POST` | `{action:"chat", k, id, name, text}` | `{ok, chat}` – Nachricht zum Termin (max. 500 Zeichen) |
+| `POST` | `{action:"chatDel", k, id, mid, name}` | `{ok, chat}` – nur eigene Nachricht |
+| `POST` | `{action:"react", k, id, mid, name, emoji}` | `{ok, chat}` – Reaktion an/aus |
 
 `list` liefert zusätzlich `push` = öffentlicher VAPID-Schlüssel (leer, solange Popups nicht eingerichtet sind).
 Neuer Termin → Apps Script schickt alle Abos mit passender Sportart (außer Ersteller:in) an den Worker; abgelaufene Abos (404/410) werden gelöscht.
@@ -153,7 +156,7 @@ POST immer als `Content-Type: text/plain` (kein CORS-Preflight bei Apps Script).
 | raus | `Paul` | Ersteller:in/Genannte, die sich abgemeldet haben |
 | status | leer / `abgsagt` | |
 
-Tab `Chat`: `id, event, zeit, name, text`. In `list` hat jeder Termin `chat:[{n, t, z}]` (letzte 100).
+Tab `Chat`: `id, event, zeit, name, text, reakt` (JSON `{emoji:[Namen]}`). In `list` hat jeder Termin `chat:[{i, n, t, z, r}]` (letzte 100).
 
 Tab `Abos`: `endpoint, p256dh, auth, name, sports, erstellt, aktualisiert, lang` (`dia`/`de`), `opts` (`joinMine, joinIn, chatMine, chatIn, chg`; leer = Standard, `-` = keine) – ein Eintrag pro Gerät.
 

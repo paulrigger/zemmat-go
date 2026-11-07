@@ -328,9 +328,9 @@ html[data-theme=modern]{background:var(--g-bg)}
 .bub{max-width:78%; align-self:flex-start; display:flex; flex-direction:column; margin-top:2px}
 .bub.first{margin-top:10px}
 .bub small{font-size:12px; color:var(--g-sec); margin:0 0 2px 12px}
-.bub span{background:var(--g-fill); color:var(--g-ink); padding:8px 13px; border-radius:20px; white-space:pre-wrap; word-wrap:break-word}
+.bub > span:not(.rxs){background:var(--g-fill); color:var(--g-ink); padding:8px 13px; border-radius:20px; white-space:pre-wrap; word-wrap:break-word}
 .bub time{font-size:11px; color:var(--g-sec); margin:2px 12px 0}
-.bub.me{align-self:flex-end; align-items:flex-end} .bub.me span{background:var(--g-tint); color:#fff}
+.bub.me{align-self:flex-end; align-items:flex-end} .bub.me > span:not(.rxs){background:var(--g-tint); color:#fff}
 .chat-empty{margin:auto; text-align:center; color:var(--g-sec); font-size:15px}
 [data-theme=modern] .chat-in{padding:8px 12px calc(10px + env(safe-area-inset-bottom)); align-items:center}
 [data-theme=modern] .chat-in input{all:unset; box-sizing:border-box; flex:1; min-width:0; font:17px var(--m-font); color:var(--g-ink); padding:9px 16px; border-radius:999px;
@@ -463,13 +463,38 @@ html:not([data-theme=modern]) .wordart.wa-12 {background:repeating-linear-gradie
 
 /* Chat: Nachricht unterwegs / fehlgeschlagen */
 .irc.sending{opacity:.55} .irc.failed{color:#c00000; cursor:pointer} .irc small{font-size:11px; color:#808080} .irc.failed small{color:#c00000}
-.bub.sending span{opacity:.6} .bub.failed{cursor:pointer} .bub.failed span{background:var(--g-red) !important; color:#fff}
+.bub.sending > span:not(.rxs){opacity:.6} .bub.failed{cursor:pointer} .bub.failed > span:not(.rxs){background:var(--g-red) !important; color:#fff}
 .bub.failed time{color:var(--g-red)}
 
 /* Optimistisch: Termin noch unterwegs */
 .ev.pending{opacity:.75} .ev.pending .act{pointer-events:none; opacity:.5}
 .neu.ecke.saving{background:#ffff99; color:#000; animation:none}
 .ios-item.pending .ios-acts{pointer-events:none; opacity:.45}
+
+/* Chat: Reaktionen & Kontextmenü */
+.chat-log [data-mid]{-webkit-user-select:none; user-select:none; -webkit-touch-callout:none}
+.irc.picked{background:#000080; color:#fff} .irc.picked .ts, .irc.picked b{color:#ffff66 !important}
+.rxs{display:inline-flex; flex-wrap:wrap; gap:4px; margin-left:6px; vertical-align:middle}
+.rx{font:12px var(--ui); padding:1px 5px; cursor:pointer; background:var(--gray); border:1px solid; border-color:#fff #404040 #404040 #fff; border-radius:0; line-height:1.4}
+.rx.mine{background:#ffff99; border-color:#404040 #fff #fff #404040; font-weight:bold}
+.msg-menu{position:fixed; z-index:99; background:var(--gray); border:2px solid; border-color:#fff #000 #000 #fff; box-shadow:3px 3px 0 rgba(0,0,0,.45); padding:3px; display:flex; flex-direction:column; gap:3px}
+.msg-menu[hidden]{display:none}
+.mm-rx{display:flex; gap:2px}
+.mm-rx button{font-size:22px; width:40px; height:40px; cursor:pointer; background:var(--gray); border:2px solid; border-color:#fff #404040 #404040 #fff; padding:0}
+.mm-rx button.mine{background:#ffff99; border-color:#404040 #fff #fff #404040}
+.mm-del{font:bold 14px var(--ui); text-align:left; padding:8px 10px; cursor:pointer; background:var(--gray); border:0; border-top:1px solid #808080}
+.mm-del:hover, .mm-del:focus{background:#000080; color:#fff}
+[data-theme=modern] .rxs{display:flex; margin:-6px 8px 0; z-index:1}
+[data-theme=modern] .bub.me .rxs{justify-content:flex-end}
+[data-theme=modern] .rx{font:13px var(--m-font); padding:2px 8px; border:0; border-radius:999px; background:var(--g-glass2); box-shadow:0 1px 4px rgba(0,0,0,.15), inset 0 0 0 .5px var(--g-edge); color:var(--g-ink)}
+[data-theme=modern] .rx.mine{background:rgba(10,132,255,.18); box-shadow:inset 0 0 0 1px var(--g-tint)}
+[data-theme=modern] .bub.picked > span:not(.rxs){transform:scale(1.04); box-shadow:0 8px 24px rgba(0,0,0,.2)}
+[data-theme=modern] .bub > span:not(.rxs){transition:transform .15s}
+[data-theme=modern] .msg-menu{background:none; border:0; box-shadow:none; padding:0; gap:8px}
+[data-theme=modern] .mm-rx{background:var(--g-glass2); -webkit-backdrop-filter:blur(30px) saturate(180%); backdrop-filter:blur(30px) saturate(180%); border-radius:999px; padding:4px 6px; box-shadow:0 10px 30px rgba(0,0,0,.2), inset 0 0 0 .5px var(--g-edge)}
+[data-theme=modern] .mm-rx button{border:0; background:none; border-radius:50%; width:38px; height:38px}
+[data-theme=modern] .mm-rx button.mine{background:rgba(10,132,255,.2)}
+[data-theme=modern] .mm-del{font:17px var(--m-font); color:var(--g-red); background:var(--g-glass2); -webkit-backdrop-filter:blur(30px); backdrop-filter:blur(30px); border:0; border-radius:14px; padding:12px 16px; box-shadow:0 10px 30px rgba(0,0,0,.2), inset 0 0 0 .5px var(--g-edge)}
 
 .themes{display:grid; grid-template-columns:repeat(2,1fr); gap:6px; margin-top:4px}
 .themes .b95{display:flex; flex-direction:column; align-items:center; gap:2px; font-size:13px; padding:8px 4px}
@@ -633,6 +658,8 @@ html:not([data-theme=modern]) .wordart.wa-12 {background:repeating-linear-gradie
   </div>
 </div>
 
+<div id="msgMenu" class="msg-menu" hidden role="menu"></div>
+
 <!-- iOS: Detail -->
 <div class="ov" id="ovDetail" hidden>
   <div class="win sheet" role="dialog" aria-modal="true" aria-labelledby="dTitle">
@@ -690,7 +717,7 @@ html:not([data-theme=modern]) .wordart.wa-12 {background:repeating-linear-gradie
    API_URL = Apps-Script-Web-App (…/exec). Leer → Demo-Modus (localStorage).
    ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbz4xf-IjvvDWh2qYNFIw7fqRttaO1khWAzOT44ZKT8AsNx1l9ad6CIJeIroiMzmIew/exec';
-const VERSION = '1.19';
+const VERSION = '1.20';
 // Begrüßungs-GIF im Intro (z. B. Giphy-Link „…/giphy.gif“). Leer = ohne GIF.
 const INTRO_GIF = '';
 
@@ -845,6 +872,7 @@ const demo = {
       ]};
       this.save(d);
     }
+    d.events.forEach(e => (e.chat || []).forEach(m => { if (!m.i) m.i = Math.random().toString(36).slice(2, 10); if (!m.r) m.r = {}; }));
     return d;
   },
   save(d) { localStorage.setItem('zg_demo', JSON.stringify(d)); },
@@ -860,7 +888,13 @@ const demo = {
       else if (base.some(n => same(n, p.name))) e.raus.push(p.name);
       this.save(d); return {ok: true, event: e};
     }
-    if (action === 'chat') { const e = find(); e.chat = e.chat || []; const t = String(p.text || '').trim().slice(0, 500); if (!t) throw new Error('Nüt gschrieba'); e.chat.push({n: p.name, t, z: new Date().toISOString()}); this.save(d); return {ok: true, chat: e.chat}; }
+    if (action === 'chat') { const e = find(); e.chat = e.chat || []; const t = String(p.text || '').trim().slice(0, 500); if (!t) throw new Error('Nüt gschrieba'); e.chat.push({i: Math.random().toString(36).slice(2, 10), n: p.name, t, z: new Date().toISOString(), r: {}}); this.save(d); return {ok: true, chat: e.chat}; }
+    if (action === 'chatDel' || action === 'react') {
+      const e = find(), m = (e.chat || []).find(x => x.i === p.mid); if (!m) throw new Error('Nachricht nüm gfunda');
+      if (action === 'chatDel') { if (!same(m.n, p.name)) throw new Error('Nur eigene Nachrichta kasch löscha'); e.chat = e.chat.filter(x => x !== m); }
+      else { m.r = m.r || {}; const l = (m.r[p.emoji] || []).filter(x => !same(x, p.name)); if (l.length === (m.r[p.emoji] || []).length) l.push(p.name); if (l.length) m.r[p.emoji] = l; else delete m.r[p.emoji]; }
+      this.save(d); return {ok: true, chat: e.chat};
+    }
     if (action === 'update') { const e = find(); ['datum', 'zeit', 'dauer', 'sport', 'sportText', 'wer', 'treffpunkt', 'drink'].forEach(k => e[k] = p.event[k]); this.save(d); return {ok: true, event: e}; }
     if (action === 'cancel') { const e = find(); d.events = d.events.filter(x => x !== e); this.save(d); return {ok: true}; }
     throw new Error('Unbekannte Aktion');
@@ -1087,7 +1121,7 @@ function closeOv(s) {
   $(s).hidden = true; if (document.querySelectorAll('.ov:not([hidden])').length === 0) document.body.style.overflow = '';
   if (s === '#ovIntro') localStorage.setItem('zg_intro', '1');
   if (s === '#ovDlg' && dlgRes) { const r = dlgRes; dlgRes = null; r(false); }
-  if (s === '#ovChat') { clearInterval(chatTimer); render(); if (!$('#ovDetail').hidden) { const e = EVENTS.find(x => x.id === detailId); if (e) drawDetail(e); } }
+  if (s === '#ovChat') { closeMsgMenu(); clearInterval(chatTimer); render(); if (!$('#ovDetail').hidden) { const e = EVENTS.find(x => x.id === detailId); if (e) drawDetail(e); } }
   if (s === '#ovName' && nameResolve) { nameResolve(''); nameResolve = null; }
 }
 document.querySelectorAll('.ov').forEach(o => {
@@ -1264,14 +1298,15 @@ function drawChat(scroll) {
   if (HD()) {
     log.innerHTML = msgs.length ? msgs.map((m, i) => {
       const mine = same(m.n, me), first = i === 0 || !same(msgs[i - 1].n, m.n);
-      return `<div class="bub${mine ? ' me' : ''}${first ? ' first' : ''}${m.state ? ' ' + m.state : ''}"${m.tmp ? ` data-tmp="${m.tmp}"` : ''}>${!mine && first ? `<small>${esc(m.n)}</small>` : ''}<span>${esc(m.t)}</span><time>${m.state ? st(m) : hhmm(m.z)}</time></div>`;
+      return `<div class="bub${mine ? ' me' : ''}${first ? ' first' : ''}${m.state ? ' ' + m.state : ''}"${m.tmp ? ` data-tmp="${m.tmp}"` : ''}${m.i ? ` data-mid="${esc(m.i)}"` : ''}>${!mine && first ? `<small>${esc(m.n)}</small>` : ''}<span>${esc(m.t)}</span>${rxHtml(m)}<time>${m.state ? st(m) : hhmm(m.z)}</time></div>`;
     }).join('') : '<p class="chat-empty">Noch keine Nachrichten.<br>Frag, wer mitkommt, oder stimmt euch ab.</p>';
   } else {
     log.innerHTML = `<div class="irc-sys">*** Du bisch jetzt im Chat vo <b>${esc(e.von)}</b> (${esc(sp.t)} ${esc(dayLabel(e.datum))} um ${e.zeit})</div>`
-      + (msgs.length ? msgs.map(m => `<div class="irc${m.state ? ' ' + m.state : ''}"${m.tmp ? ` data-tmp="${m.tmp}"` : ''}><span class="ts">[${hhmm(m.z)}]</span> <b style="color:${nickCol(m.n)}">&lt;${esc(m.n)}&gt;</b> ${esc(m.t)}${m.state ? ' <small>' + st(m) + '</small>' : ''}</div>`).join('')
+      + (msgs.length ? msgs.map(m => `<div class="irc${m.state ? ' ' + m.state : ''}"${m.tmp ? ` data-tmp="${m.tmp}"` : ''}${m.i ? ` data-mid="${esc(m.i)}"` : ''}><span class="ts">[${hhmm(m.z)}]</span> <b style="color:${nickCol(m.n)}">&lt;${esc(m.n)}&gt;</b> ${esc(m.t)}${m.state ? ' <small>' + st(m) + '</small>' : ''}${rxHtml(m)}</div>`).join('')
          : '<div class="irc-sys">*** Do isch no nüt gschrieba. Sag „Hoi“! 👋</div>');
   }
-  $('#cText').placeholder = T('Schriib öppis …', 'Nachricht');
+  if (!msgs.length || !localStorage.getItem('zg_rxhint')) $('#cText').placeholder = T('Schriib öppis … (lang drucka = reagiera)', 'Nachricht · lange drücken zum Reagieren');
+  else $('#cText').placeholder = T('Schriib öppis …', 'Nachricht');
   $('#cSend').textContent = T('Schick!', 'Senden');
   if (scroll || atEnd) log.scrollTop = log.scrollHeight;
   markSeen(e);
@@ -1301,7 +1336,64 @@ $('#cForm').addEventListener('submit', ev => {
   $('#cText').value = ''; $('#cText').focus();
   chatSend(e.id, p);
 });
+/* Reaktionen & Löschen */
+const RX = ['👍', '❤️', '😂', '😮', '😢', '🙏', '🔥'];
+function rxHtml(m) {
+  const r = m.r || {}, me = myName(), keys = RX.filter(k => (r[k] || []).length);
+  if (!keys.length) return '';
+  return '<span class="rxs">' + keys.map(k => `<button type="button" class="rx${r[k].some(n => same(n, me)) ? ' mine' : ''}" data-rx="${k}" title="${esc(r[k].join(', '))}">${k}${r[k].length > 1 ? ' ' + r[k].length : ''}</button>`).join('') + '</span>';
+}
+function chatMsg(mid) { const e = EVENTS.find(x => x.id === chatId); return e && (e.chat || []).find(m => m.i === mid); }
+function chatOp(action, mid, emoji) {
+  const e = EVENTS.find(x => x.id === chatId); if (!e) return;
+  const before = JSON.parse(JSON.stringify(e.chat || [])), name = myName(), eid = e.id;
+  bg(() => {
+      if (action === 'chatDel') e.chat = e.chat.filter(m => m.i !== mid);
+      else { const m = e.chat.find(x => x.i === mid); if (!m) return; m.r = m.r || {}; const l = (m.r[emoji] || []).filter(x => !same(x, name)); if (l.length === (m.r[emoji] || []).length) l.push(name); if (l.length) m.r[emoji] = l; else delete m.r[emoji]; }
+      drawChat(); render();
+    },
+    () => store.call(action, {id: eid, mid, name, emoji}),
+    j => { e.chat = j.chat; if (chatId === eid) drawChat(); render(); },
+    () => { e.chat = before; if (chatId === eid) drawChat(); render(); });
+}
+function openMsgMenu(el) {
+  const mid = el.dataset.mid, m = chatMsg(mid); if (!m) return;
+  localStorage.setItem('zg_rxhint', '1');
+  const mine = same(m.n, myName()), menu = $('#msgMenu'), r = m.r || {};
+  menu.innerHTML = `<div class="mm-rx">${RX.map(k => `<button type="button" data-mm-rx="${k}" class="${(r[k] || []).some(n => same(n, myName())) ? 'mine' : ''}">${k}</button>`).join('')}</div>`
+    + (mine ? `<button type="button" class="mm-del" data-mm-del>${T('🗑️ Löscha', 'Löschen')}</button>` : '');
+  menu.dataset.mid = mid; menu.hidden = false;
+  const b = el.getBoundingClientRect(), mw = menu.offsetWidth, mh = menu.offsetHeight;
+  let top = b.top - mh - 8; if (top < 10) top = b.bottom + 8;
+  menu.style.top = Math.min(top, innerHeight - mh - 10) + 'px';
+  menu.style.left = Math.max(8, Math.min(innerWidth - mw - 8, b.left + b.width / 2 - mw / 2)) + 'px';
+  el.classList.add('picked'); menuEl = el;
+  if (navigator.vibrate) navigator.vibrate(15);
+}
+let menuEl = null;
+function closeMsgMenu() { $('#msgMenu').hidden = true; if (menuEl) menuEl.classList.remove('picked'); menuEl = null; }
+$('#msgMenu').addEventListener('click', ev => {
+  const mid = $('#msgMenu').dataset.mid, rx = ev.target.closest('[data-mm-rx]'), del = ev.target.closest('[data-mm-del]');
+  closeMsgMenu();
+  if (rx) chatOp('react', mid, rx.dataset.mmRx);
+  if (del) chatOp('chatDel', mid);
+});
+document.addEventListener('pointerdown', ev => { if (!$('#msgMenu').hidden && !ev.target.closest('#msgMenu')) closeMsgMenu(); }, true);
+// Langes Drücken (Touch & Maus) bzw. Rechtsklick
+let lpTimer = null, lpStart = null, lpFired = false;
+$('#cLog').addEventListener('pointerdown', ev => {
+  const el = ev.target.closest('[data-mid]'); if (!el || ev.target.closest('.rx')) return;
+  lpFired = false; lpStart = [ev.clientX, ev.clientY];
+  lpTimer = setTimeout(() => { lpFired = true; openMsgMenu(el); }, 480);
+});
+['pointerup', 'pointercancel', 'pointerleave'].forEach(t => $('#cLog').addEventListener(t, () => clearTimeout(lpTimer)));
+$('#cLog').addEventListener('pointermove', ev => { if (lpStart && Math.hypot(ev.clientX - lpStart[0], ev.clientY - lpStart[1]) > 10) clearTimeout(lpTimer); });
+$('#cLog').addEventListener('contextmenu', ev => { const el = ev.target.closest('[data-mid]'); if (el) { ev.preventDefault(); clearTimeout(lpTimer); openMsgMenu(el); } });
+$('#cLog').addEventListener('scroll', () => { clearTimeout(lpTimer); closeMsgMenu(); });
+
 $('#cLog').addEventListener('click', ev => {
+  if (lpFired) { lpFired = false; return; }
+  const rx = ev.target.closest('.rx'); if (rx) { const el = rx.closest('[data-mid]'); if (el) chatOp('react', el.dataset.mid, rx.dataset.rx); return; }
   const el = ev.target.closest('.failed[data-tmp]'); if (!el) return;
   const p = (PENDING[chatId] || []).find(x => x.tmp === el.dataset.tmp); if (p) chatSend(chatId, p);
 });

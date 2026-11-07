@@ -1,5 +1,5 @@
 /**
- * zämm go – API v1.7 (Google Apps Script, gebunden an ein Google Sheet)
+ * zämm go – API v1.8 (Google Apps Script, gebunden an ein Google Sheet)
  *
  * Einrichtung:
  *   1. Neues Google Sheet → Erweiterungen → Apps Script → diesen Code einfügen
@@ -18,7 +18,9 @@
  *                   {action:"test", k, endpoint}          -> { ok, result }  Test-Popup an dieses Gerät
  *                   {action:"update", k, id, name, event:{…}} -> { ok, event }  (jede:r)
  *                   {action:"chat", k, id, name, text}    -> { ok, chat:[…] }  Chat-Nachricht zu einem Termin
- * Jeder Termin in list hat chat:[{n, t, z}] (Name, Text, Zeit).
+ *                   {action:"chatDel", k, id, mid, name}  -> { ok, chat }  eigene Nachricht löschen
+ *                   {action:"react", k, id, mid, name, emoji} -> { ok, chat }  Reaktion an/aus
+ * Jeder Termin in list hat chat:[{i, n, t, z, r}] (Id, Name, Text, Zeit, Reaktionen {emoji:[Namen]}).
  * Fehler immer als { ok:false, error:"…" }
  *
  * Skripteigenschaften:
@@ -28,7 +30,7 @@
  *   PUSH_SECRET  gleiches Secret wie im Worker (SECRET)
  *   APP_URL      optional, Standard https://paulrigger.github.io/zemmat-go/
  */
-const VERSION = '1.7';
+const VERSION = '1.8';
 const TZ = 'Europe/Vienna';
 const SHEET = 'Events';
 const COLS = ['id', 'erstellt', 'von', 'datum', 'zeit', 'dauer', 'sport', 'sportText', 'wer', 'treffpunkt', 'drink', 'dabei', 'status', 'raus'];  // raus = Ersteller:in/Genannte, die sich abgemeldet haben
@@ -37,7 +39,8 @@ const DAUER = ['', 'h05', 'h1', 'h15', 'h2', 'h3', 'halb', 'ganz'];
 const MAX_OPEN = 300;
 const ABOS = 'Abos';
 const CHAT = 'Chat';
-const CHAT_COLS = ['id', 'event', 'zeit', 'name', 'text'];
+const CHAT_COLS = ['id', 'event', 'zeit', 'name', 'text', 'reakt'];
+const EMOJIS = ['👍', '❤️', '😂', '😮', '😢', '🙏', '🔥'];
 const ABO_COLS = ['endpoint', 'p256dh', 'auth', 'name', 'sports', 'erstellt', 'aktualisiert', 'lang', 'opts'];
 const OPTS = ['joinMine', 'joinIn', 'chatMine', 'chatIn', 'chg'];
 const OPTS_DEFAULT = ['joinMine', 'chatMine', 'chatIn', 'chg'];
@@ -72,7 +75,11 @@ function sheet_() {
   if (sh.getLastColumn() < COLS.length) sh.getRange(1, 1, 1, COLS.length).setValues([COLS]).setFontWeight('bold'); // neue Spalten nachziehen
   return sh;
 }
-function chat_() { return tab_(CHAT, CHAT_COLS); }
+function chat_() {
+  const sh = tab_(CHAT, CHAT_COLS);
+  if (sh.getLastColumn() < CHAT_COLS.length) sh.getRange(1, 1, 1, CHAT_COLS.length).setValues([CHAT_COLS]).setFontWeight('bold');
+  return sh;
+}
 function abos_() {
   const sh = tab_(ABOS, ABO_COLS);
   if (sh.getLastColumn() < ABO_COLS.length) sh.getRange(1, 1, 1, ABO_COLS.length).setValues([ABO_COLS]).setFontWeight('bold'); // neue Spalten nachziehen
@@ -122,6 +129,8 @@ function run_(p) {
         if (r.ok) { try { notifyChange_(r.before, r.event, name_(p.name)); } catch (x) { console.error('Push Änderung: ' + x); } delete r.before; }
         return r;
       }
+      case 'chatDel': return locked_(() => chatDel_(p.id, p.mid, p.name));
+      case 'react':   return locked_(() => react_(p.id, p.mid, p.name, p.emoji));
       case 'chat': {
         const r = locked_(() => chatPost_(p.id, p.name, p.text));
         if (r.ok) { try { notifyChat_(r.event, r.msg); } catch (x) { console.error('Push Chat: ' + x); } delete r.event; delete r.msg; }
@@ -379,7 +388,9 @@ function chatMap_() {
   for (let i = 1; i < v.length; i++) {
     if (!v[i][0]) continue;
     const ev = String(v[i][1]);
-    (m[ev] = m[ev] || []).push({ n: String(v[i][3]), t: String(v[i][4]), z: str_(v[i][2], "yyyy-MM-dd'T'HH:mm:ssXXX") });
+    let r = {};
+    try { r = v[i][5] ? JSON.parse(v[i][5]) : {}; } catch (e) { r = {}; }
+    (m[ev] = m[ev] || []).push({ i: String(v[i][0]), n: String(v[i][3]), t: String(v[i][4]), z: str_(v[i][2], "yyyy-MM-dd'T'HH:mm:ssXXX"), r });
   }
   Object.keys(m).forEach(k => { if (m[k].length > 100) m[k] = m[k].slice(-100); });
   return m;
@@ -394,7 +405,7 @@ function chatPost_(id, name, text) {
   const sh = chat_();
   const z = Utilities.formatDate(new Date(), TZ, "yyyy-MM-dd'T'HH:mm:ssXXX");
   sh.getRange(sh.getLastRow() + 1, 1, 1, CHAT_COLS.length).setNumberFormat('@')
-    .setValues([[Utilities.getUuid().replace(/-/g, '').slice(0, 8), String(id), z, n, t]]);
+    .setValues([[Utilities.getUuid().replace(/-/g, '').slice(0, 8), String(id), z, n, t, '']]);
   const chat = chatMap_()[String(id)] || [];
   return { ok: true, chat, event: hit.ev, msg: { n, t, z } };
 }
@@ -521,4 +532,31 @@ function notifyJoin_(ev, by, add) {
       url: app + '#e' + ev.id, tag: 'zg-join-' + ev.id
     };
   });
+}
+
+/* ---------- Chat: löschen & reagieren ---------- */
+function chatRow_(id, mid) {
+  const sh = chat_(), v = sh.getDataRange().getValues();
+  for (let i = 1; i < v.length; i++) if (String(v[i][0]) === String(mid) && String(v[i][1]) === String(id)) return { sh, row: i + 1, vals: v[i] };
+  throw new Error('Nachricht nüm gfunda');
+}
+function chatDel_(id, mid, name) {
+  const n = name_(name);
+  const { sh, row, vals } = chatRow_(id, mid);
+  if (String(vals[3]).toLowerCase() !== n.toLowerCase()) throw new Error('Nur eigene Nachrichta kasch löscha');
+  sh.deleteRow(row);
+  return { ok: true, chat: chatMap_()[String(id)] || [] };
+}
+function react_(id, mid, name, emoji) {
+  const n = name_(name);
+  if (!n) throw new Error('Nama fehlt');
+  if (EMOJIS.indexOf(emoji) < 0) throw new Error('Des Emoji gits ned');
+  const { sh, row, vals } = chatRow_(id, mid);
+  let r = {};
+  try { r = vals[5] ? JSON.parse(vals[5]) : {}; } catch (e) { r = {}; }
+  const list = (r[emoji] || []).filter(x => String(x).toLowerCase() !== n.toLowerCase());
+  if (list.length === (r[emoji] || []).length) list.push(n);       // war nicht drin → hinzufügen, sonst entfernt
+  if (list.length) r[emoji] = list; else delete r[emoji];
+  sh.getRange(row, 6).setNumberFormat('@').setValue(Object.keys(r).length ? JSON.stringify(r) : '');
+  return { ok: true, chat: chatMap_()[String(id)] || [] };
 }
