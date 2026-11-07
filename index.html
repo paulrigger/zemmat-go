@@ -461,6 +461,11 @@ html:not([data-theme=modern]) .wordart.wa-12 {background:repeating-linear-gradie
   transform:skewX(-14deg); filter:drop-shadow(3px 3px 0 #3b1a05) drop-shadow(-1px -1px 0 #fff3c4)}
 [data-theme=modern] .wordart > span{transform:none !important; color:inherit !important}
 
+/* Chat: Nachricht unterwegs / fehlgeschlagen */
+.irc.sending{opacity:.55} .irc.failed{color:#c00000; cursor:pointer} .irc small{font-size:11px; color:#808080} .irc.failed small{color:#c00000}
+.bub.sending span{opacity:.6} .bub.failed{cursor:pointer} .bub.failed span{background:var(--g-red) !important; color:#fff}
+.bub.failed time{color:var(--g-red)}
+
 .themes{display:grid; grid-template-columns:repeat(2,1fr); gap:6px; margin-top:4px}
 .themes .b95{display:flex; flex-direction:column; align-items:center; gap:2px; font-size:13px; padding:8px 4px}
 .themes .b95 span{font-size:24px}
@@ -680,7 +685,7 @@ html:not([data-theme=modern]) .wordart.wa-12 {background:repeating-linear-gradie
    API_URL = Apps-Script-Web-App (…/exec). Leer → Demo-Modus (localStorage).
    ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbz4xf-IjvvDWh2qYNFIw7fqRttaO1khWAzOT44ZKT8AsNx1l9ad6CIJeIroiMzmIew/exec';
-const VERSION = '1.17.1';
+const VERSION = '1.18';
 // Begrüßungs-GIF im Intro (z. B. Giphy-Link „…/giphy.gif“). Leer = ohne GIF.
 const INTRO_GIF = '';
 
@@ -1200,15 +1205,16 @@ function drawChat(scroll) {
   const sp = sportOf(e);
   $('#cTitle').textContent = '💬 #' + sp.t.replace(/\s+/g, '-') + '-' + dayLabel(e.datum).replace(/\s+/g, '') + ' – ' + e.von;
   $('#cTitle2').textContent = sportName(e) + ' · ' + dayHeading(e.datum).replace(/^.* – /, '');
-  const msgs = e.chat || [];
+  const msgs = chatMsgs(e);
+  const st = m => m.state === 'failed' ? T('❌ ned gschickt – tippa zum nomol Probiera', 'Nicht gesendet – tippen zum Wiederholen') : m.state === 'sending' ? T('⏳', 'Wird gesendet …') : '';
   if (HD()) {
     log.innerHTML = msgs.length ? msgs.map((m, i) => {
       const mine = same(m.n, me), first = i === 0 || !same(msgs[i - 1].n, m.n);
-      return `<div class="bub${mine ? ' me' : ''}${first ? ' first' : ''}">${!mine && first ? `<small>${esc(m.n)}</small>` : ''}<span>${esc(m.t)}</span><time>${hhmm(m.z)}</time></div>`;
+      return `<div class="bub${mine ? ' me' : ''}${first ? ' first' : ''}${m.state ? ' ' + m.state : ''}"${m.tmp ? ` data-tmp="${m.tmp}"` : ''}>${!mine && first ? `<small>${esc(m.n)}</small>` : ''}<span>${esc(m.t)}</span><time>${m.state ? st(m) : hhmm(m.z)}</time></div>`;
     }).join('') : '<p class="chat-empty">Noch keine Nachrichten.<br>Frag, wer mitkommt, oder stimmt euch ab.</p>';
   } else {
     log.innerHTML = `<div class="irc-sys">*** Du bisch jetzt im Chat vo <b>${esc(e.von)}</b> (${esc(sp.t)} ${esc(dayLabel(e.datum))} um ${e.zeit})</div>`
-      + (msgs.length ? msgs.map(m => `<div class="irc"><span class="ts">[${hhmm(m.z)}]</span> <b style="color:${nickCol(m.n)}">&lt;${esc(m.n)}&gt;</b> ${esc(m.t)}</div>`).join('')
+      + (msgs.length ? msgs.map(m => `<div class="irc${m.state ? ' ' + m.state : ''}"${m.tmp ? ` data-tmp="${m.tmp}"` : ''}><span class="ts">[${hhmm(m.z)}]</span> <b style="color:${nickCol(m.n)}">&lt;${esc(m.n)}&gt;</b> ${esc(m.t)}${m.state ? ' <small>' + st(m) + '</small>' : ''}</div>`).join('')
          : '<div class="irc-sys">*** Do isch no nüt gschrieba. Sag „Hoi“! 👋</div>');
   }
   $('#cText').placeholder = T('Schriib öppis …', 'Nachricht');
@@ -1216,16 +1222,34 @@ function drawChat(scroll) {
   if (scroll || atEnd) log.scrollTop = log.scrollHeight;
   markSeen(e);
 }
-$('#cForm').addEventListener('submit', async ev => {
-  ev.preventDefault();
-  const t = $('#cText').value.trim(), e = EVENTS.find(x => x.id === chatId);
-  if (!t || !e) return;
-  const b = $('#cSend'); b.disabled = true;
+/* Sofort anzeigen, im Hintergrund senden (optimistisch) */
+const PENDING = {};   // eventId → [{tmp, n, t, z, state}]
+function chatMsgs(e) {
+  const server = e.chat || [];
+  const pend = (PENDING[e.id] || []).filter(p => !server.some(m => same(m.n, p.n) && m.t === p.t && new Date(m.z) >= new Date(p.z) - 120e3));
+  return server.concat(pend);
+}
+async function chatSend(eid, p) {
+  p.state = 'sending'; drawChat(true);
   try {
-    const j = await store.call('chat', {id: e.id, name: myName(), text: t});
-    e.chat = j.chat; $('#cText').value = ''; drawChat(true); render();
-  } catch (x) { tell(x.message); }
-  finally { b.disabled = false; $('#cText').focus(); }
+    const j = await store.call('chat', {id: eid, name: p.n, text: p.t});
+    const e = EVENTS.find(x => x.id === eid); if (e) e.chat = j.chat;
+    PENDING[eid] = (PENDING[eid] || []).filter(x => x !== p);
+  } catch (x) { p.state = 'failed'; status('Fehler: ' + x.message, true); }
+  if (chatId === eid) drawChat(); render();
+}
+$('#cForm').addEventListener('submit', ev => {
+  ev.preventDefault();
+  const t = $('#cText').value.trim().slice(0, 500), e = EVENTS.find(x => x.id === chatId);
+  if (!t || !e) return;
+  const p = {tmp: 'p' + Date.now() + Math.random().toString(36).slice(2, 6), n: myName(), t, z: new Date().toISOString(), state: 'sending'};
+  (PENDING[e.id] = PENDING[e.id] || []).push(p);
+  $('#cText').value = ''; $('#cText').focus();
+  chatSend(e.id, p);
+});
+$('#cLog').addEventListener('click', ev => {
+  const el = ev.target.closest('.failed[data-tmp]'); if (!el) return;
+  const p = (PENDING[chatId] || []).find(x => x.tmp === el.dataset.tmp); if (p) chatSend(chatId, p);
 });
 
 /* ---------- Langweilig: iOS-Liste, Formular, Detail ---------- */
