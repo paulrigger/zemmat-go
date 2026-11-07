@@ -466,6 +466,11 @@ html:not([data-theme=modern]) .wordart.wa-12 {background:repeating-linear-gradie
 .bub.sending span{opacity:.6} .bub.failed{cursor:pointer} .bub.failed span{background:var(--g-red) !important; color:#fff}
 .bub.failed time{color:var(--g-red)}
 
+/* Optimistisch: Termin noch unterwegs */
+.ev.pending{opacity:.75} .ev.pending .act{pointer-events:none; opacity:.5}
+.neu.ecke.saving{background:#ffff99; color:#000; animation:none}
+.ios-item.pending .ios-acts{pointer-events:none; opacity:.45}
+
 .themes{display:grid; grid-template-columns:repeat(2,1fr); gap:6px; margin-top:4px}
 .themes .b95{display:flex; flex-direction:column; align-items:center; gap:2px; font-size:13px; padding:8px 4px}
 .themes .b95 span{font-size:24px}
@@ -685,7 +690,7 @@ html:not([data-theme=modern]) .wordart.wa-12 {background:repeating-linear-gradie
    API_URL = Apps-Script-Web-App (…/exec). Leer → Demo-Modus (localStorage).
    ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbz4xf-IjvvDWh2qYNFIw7fqRttaO1khWAzOT44ZKT8AsNx1l9ad6CIJeIroiMzmIew/exec';
-const VERSION = '1.18';
+const VERSION = '1.19';
 // Begrüßungs-GIF im Intro (z. B. Giphy-Link „…/giphy.gif“). Leer = ohne GIF.
 const INTRO_GIF = '';
 
@@ -903,8 +908,9 @@ function status(t, bad) { $('#st').textContent = t; $('#st').style.color = bad ?
 
 /* ---------- Liste ---------- */
 let EVENTS = [], busy = false;
+let INFLIGHT = 0;   // laufende optimistische Aktionen → Nachladen pausieren, sonst würde es sie überschreiben
 async function load(quiet) {
-  if (busy) return; busy = true; // eslint-disable-line
+  if (busy || INFLIGHT > 0 && quiet) return; busy = true; // eslint-disable-line
   if (!quiet) status(T('Verbinda mit zaemm-go.at …', 'Lade …'));
   try {
     const j = await store.call('list');
@@ -940,7 +946,7 @@ function render() {
     if (e.datum !== last) { h += `<h3>📅 ${esc(dayHeading(e.datum))}</h3>`; last = e.datum; }
     const joined = imIn(e, me);
     const isNew = isNewEv(e);
-    h += `<div class="ev" id="e${esc(e.id)}">${isNew ? '<span class="neu blink ecke">NEU!</span>' : ''}
+    h += `<div class="ev${e._pending ? ' pending' : ''}" id="e${esc(e.id)}">${e._pending ? '<span class="neu ecke saving">⏳ wird gspeicheret …</span>' : ''}${isNew ? '<span class="neu blink ecke">NEU!</span>' : ''}
       <div class="eb fibel">${fibel(e, false)}</div>
       <div class="act">
         ${joined
@@ -962,6 +968,34 @@ $('#list').addEventListener('click', ev => {
   const e = EVENTS.find(x => x.id === b.dataset.id); if (!e) return;
   doAct(b.dataset.a, e, b);
 });
+/** An-/Abmelden lokal anwenden (gleiche Regeln wie der Server) */
+function applyJoin(e, name, add) {
+  const w = e.wer || {}, base = (w.mode === 'names' && (w.names || []).length ? w.names : [e.von]);
+  e.dabei = (e.dabei || []).filter(n => !same(n, name)); e.raus = (e.raus || []).filter(n => !same(n, name));
+  if (add) { if (!base.some(n => same(n, name))) e.dabei.push(name); }
+  else if (base.some(n => same(n, name))) e.raus.push(name);
+}
+const snap = e => JSON.parse(JSON.stringify(e));
+function afterChange(e, removed) {
+  render();
+  if (!$('#ovDetail').hidden) { if (removed) closeOv('#ovDetail'); else if (e && detailId === e.id) drawDetail(e); }
+}
+/** Optimistisch: sofort anzeigen, im Hintergrund speichern, bei Fehler zurück */
+async function bg(apply, call, ok, undo, okMsg) {
+  apply(); INFLIGHT++;
+  if (okMsg) status(okMsg);
+  let j;
+  try { j = await call(); }
+  catch (x) {
+    INFLIGHT--;
+    const then = undo(x); status('Fehler: ' + x.message, true);
+    await tell(T('Hett ned klappt: ', 'Hat nicht geklappt: ') + x.message);
+    if (typeof then === 'function') then();         // z. B. Editor mit den Eingaben wieder öffnen
+    return;
+  }
+  INFLIGHT--; ok(j);
+}
+
 async function doAct(a, e, b) {
   if (a === 'chat') return openChat(e.id);
   if (a === 'edit') return HD() ? openForm(e) : openEdit(e);
@@ -980,14 +1014,18 @@ async function doAct(a, e, b) {
       if (!await ask('Ganz sicher?\nDenn isch dä Termin für alli weg und die andra kriagand Bscheid.', {icon: '🤔', title: 'Absaga.exe – Letschte Warnung', ok: 'Jo, weg damit', no: 'Na, doch ned'})) return;
     }
   }
-  b.disabled = true; status(T('Schick …', 'Sende …'));
-  try {
-    const j = await store.call(a, {id: e.id, name});
-    if (a === 'cancel') EVENTS = EVENTS.filter(x => x !== e); else Object.assign(e, j.event);
-    render(); status(a === 'join' ? T('Super, du bisch dabei! 🎉', 'Du bist dabei.') : a === 'leave' ? T('Schad – vlicht s\'nögscht Mol.', 'Abgemeldet.') : T('Abgsagt.', 'Abgesagt.'));
-    if (!$('#ovDetail').hidden) { if (a === 'cancel') closeOv('#ovDetail'); else drawDetail(e); }
-    return true;
-  } catch (x) { status('Fehler: ' + x.message, true); b.disabled = false; tell(x.message); }
+  if (e._pending) return tell(T('Dä Termin wird no gspeicheret – a Sekündli.', 'Der Termin wird noch gespeichert – einen Moment.'), {icon: '⏳', title: 'zämm go'});
+  const before = snap(e), idx = EVENTS.indexOf(e);
+  const msg = a === 'join' ? T('Super, du bisch dabei! 🎉', 'Du bist dabei.') : a === 'leave' ? T('Schad – vlicht s\'nögscht Mol.', 'Abgemeldet.') : T('Abgsagt.', 'Abgesagt.');
+  if (a === 'cancel') return bg(
+    () => { EVENTS = EVENTS.filter(x => x !== e); afterChange(e, true); },
+    () => store.call('cancel', {id: e.id, name}), () => {},
+    () => { EVENTS.splice(Math.max(0, idx), 0, Object.assign(e, before)); afterChange(e); }, msg);
+  return bg(
+    () => { applyJoin(e, name, a === 'join'); afterChange(e); },
+    () => store.call(a, {id: e.id, name}),
+    j => { if (j.event) Object.assign(e, j.event); afterChange(e); },
+    () => { Object.assign(e, before); afterChange(e); }, msg);
 }
 
 function link(e) { return location.origin + location.pathname + (KEY ? '?k=' + encodeURIComponent(KEY) : DEMO && qs.has('demo') ? '?demo' : '') + '#e' + e.id; }
@@ -1159,25 +1197,41 @@ $('#send').onclick = async () => {
   const b = $('#send'), name = myName();
   if (!name) return askName();
   if (endOf(draft) < new Date()) { $('#newErr').textContent = T('⏰ Dä Zitpunkt isch scho verbei.', 'Der Zeitpunkt liegt in der Vergangenheit.'); return; }
-  b.disabled = true; b.textContent = T('⏳ Schick …', 'Sende …'); $('#newErr').textContent = ''; status(T('Schick …', 'Sende …'));
-  try {
-    if (editId) {
-      const j = await store.call('update', {id: editId, name, event: draft});
-      const old = EVENTS.find(x => x.id === editId); if (old) Object.assign(old, j.event);
-      closeOv('#ovNew'); render(); status('Gspeicheret ✔');
-      const el = document.getElementById('e' + editId); if (el) { el.scrollIntoView({block: 'center', behavior: 'smooth'}); el.classList.add('flash'); }
-      return;
-    }
-    const j = await store.call('create', {event: {...draft, von: name}});
-    EVENTS.push(j.event);
-    localStorage.setItem('zg_last', JSON.stringify({sport: draft.sport, sportText: draft.sportText}));
-    if (draft.treffpunkt) { let h = []; try { h = JSON.parse(localStorage.getItem('zg_treff')) || []; } catch (e) {} h = [draft.treffpunkt, ...h.filter(t => t !== draft.treffpunkt)].slice(0, 6); localStorage.setItem('zg_treff', JSON.stringify(h)); }
-    $('#cnt').textContent = String(Number($('#cnt').textContent) + 1).padStart(6, '0');
-    closeOv('#ovNew'); render(); status(T('Iitraga! 🎉 Jetzt no teila.', 'Eingetragen.'));
-    const el = document.getElementById('e' + j.event.id); if (el) { el.scrollIntoView({block: 'center', behavior: 'smooth'}); el.classList.add('flash'); }
-  } catch (x) { $('#newErr').textContent = T('Hoppla: ', 'Fehler: ') + x.message; status('Fehler: ' + x.message, true); }
-  finally { b.disabled = false; b.textContent = editId ? '💾 Speichra!' : T('📨 Abschicka!', 'Eintragen'); }
+  $('#newErr').textContent = '';
+  const d = JSON.parse(JSON.stringify(draft));
+  closeOv('#ovNew');
+  if (editId) saveEdit(editId, d, name, () => { draft = d; openEdit(Object.assign(snap(EVENTS.find(x => x.id === editId) || {}), d)); });
+  else saveNew(d, name, () => { openNew().then(() => { draft = d; drawNew(); }); });
 };
+
+/** Gemeinsam für 90er + Langweilig: neuer Termin sofort sichtbar, Speichern im Hintergrund */
+function saveNew(d, name, reopen) {
+  const tmp = {...d, id: 'tmp' + Date.now(), von: name, erstellt: new Date().toISOString(), dabei: [], raus: [], chat: [], _pending: true};
+  localStorage.setItem('zg_last', JSON.stringify({sport: d.sport, sportText: d.sportText}));
+  if (d.treffpunkt) { let h = []; try { h = JSON.parse(localStorage.getItem('zg_treff')) || []; } catch (e) {} h = [d.treffpunkt, ...h.filter(t => t !== d.treffpunkt)].slice(0, 6); localStorage.setItem('zg_treff', JSON.stringify(h)); }
+  bg(() => {
+      EVENTS.push(tmp); render();
+      const el = document.getElementById('e' + tmp.id); if (el) { el.scrollIntoView({block: 'center', behavior: 'smooth'}); el.classList.add('flash'); }
+    },
+    () => store.call('create', {event: {...d, von: name}}),
+    j => {
+      const i = EVENTS.indexOf(tmp); if (i >= 0) EVENTS[i] = j.event; else EVENTS.push(j.event);
+      $('#cnt').textContent = String(Number($('#cnt').textContent) + 1).padStart(6, '0');
+      render(); const el = document.getElementById('e' + j.event.id); if (el) el.classList.add('flash');
+      status(T('Iitraga! 🎉 Jetzt no teila.', 'Eingetragen.'));
+    },
+    () => { EVENTS = EVENTS.filter(x => x !== tmp); render(); return reopen; },
+    T('Schick …', 'Wird gespeichert …'));
+}
+function saveEdit(id, d, name, reopen) {
+  const e = EVENTS.find(x => x.id === id); if (!e) return;
+  const before = snap(e);
+  bg(() => { Object.assign(e, d); afterChange(e); const el = document.getElementById('e' + id); if (el) { el.scrollIntoView({block: 'center', behavior: 'smooth'}); el.classList.add('flash'); } },
+    () => store.call('update', {id, name, event: d}),
+    j => { Object.assign(e, j.event); afterChange(e); status(T('Gspeicheret ✔', 'Gespeichert')); },
+    () => { Object.assign(e, before); afterChange(e); return reopen; },
+    T('Gspeicheret ✔', 'Gespeichert'));
+}
 
 /* ---------- Chat pro Termin ---------- */
 let chatId = null, chatTimer = null;
@@ -1272,11 +1326,11 @@ function renderIOS(evs, me) {
     const isNew = isNewEv(e);
     const sub = [goersText(e), e.treffpunkt].filter(Boolean).map(esc).join(' · ');
     const nChat = (e.chat || []).length, u = unread(e), id = esc(e.id);
-    h += `<div class="ios-item s-${esc(e.sport)}" id="e${id}">
+    h += `<div class="ios-item s-${esc(e.sport)}${e._pending ? ' pending' : ''}" id="e${id}">
       <button class="ios-row" data-open="${id}">
         <span class="ios-time"><b>${e.zeit}</b><small>${e.dauer ? DUR_SHORT[e.dauer] : ''}</small></span>
         <span class="ios-main"><span class="ios-title">${esc(sportName(e))}${isNew ? '<i class="ios-new">Neu</i>' : ''}${e.drink ? '<i class="ios-tag">Drink</i>' : ''}</span>
-          <span class="ios-sub">${sub}</span></span>
+          <span class="ios-sub">${e._pending ? 'Wird gespeichert … · ' : ''}${sub}</span></span>
       </button>
       <div class="ios-acts">
         <button class="ios-act${joined ? ' on' : ''}" data-a="${joined ? 'leave' : 'join'}" data-id="${id}">${joined ? '✓ Dabei' : '+ Dabei'}</button>
@@ -1319,10 +1373,10 @@ $('#dBody').addEventListener('click', ev => {
 let fWer = 'i';
 let formEditId = null;
 function openForm(ev) {
-  formEditId = ev ? ev.id : null;
+  formEditId = ev && ev.id ? ev.id : null;
   const d = ev ? {...ev, drink: !!ev.drink} : freshDraft();
-  $('#tForm').textContent = ev ? 'Termin bearbeiten' : 'Neuer Termin';
-  $('#fSave').textContent = ev ? 'Sichern' : 'Hinzufügen';
+  $('#tForm').textContent = formEditId ? 'Termin bearbeiten' : 'Neuer Termin';
+  $('#fSave').textContent = formEditId ? 'Sichern' : 'Hinzufügen';
   $('#fSport').innerHTML = Object.entries(SPORT).map(([k, s]) => `<option value="${k}">${esc(s.lh)}</option>`).join('');
   $('#fSport').value = d.sport; $('#fSportText').value = d.sport === 'anders' ? d.sportText : '';
   $('#fDauer').innerHTML = '<option value="">Offen</option>' + Object.keys(DAUER).map(k => `<option value="${k}">${DUR_SHORT[k]}</option>`).join('');
@@ -1359,23 +1413,11 @@ $('#fSave').onclick = async () => {
   if (!/^\d{4}-\d\d-\d\d$/.test(d.datum) || !/^\d\d:\d\d$/.test(d.zeit)) return err.textContent = 'Bitte Datum und Uhrzeit angeben.';
   if (d.sport === 'anders' && !d.sportText) return err.textContent = 'Bitte die Aktivität angeben.';
   if (endOf(d) < new Date()) return err.textContent = 'Der Zeitpunkt liegt in der Vergangenheit.';
-  b.disabled = true; err.textContent = '';
-  try {
-    if (formEditId) {
-      const j = await store.call('update', {id: formEditId, name, event: d});
-      const old = EVENTS.find(x => x.id === formEditId); if (old) Object.assign(old, j.event);
-      closeOv('#ovForm'); render(); if (!$('#ovDetail').hidden && old) drawDetail(old);
-      return;
-    }
-    const j = await store.call('create', {event: {...d, von: name}});
-    EVENTS.push(j.event);
-    localStorage.setItem('zg_last', JSON.stringify({sport: d.sport, sportText: d.sportText}));
-    if (d.treffpunkt) { let h = []; try { h = JSON.parse(localStorage.getItem('zg_treff')) || []; } catch (e) {} h = [d.treffpunkt, ...h.filter(t => t !== d.treffpunkt)].slice(0, 6); localStorage.setItem('zg_treff', JSON.stringify(h)); }
-    $('#cnt').textContent = String(Number($('#cnt').textContent) + 1).padStart(6, '0');
-    closeOv('#ovForm'); render();
-    const el = document.getElementById('e' + j.event.id); if (el) { el.scrollIntoView({block: 'center', behavior: 'smooth'}); el.classList.add('flash'); }
-  } catch (x) { err.textContent = 'Fehler: ' + x.message; }
-  finally { b.disabled = false; }
+  err.textContent = '';
+  const editing = formEditId;
+  closeOv('#ovForm');
+  if (editing) saveEdit(editing, d, name, () => openForm(Object.assign(snap(EVENTS.find(x => x.id === editing) || {}), d)));
+  else saveNew(d, name, () => openForm({...d, id: null}));
 };
 
 /* ---------- Iistellige & Push ---------- */

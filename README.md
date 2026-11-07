@@ -33,6 +33,7 @@ du tragst ii, wenn du gosch, und wer will, kunnt mit.
 - **📣 Teilen** (Share-Sheet bzw. WhatsApp) mit direktem Link auf den Termin
 - **📲 App teilen** – kurzer Einladungstext + Gruppen-Link (mit Schlüssel)
 - **📆 Kalender** – .ics-Datei zum Importieren
+- **⚡ Sofort-Anzeige:** Dabei/Doch ned, Anlegen, Ändern, Absagen und Chat erscheinen sofort, gespeichert wird im Hintergrund. Bei Fehlern wird der alte Stand wiederhergestellt (beim Anlegen/Ändern öffnet sich der Editor mit den Eingaben wieder; Chat-Nachrichten lassen sich per Tipp erneut senden)
 - **💬 Chat pro Termin** – 90er: IRC-Look („Schwätza“), Langweilig: Nachrichten-Blasen. Ungelesene werden markiert, Popup an alle Beteiligten (Ersteller:in, Dabei, Mitschreibende) mit aktivierten Benachrichtigungen
 - **Kein Login:** Name wird beim ersten Mal abgefragt und lokal gespeichert
 - **✏️ Ändern** und **🗑️ Absagen** kann jede:r. Absagen im 90er-Design mit doppelter Rückfrage. Teilnehmer:innen und Chat bleiben beim Ändern erhalten; bei Änderung von Datum, Zeit, Ort, Sportart oder Dauer und bei Absagen bekommen alle Beteiligten ein Popup (mit Name, wer es war)
