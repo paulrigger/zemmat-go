@@ -15,7 +15,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@0,400;0,700;1,400&display=swap">
 <meta name="apple-mobile-web-app-title" content="zämm go">
-<script>try{var t=localStorage.getItem('zg_theme');document.documentElement.dataset.theme=t==='modern'||t==='90er'?t:'20er'}catch(e){}</script>
+<script>try{var t=localStorage.getItem('zg_theme');document.documentElement.dataset.theme=t==='modern'||t==='20er'?t:'90er'}catch(e){}</script>
 <style>
 :root{
   --navy:#000080; --teal:#008080; --gray:#c0c0c0; --dark:#808080; --paper:#fffbea;
@@ -574,6 +574,64 @@ html[data-theme='20er'], [data-theme='20er'] body{background:#fff}
 [data-theme=modern] #page{position:relative}
 [data-theme=modern] #appShare, [data-theme=modern] #setBtn{width:42px; height:42px; min-height:0; padding:0; display:flex; align-items:center; justify-content:center; color:var(--g-tint)}
 
+/* ================= 90er: Aufbau A (kompakt) ================= */
+[data-theme='90er'] header{text-align:left; padding:calc(12px + env(safe-area-inset-top)) 12px 6px; border-bottom:3px double var(--navy)}
+[data-theme='90er'] .wordart{margin:2px 0 0}
+[data-theme='90er'] .sports, [data-theme='90er'] marquee, [data-theme='90er'] main h2, [data-theme='90er'] hr.rb, [data-theme='90er'] #status{display:none}
+[data-theme='90er'] footer .d90{display:none}
+[data-theme='90er'] footer{padding:12px 8px 16px}
+[data-theme='90er'] #page{position:relative}
+[data-theme='90er'] .hello{border:0; padding:6px 14px 0}
+[data-theme='90er'] .hello-btns{position:absolute; top:calc(16px + env(safe-area-inset-top)); right:12px}
+[data-theme='90er'] .hello-btns .bt{display:none}
+[data-theme='90er'] .hello-btns .b95{font-size:16px; padding:4px 8px}
+[data-theme='90er'] #vreni{bottom:calc(8px + env(safe-area-inset-bottom))}
+[data-theme='90er'] main h3{margin:14px 0 8px}
+.evA{padding:8px 10px 10px; margin:0 0 14px}
+.evA .a-top{display:flex; align-items:center; gap:10px}
+.a-emo{font-size:38px; line-height:1; font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif; flex:none}
+.a-tt{flex:1; min-width:0}
+.a-tt b{font:bold 21px var(--fibel)}
+.a-tt small{display:block; font:13px/1.35 var(--fibel); color:#555; margin-top:1px}
+.a-save{font:12px var(--ui); color:#555}
+.a-time{flex:none; font:bold 20px "Courier New",monospace; background:#000; color:#0f0; padding:2px 7px; text-shadow:0 0 4px #0f0; border:2px inset #555}
+.a-who{font:16px/1.4 var(--fibel); margin:8px 0 10px}
+.evA .info-i{position:static; display:inline-flex; vertical-align:middle; width:24px; height:24px; font-size:14px; line-height:1; align-items:center; justify-content:center; margin-left:4px}
+.evA .act{display:flex; gap:6px; align-items:center; padding:0}
+.evA.pending{opacity:.7} .evA.pending .act{pointer-events:none; opacity:.5}
+
+/* ================= 20er: Chat als Notizblock mit Klebezetteln ================= */
+[data-theme='20er'] .chatwin{display:flex; padding:0; border:0; background:#fff; box-shadow:2px 6px 18px rgba(0,0,0,.3); border-radius:4px;
+  background-image:linear-gradient(90deg, transparent 38px, #f4a7a7 38px, #f4a7a7 40px, transparent 40px), repeating-linear-gradient(180deg, transparent 0 27px, #cfe3f7 27px 28px)}
+[data-theme='20er'] .chatwin .tb{display:none}
+[data-theme='20er'] .chat-head{display:flex; align-items:center; justify-content:space-between; padding:16px 12px 8px 48px; background:
+  radial-gradient(circle at 6px 6px, #bbb 3px, transparent 4px) 22px 4px/26px 14px repeat-x}
+[data-theme='20er'] .chat-head > span:first-child{display:none}
+[data-theme='20er'] .chat-head b{font:bold 15px var(--fibel); background:rgba(255,235,120,.9); padding:3px 12px; transform:rotate(-2deg); clip-path:polygon(2% 0,98% 6%,100% 100%,0 94%)}
+[data-theme='20er'] .chat-head .ios-txt{all:unset; cursor:pointer; font:bold 14px var(--ui); background:var(--gray); border:2px solid; border-color:#fff #404040 #404040 #fff; padding:3px 10px}
+[data-theme='20er'] .chat-log{background:none; border:0; margin:0; padding:6px 14px 10px 50px; display:flex; flex-direction:column; gap:4px; font:16px/1.35 var(--fibel)}
+[data-theme='20er'] .bub{max-width:80%; align-self:flex-start; display:flex; flex-direction:column; margin-top:4px}
+[data-theme='20er'] .bub.first{margin-top:12px}
+[data-theme='20er'] .bub small{font:bold 13px var(--fibel); color:#a00; margin:0 0 2px 4px}
+[data-theme='20er'] .bub > span:not(.rxs){background:#b3e5fc; border-radius:2px; padding:8px 11px 9px; box-shadow:1px 3px 5px rgba(0,0,0,.22); transform:rotate(-.8deg); white-space:pre-wrap; word-wrap:break-word; color:#000}
+[data-theme='20er'] .bub:nth-child(3n) > span:not(.rxs){background:#f8bbd0; transform:rotate(.7deg)}
+[data-theme='20er'] .bub:nth-child(3n+1) > span:not(.rxs){background:#c5e1a5; transform:rotate(-.4deg)}
+[data-theme='20er'] .bub.me{align-self:flex-end; align-items:flex-end}
+[data-theme='20er'] .bub.me > span:not(.rxs){background:#fff59d !important; transform:rotate(1deg)}
+[data-theme='20er'] .bub time{font:11px var(--ui); color:#888; margin:3px 4px 0}
+[data-theme='20er'] .bub.sending > span:not(.rxs){opacity:.6}
+[data-theme='20er'] .bub.failed > span:not(.rxs){background:#ffcdd2 !important; outline:2px dashed #c62828}
+[data-theme='20er'] .bub.failed time{color:#c62828}
+[data-theme='20er'] .bub.picked > span:not(.rxs){transform:scale(1.04) rotate(0); box-shadow:0 0 0 3px #ff0, 1px 3px 5px rgba(0,0,0,.22)}
+[data-theme='20er'] .rxs{display:flex; margin:-8px 6px 0; z-index:1}
+[data-theme='20er'] .bub.me .rxs{justify-content:flex-end}
+[data-theme='20er'] .rx{font:13px var(--ui); background:#fff; border:2px solid #000; border-radius:999px; padding:1px 7px; box-shadow:1px 1px 0 #000}
+[data-theme='20er'] .rx.mine{background:#fff59d}
+[data-theme='20er'] .chat-empty{margin:auto; text-align:center; color:#666; font:16px var(--fibel); transform:rotate(-1deg)}
+[data-theme='20er'] .chat-in{padding:8px 10px calc(10px + env(safe-area-inset-bottom)); background:rgba(255,255,255,.9); border-top:2px dashed #ccc}
+[data-theme='20er'] .chat-in input{font:16px var(--fibel); border:0; border-bottom:2px solid #000080; background:transparent}
+[data-theme='20er'] .chat-in .b95{background:#fff59d; border:0; box-shadow:1px 3px 5px rgba(0,0,0,.25); transform:rotate(-2deg); font:bold 14px var(--fibel)}
+
 .themes{display:grid; grid-template-columns:repeat(3,1fr); gap:6px; margin-top:4px}
 .themes .b95{display:flex; flex-direction:column; align-items:center; gap:2px; font-size:13px; padding:8px 4px}
 .themes .b95 span{font-size:24px}
@@ -802,7 +860,7 @@ html[data-theme='20er'], [data-theme='20er'] body{background:#fff}
    API_URL = Apps-Script-Web-App (…/exec). Leer → Demo-Modus (localStorage).
    ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbz4xf-IjvvDWh2qYNFIw7fqRttaO1khWAzOT44ZKT8AsNx1l9ad6CIJeIroiMzmIew/exec';
-const VERSION = '1.23.1';
+const VERSION = '1.24';
 // Begrüßungs-GIF im Intro (z. B. Giphy-Link „…/giphy.gif“). Leer = ohne GIF.
 const INTRO_GIF = '';
 
@@ -1082,14 +1140,18 @@ function render() {
     if (e.datum !== last) { h += `<h3>📅 ${esc(dayHeading(e.datum))}</h3>`; last = e.datum; }
     const joined = imIn(e, me);
     const isNew = isNewEv(e);
-    h += `<div class="ev${e._pending ? ' pending' : ''}" id="e${esc(e.id)}">${e._pending ? '<span class="neu ecke saving">⏳ wird gspeicheret …</span>' : ''}${isNew ? '<span class="neu blink ecke">NEU!</span>' : ''}
-      ${e.info ? `<button class="info-i" data-a="info" data-id="${esc(e.id)}" title="Zuesatzinfo" aria-label="Zuesatzinfo aazeiga">i</button>` : ''}
-      <div class="eb fibel">${fibel(e, false)}</div>
+    const sp = SPORT[e.sport] || SPORT.anders, id = esc(e.id), nChat = (e.chat || []).length, u = unread(e);
+    const title = e.sport === 'anders' ? (e.sportText || 'Öppis') : sp.l;
+    const meta = [e.treffpunkt ? '📍 ' + e.treffpunkt : '', e.dauer ? '⏳ ' + DAUER[e.dauer][0].replace(/^a /, '1 ').replace(/^an /, '') : '', e.drink ? '🍺 nochher' : ''].filter(Boolean).map(esc).join(' · ');
+    h += `<div class="ev evA${e._pending ? ' pending' : ''}" id="e${id}">
+      <div class="a-top"><span class="a-emo" aria-hidden="true">${sp.e}</span>
+        <span class="a-tt"><b>${esc(title)}</b>${isNew ? ' <span class="neu blink">NEU</span>' : ''}${e._pending ? ' <span class="a-save">⏳ wird gspeicheret</span>' : ''}${meta ? '<small>' + meta + '</small>' : ''}</span>
+        <span class="a-time">${e.zeit}</span></div>
+      <div class="a-who">👥 ${esc(goersText(e))} ${goersPlural(e) ? 'gond' : 'goht'}. <b>Wer kunnt mit?</b>${e.info ? ` <button class="info-i" data-a="info" data-id="${id}" title="Zuesatzinfo" aria-label="Zuesatzinfo aazeiga">i</button>` : ''}</div>
       <div class="act">
-        ${joined
-          ? `<button class="b95 on" data-a="leave" data-id="${esc(e.id)}">${T('✅ I bin dabei · doch ned?', '✓ Dabei · absagen')}</button>`
-          : `<button class="b95 big" data-a="join" data-id="${esc(e.id)}">${T('🙋 I bin dabei!', 'Ich bin dabei')}</button>`}
-        <button class="b95 more" data-a="more" data-id="${esc(e.id)}" aria-label="Meh Optiona">⋯ Meh${(e.chat || []).length ? ' · 💬' + (e.chat || []).length : ''}${unread(e) ? ' <span class="neu blink">NEU</span>' : ''}</button>
+        ${joined ? `<button class="b95 on" data-a="leave" data-id="${id}">✅ Dabei</button>` : `<button class="b95 big" data-a="join" data-id="${id}">🙋 I bin dabei!</button>`}
+        <button class="b95" data-a="chat" data-id="${id}">💬${nChat ? ' ' + nChat : ''}${u ? ' <span class="neu blink">NEU</span>' : ''}</button>
+        <span style="flex:1"></span><button class="b95" data-a="more" data-id="${id}" aria-label="Meh Optiona">⋯</button>
       </div></div>`;
   }
   $('#list').innerHTML = h;
@@ -1419,11 +1481,11 @@ function drawChat(scroll) {
   $('#cTitle2').textContent = sportName(e) + ' · ' + dayHeading(e.datum).replace(/^.* – /, '');
   const msgs = chatMsgs(e);
   const st = m => m.state === 'failed' ? T('❌ ned gschickt – tippa zum nomol Probiera', 'Nicht gesendet – tippen zum Wiederholen') : m.state === 'sending' ? T('⏳', 'Wird gesendet …') : '';
-  if (HD()) {
+  if (HD() || is20()) {
     log.innerHTML = msgs.length ? msgs.map((m, i) => {
       const mine = same(m.n, me), first = i === 0 || !same(msgs[i - 1].n, m.n);
       return `<div class="bub${mine ? ' me' : ''}${first ? ' first' : ''}${m.state ? ' ' + m.state : ''}"${m.tmp ? ` data-tmp="${m.tmp}"` : ''}${m.i ? ` data-mid="${esc(m.i)}"` : ''}>${!mine && first ? `<small>${esc(m.n)}</small>` : ''}<span>${esc(m.t)}</span>${rxHtml(m)}<time>${m.state ? st(m) : hhmm(m.z)}</time></div>`;
-    }).join('') : '<p class="chat-empty">Noch keine Nachrichten.<br>Frag, wer mitkommt, oder stimmt euch ab.</p>';
+    }).join('') : `<p class="chat-empty">${T('Do isch no nüt gschrieba.<br>Sag „Hoi“ und fröag, wer mitkunnt! 👋', 'Noch keine Nachrichten.<br>Frag, wer mitkommt, oder stimmt euch ab.')}</p>`;
   } else {
     log.innerHTML = `<div class="irc-sys">*** Du bisch jetzt im Chat vo <b>${esc(e.von)}</b> (${esc(sp.t)} ${esc(dayLabel(e.datum))} um ${e.zeit})</div>`
       + (msgs.length ? msgs.map(m => `<div class="irc${m.state ? ' ' + m.state : ''}"${m.tmp ? ` data-tmp="${m.tmp}"` : ''}${m.i ? ` data-mid="${esc(m.i)}"` : ''}><span class="ts">[${hhmm(m.z)}]</span> <b style="color:${nickCol(m.n)}">&lt;${esc(m.n)}&gt;</b> ${esc(m.t)}${m.state ? ' <small>' + st(m) + '</small>' : ''}${rxHtml(m)}</div>`).join('')
