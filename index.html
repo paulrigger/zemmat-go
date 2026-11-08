@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>zämm go</title>
 <meta name="description" content="zämm go: Statt zwölf WhatsApp-Gruppa – iitraga wenn du gosch, und wer will, kunnt mit.">
-<meta name="theme-color" content="#000080">
+<meta name="theme-color" content="#fffbea">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-180.png">
@@ -15,7 +15,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@0,400;0,700;1,400&display=swap">
 <meta name="apple-mobile-web-app-title" content="zämm go">
-<script>try{var t=localStorage.getItem('zg_theme');document.documentElement.dataset.theme=t==='modern'||t==='20er'?t:'90er'}catch(e){}</script>
+<script>try{var t=localStorage.getItem('zg_theme');t=t==='modern'||t==='20er'?t:'90er';document.documentElement.dataset.theme=t;var dk=matchMedia('(prefers-color-scheme: dark)').matches;document.querySelector('meta[name=theme-color]').content=t==='20er'?'#ffffff':t==='modern'?(dk?'#000000':'#f2f2f7'):'#fffbea'}catch(e){}</script>
 <style>
 :root{
   --navy:#000080; --teal:#008080; --gray:#c0c0c0; --dark:#808080; --paper:#fffbea;
@@ -145,7 +145,7 @@ footer{border-top:3px double var(--navy); text-align:center; padding:12px 8px 16
 .badge{font:bold 10px/1 var(--ui); border:1px solid #000; display:inline-flex}
 .badge b{background:#000080; color:#fff; padding:3px 4px} .badge i{font-style:normal; background:#ffcc00; padding:3px 4px}
 @media (max-width:480px){
-  body{padding:0 0 90px} #page{border-width:0 4px 4px; box-shadow:none}
+  body{padding:0 0 90px} #page{border-width:0; box-shadow:none}
   .fibel{font-size:19px} .ev .fibel{font-size:17px}
 }
 [data-theme=modern] .d90, [data-theme='20er'] .d90{display:none !important}
@@ -234,6 +234,7 @@ footer{border-top:3px double var(--navy); text-align:center; padding:12px 8px 16
 }}
 html[data-theme=modern]{background:var(--g-bg)}
 [data-theme=modern] body{min-height:100vh; color:var(--g-ink); background:
+  linear-gradient(var(--g-bg) 0, var(--g-bg) calc(env(safe-area-inset-top) + 8px), transparent calc(env(safe-area-inset-top) + 90px)),
   radial-gradient(60% 40% at 0% 0%, rgba(10,132,255,.22), transparent 70%),
   radial-gradient(50% 35% at 100% 20%, rgba(255,55,95,.14), transparent 70%),
   radial-gradient(60% 40% at 50% 100%, rgba(48,209,88,.14), transparent 70%), var(--g-bg) fixed; font-family:var(--m-font)}
@@ -856,7 +857,7 @@ html[data-theme='20er'], [data-theme='20er'] body{background:#fff}
    API_URL = Apps-Script-Web-App (…/exec). Leer → Demo-Modus (localStorage).
    ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbz4xf-IjvvDWh2qYNFIw7fqRttaO1khWAzOT44ZKT8AsNx1l9ad6CIJeIroiMzmIew/exec';
-const VERSION = '1.24.1';
+const VERSION = '1.24.2';
 // Begrüßungs-GIF im Intro (z. B. Giphy-Link „…/giphy.gif“). Leer = ohne GIF.
 const INTRO_GIF = '';
 
@@ -1862,11 +1863,13 @@ function hashChat() { if (location.hash.startsWith('#c')) { const id = location.
 window.addEventListener('hashchange', () => { if (location.hash.startsWith('#c')) return load(true).then(hashChat); load(true).then(() => { const el = document.getElementById(location.hash.slice(1)); if (el) { el.scrollIntoView({block: 'center'}); el.classList.add('flash'); } }); });
 
 /* ---------- Usseha & Intro ---------- */
-const THEME_COL = {'20er': '#ffffff', '90er': '#000080', modern: '#175676'};
+const THEME_COL = {'20er': '#ffffff', '90er': '#fffbea', modern: '#f2f2f7'};
+const themeCol = t => t === 'modern' && matchMedia('(prefers-color-scheme: dark)').matches ? '#000000' : (THEME_COL[t] || '#fffbea');
+try { matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => themeDraw()); } catch (e) {}
 function themeDraw() {
   const t = document.documentElement.dataset.theme || '90er';
   document.querySelectorAll('[data-theme-set]').forEach(b => b.classList.toggle('on', b.dataset.themeSet === t));
-  document.querySelector('meta[name=theme-color]').content = THEME_COL[t] || '#000080';
+  document.querySelector('meta[name=theme-color]').content = themeCol(t);
 }
 $('#themes').addEventListener('click', e => {
   const b = e.target.closest('[data-theme-set]'); if (!b) return;
