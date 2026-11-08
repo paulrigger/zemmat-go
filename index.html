@@ -559,9 +559,6 @@ html[data-theme='20er'], [data-theme='20er'] body{background:#fff}
 [data-theme='20er'] #plus::before{content:""; position:absolute; top:-7px; left:50%; width:14px; height:14px; margin-left:-7px; border-radius:50%; background:radial-gradient(circle at 35% 35%,#ff8a80,#c62828); box-shadow:1px 2px 2px rgba(0,0,0,.4)}
 
 /* iPhone: bis ganz nach oben, Streifen unter der Statusleiste damit Uhrzeit lesbar bleibt */
-#safeTop{position:fixed; top:0; left:0; right:0; height:calc(env(safe-area-inset-top) + 22px); z-index:45; pointer-events:none;
-  background:linear-gradient(180deg, rgba(0,0,0,.42) 0%, rgba(0,0,0,.30) 45%, rgba(0,0,0,0) 100%)}
-@supports not (top: env(safe-area-inset-top)){#safeTop{display:none}}
 .ov{padding-top:max(14px, calc(env(safe-area-inset-top) + 8px)) !important}
 [data-theme=modern] .ov{padding-top:calc(env(safe-area-inset-top) + 8px) !important}
 .upd{top:calc(8px + env(safe-area-inset-top))}
@@ -644,7 +641,6 @@ html[data-theme='20er'], [data-theme='20er'] body{background:#fff}
 </style>
 </head>
 <body>
-<div id="safeTop" aria-hidden="true"></div>
 <div id="page">
   <header>
     <div class="wordart">zämm go</div>
@@ -860,7 +856,7 @@ html[data-theme='20er'], [data-theme='20er'] body{background:#fff}
    API_URL = Apps-Script-Web-App (…/exec). Leer → Demo-Modus (localStorage).
    ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbz4xf-IjvvDWh2qYNFIw7fqRttaO1khWAzOT44ZKT8AsNx1l9ad6CIJeIroiMzmIew/exec';
-const VERSION = '1.24';
+const VERSION = '1.24.1';
 // Begrüßungs-GIF im Intro (z. B. Giphy-Link „…/giphy.gif“). Leer = ohne GIF.
 const INTRO_GIF = '';
 
