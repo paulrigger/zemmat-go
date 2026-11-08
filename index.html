@@ -10,6 +10,8 @@
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-180.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@0,400;0,700;1,400&display=swap">
 <meta name="apple-mobile-web-app-title" content="zämm go">
@@ -23,7 +25,7 @@
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 body{
-  margin:0; padding:12px 8px 90px; color:#000;
+  margin:0; padding:calc(12px + env(safe-area-inset-top)) 8px 90px; color:#000;
   font:17px/1.45 "Times New Roman",Times,serif;
   background:#007070 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Crect width='80' height='80' fill='%23007070'/%3E%3Cpath d='M0 70 L18 44 L28 56 L40 36 L60 70Z' fill='%23008a8a'/%3E%3Cpath d='M34 45 L40 36 L46 45 L42 43 L40 46 L38 43Z' fill='%23e8ffff'/%3E%3Ctext x='62' y='20' font-size='14' fill='%23ffff66'%3E*%3C/text%3E%3Ctext x='8' y='26' font-size='9' fill='%23ffffff'%3E%2B%3C/text%3E%3C/svg%3E");
 }
@@ -160,7 +162,7 @@ footer{border-top:3px double var(--navy); text-align:center; padding:12px 8px 16
 [data-theme=modern] body{font:16px/1.45 -apple-system,BlinkMacSystemFont,"SF Pro Text",Inter,"Segoe UI",Roboto,sans-serif; color:var(--m-ink);
   background:radial-gradient(120% 60% at 100% 0%,rgba(75,163,195,.3),transparent 60%),var(--m-page) fixed; padding:0 0 100px}
 [data-theme=modern] #page{border:0; box-shadow:none; background:none; max-width:640px}
-[data-theme=modern] header{background:none; text-align:left; padding:max(18px,env(safe-area-inset-top)) 16px 4px}
+[data-theme=modern] header{background:none; text-align:left; padding:calc(14px + env(safe-area-inset-top)) 16px 4px}
 [data-theme=modern] .wordart{transform:none; filter:none; background:none; color:var(--m-ink); -webkit-background-clip:initial; background-clip:initial;
   font:700 30px/1.1 -apple-system,BlinkMacSystemFont,"SF Pro Display",Inter,sans-serif; letter-spacing:-.5px; margin:0}
 [data-theme=modern] .sub{font:15px var(--m-font); color:var(--m-muted); margin:2px 0 0}
@@ -521,11 +523,11 @@ html:not([data-theme=modern]) .wordart.wa-12 {background:repeating-linear-gradie
 html[data-theme='20er'], [data-theme='20er'] body{background:#fff}
 [data-theme='20er'] body{padding:0 0 110px}
 [data-theme='20er'] #page{border:0; box-shadow:none; background:#fff; max-width:640px; position:relative}
-[data-theme='20er'] header{background:none; text-align:left; padding:14px 12px 4px}
+[data-theme='20er'] header{background:none; text-align:left; padding:calc(14px + env(safe-area-inset-top)) 12px 4px}
 [data-theme='20er'] .wordart{margin:4px 0 0}
 [data-theme='20er'] .sports{display:none}
 [data-theme='20er'] .hello{border:0; padding:2px 14px 0; font-size:15px; color:#555}
-[data-theme='20er'] .hello-btns{position:absolute; top:16px; right:12px}
+[data-theme='20er'] .hello-btns{position:absolute; top:calc(16px + env(safe-area-inset-top)); right:12px}
 [data-theme='20er'] .hello-btns .bt{display:none}
 [data-theme='20er'] .hello-btns .b95{font-size:16px; padding:4px 8px}
 [data-theme='20er'] main h2{display:none}
@@ -556,6 +558,23 @@ html[data-theme='20er'], [data-theme='20er'] body{background:#fff}
 [data-theme='20er'] #plus small{font:bold 10px var(--ui)}
 [data-theme='20er'] #plus::before{content:""; position:absolute; top:-7px; left:50%; width:14px; height:14px; margin-left:-7px; border-radius:50%; background:radial-gradient(circle at 35% 35%,#ff8a80,#c62828); box-shadow:1px 2px 2px rgba(0,0,0,.4)}
 
+/* iPhone: bis ganz nach oben, Streifen unter der Statusleiste damit Uhrzeit lesbar bleibt */
+#safeTop{position:fixed; top:0; left:0; right:0; height:env(safe-area-inset-top); z-index:45; pointer-events:none; background:#000080}
+[data-theme='20er'] #safeTop{background:#1b1b1b; box-shadow:0 3px 0 0 transparent; border-bottom:3px solid; border-image:linear-gradient(90deg,#e53935,#fb8c00,#fdd835,#43a047,#1e88e5,#8e24aa) 1}
+[data-theme=modern] #safeTop{background:rgba(0,0,0,.28); -webkit-backdrop-filter:blur(20px) saturate(180%); backdrop-filter:blur(20px) saturate(180%)}
+@media (prefers-color-scheme:dark){[data-theme=modern] #safeTop{background:rgba(0,0,0,.45)}}
+.ov{padding-top:max(14px, calc(env(safe-area-inset-top) + 8px)) !important}
+[data-theme=modern] .ov{padding-top:calc(env(safe-area-inset-top) + 8px) !important}
+.upd{top:calc(8px + env(safe-area-inset-top))}
+/* Header-Symbole */
+.si{display:none; width:22px; height:22px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round}
+[data-theme=modern] .hello-btns .bi, [data-theme=modern] .hello-btns .bt{display:none}
+[data-theme=modern] .hello-btns .si{display:block}
+[data-theme=modern] .hello{position:static}
+[data-theme=modern] .hello-btns{position:absolute; top:calc(16px + env(safe-area-inset-top)); right:14px; gap:10px}
+[data-theme=modern] #page{position:relative}
+[data-theme=modern] #appShare, [data-theme=modern] #setBtn{width:42px; height:42px; min-height:0; padding:0; display:flex; align-items:center; justify-content:center; color:var(--g-tint)}
+
 .themes{display:grid; grid-template-columns:repeat(3,1fr); gap:6px; margin-top:4px}
 .themes .b95{display:flex; flex-direction:column; align-items:center; gap:2px; font-size:13px; padding:8px 4px}
 .themes .b95 span{font-size:24px}
@@ -568,13 +587,14 @@ html[data-theme='20er'], [data-theme='20er'] body{background:#fff}
 </style>
 </head>
 <body>
+<div id="safeTop" aria-hidden="true"></div>
 <div id="page">
   <header>
     <div class="wordart">zämm go</div>
     <div class="sports">🚵 Bika · 🚴 Rennvelo · 🚲 Gravla · 🏃 Jogga · 🥾 Wandra · 🧗 Klettra · ⛷️ Schitoura</div>
   </header>
   <marquee class="d90" scrollamount="5">+++ Hoi zemma! +++ Kei zwölf WhatsApp-Gruppa meh +++ Iitraga wenn du gosch – wer will, kunnt mit +++ Kei Login, kei Schmarra +++ Lustenauer usdrücklich willkomma +++</marquee>
-  <div class="hello"><span id="hi">Hoi!</span><span class="hello-btns"><button class="b95 mini" id="appShare" aria-label="App teilen">📲<span class="bt" data-hd=" App teilen"> App teila</span></button><button class="b95 mini" id="setBtn" aria-label="Einstellungen">⚙️<span class="bt"> Einstellungen</span></button></span></div>
+  <div class="hello"><span id="hi">Hoi!</span><span class="hello-btns"><button class="b95 mini" id="appShare" aria-label="App teilen"><span class="bi">📲</span><svg class="si" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7.5 7.5 12 3l4.5 4.5" /><path d="M8 11H6.5A1.5 1.5 0 0 0 5 12.5v7A1.5 1.5 0 0 0 6.5 21h11a1.5 1.5 0 0 0 1.5-1.5v-7a1.5 1.5 0 0 0-1.5-1.5H16"/></svg><span class="bt" data-hd=" App teilen"> App teila</span></button><button class="b95 mini" id="setBtn" aria-label="Einstellungen"><span class="bi">⚙️</span><svg class="si" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2.2"/><circle cx="9" cy="17" r="2.2"/></svg><span class="bt"> Einstellungen</span></button></span></div>
   <div class="demo" id="demo" hidden data-hd="⚠️ <b>DEMO-MODUS</b> – Einträge werden nur auf diesem Gerät gespeichert. Für die echte Version brauchst du den Link aus der Gruppe.">⚠️ <b>DEMO-MODUS</b> – Iiträg landan nur uf dim eigna Gerät. Für die echte Version brucht's da Link us dr Gruppa.</div>
   <main>
     <h2 data-hd="Was steht an?">Was lauft? <span class="blink d90">✨</span></h2>
@@ -783,7 +803,7 @@ html[data-theme='20er'], [data-theme='20er'] body{background:#fff}
    API_URL = Apps-Script-Web-App (…/exec). Leer → Demo-Modus (localStorage).
    ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbz4xf-IjvvDWh2qYNFIw7fqRttaO1khWAzOT44ZKT8AsNx1l9ad6CIJeIroiMzmIew/exec';
-const VERSION = '1.22';
+const VERSION = '1.23';
 // Begrüßungs-GIF im Intro (z. B. Giphy-Link „…/giphy.gif“). Leer = ohne GIF.
 const INTRO_GIF = '';
 
