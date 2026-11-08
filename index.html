@@ -575,6 +575,11 @@ html[data-theme='20er'], [data-theme='20er'] body{background:#fff}
 .si{display:none; width:22px; height:22px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round}
 [data-theme=modern] .hello-btns .bi, [data-theme=modern] .hello-btns .bt{display:none}
 [data-theme=modern] .hello-btns .si{display:block}
+.pp{display:none; width:22px; height:22px; vertical-align:middle}
+[data-theme='90er'] #appShare .bi{display:none} [data-theme='90er'] #appShare .pp{display:inline-block}
+[data-theme='90er'] #hi{display:none} [data-theme='90er'] .hello{padding:0; min-height:0}
+[data-theme='90er'] footer > div:first-child{display:none}
+
 [data-theme=modern] .hello{position:static}
 [data-theme=modern] .hello-btns{position:absolute; top:calc(16px + env(safe-area-inset-top)); right:14px; gap:10px}
 [data-theme=modern] #page{position:relative}
@@ -656,7 +661,7 @@ html[data-theme='20er'], [data-theme='20er'] body{background:#fff}
     <div class="sports">🚵 Bika · 🚴 Rennvelo · 🚲 Gravla · 🏃 Jogga · 🥾 Wandra · 🧗 Klettra · ⛷️ Schitoura</div>
   </header>
   <marquee class="d90" scrollamount="5">+++ Hoi zemma! +++ Kei zwölf WhatsApp-Gruppa meh +++ Iitraga wenn du gosch – wer will, kunnt mit +++ Kei Login, kei Schmarra +++ Lustenauer usdrücklich willkomma +++</marquee>
-  <div class="hello"><span id="hi">Hoi!</span><span class="hello-btns"><button class="b95 mini" id="appShare" aria-label="App teilen"><span class="bi">📲</span><svg class="si" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7.5 7.5 12 3l4.5 4.5" /><path d="M8 11H6.5A1.5 1.5 0 0 0 5 12.5v7A1.5 1.5 0 0 0 6.5 21h11a1.5 1.5 0 0 0 1.5-1.5v-7a1.5 1.5 0 0 0-1.5-1.5H16"/></svg><span class="bt" data-hd=" App teilen"> App teila</span></button><button class="b95 mini" id="setBtn" aria-label="Einstellungen"><span class="bi">⚙️</span><svg class="si" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2.2"/><circle cx="9" cy="17" r="2.2"/></svg><span class="bt"> Einstellungen</span></button></span></div>
+  <div class="hello"><span id="hi">Hoi!</span><span class="hello-btns"><button class="b95 mini" id="appShare" aria-label="App teilen"><span class="bi">📲</span><svg class="pp" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 11 22 3 15 21 11 13Z" fill="#fff" stroke="#000" stroke-width="1.4" stroke-linejoin="round"/><path d="M11 13 22 3" stroke="#000" stroke-width="1.2"/><path d="M11 13l-1 6 3-4" fill="#c0c0c0" stroke="#000" stroke-width="1.2" stroke-linejoin="round"/></svg><svg class="si" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7.5 7.5 12 3l4.5 4.5" /><path d="M8 11H6.5A1.5 1.5 0 0 0 5 12.5v7A1.5 1.5 0 0 0 6.5 21h11a1.5 1.5 0 0 0 1.5-1.5v-7a1.5 1.5 0 0 0-1.5-1.5H16"/></svg><span class="bt" data-hd=" App teilen"> App teila</span></button><button class="b95 mini" id="setBtn" aria-label="Einstellungen"><span class="bi">⚙️</span><svg class="si" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2.2"/><circle cx="9" cy="17" r="2.2"/></svg><span class="bt"> Einstellungen</span></button></span></div>
   <div class="demo" id="demo" hidden data-hd="⚠️ <b>DEMO-MODUS</b> – Einträge werden nur auf diesem Gerät gespeichert. Für die echte Version brauchst du den Link aus der Gruppe.">⚠️ <b>DEMO-MODUS</b> – Iiträg landan nur uf dim eigna Gerät. Für die echte Version brucht's da Link us dr Gruppa.</div>
   <main>
     <h2 data-hd="Was steht an?">Was lauft? <span class="blink d90">✨</span></h2>
@@ -865,7 +870,7 @@ html[data-theme='20er'], [data-theme='20er'] body{background:#fff}
    API_URL = Apps-Script-Web-App (…/exec). Leer → Demo-Modus (localStorage).
    ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbz4xf-IjvvDWh2qYNFIw7fqRttaO1khWAzOT44ZKT8AsNx1l9ad6CIJeIroiMzmIew/exec';
-const VERSION = '1.24.5';
+const VERSION = '1.24.6';
 // Begrüßungs-GIF im Intro (z. B. Giphy-Link „…/giphy.gif“). Leer = ohne GIF.
 const INTRO_GIF = '';
 
