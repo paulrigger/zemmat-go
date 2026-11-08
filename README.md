@@ -15,6 +15,7 @@ du tragst ii, wenn du gosch, und wer will, kunnt mit.
   <img src="docs/neu.png" width="260" alt="Neuer Termin als Lückentext">
 </p>
 <p>
+  <img src="docs/20er.png" width="200" alt="Design 20er (Zettel)">
   <img src="docs/modern.png" width="200" alt="Design Langweilig (Hochdeutsch)">
 </p>
 
@@ -49,7 +50,7 @@ du tragst ii, wenn du gosch, und wer will, kunnt mit.
 
   <img src="docs/velo-vreni.gif" width="300" alt="Velo-Vreni">
 - **⚙️ Einstellungen** (immer Hochdeutsch): Name, Benachrichtigungen (an/aus, Sportarten, Test), Design
-- **🎨 Zwei Designs:** 🌈 90er im Vorarlberger Dialekt (Standard) · 😐 Langweilig – eigene Oberfläche im iOS-2026-Stil (Liquid Glass, hell/dunkel): schlichte Terminliste, Detailansicht, Eingabeformular statt Lückentext, **auf Hochdeutsch** (auch die Popups)
+- **🎨 Drei Designs:** 📌 **20er** (Standard) – Zettel mit großen Sport-Symbolen, nach Tag gruppiert, weißer Hintergrund, Dialekt · 🌈 90er im Vorarlberger Dialekt (Standard) · 😐 Langweilig – eigene Oberfläche im iOS-2026-Stil (Liquid Glass, hell/dunkel): schlichte Terminliste, Detailansicht, Eingabeformular statt Lückentext, **auf Hochdeutsch** (auch die Popups)
 - **Begrüßung** beim ersten Öffnen: „Oa App statt zwölf WhatsApp-Gruppa“ + Anleitung Home-Bildschirm, optional mit GIF (`INTRO_GIF` in `index.html`). Später über ⚙️ → „Wia goht des?“
 - **WordArt-Schriftzug wechselt jeden Monat** zwischen 12 Stilen (Regenbogen, Chrom, Feuer, Eis 3D, Welle, Bogen, Kontur, Gold, Neon, Perspektive, Comic, Retro-Streifen). Vorschau: `?wa=1` … `?wa=12`
 

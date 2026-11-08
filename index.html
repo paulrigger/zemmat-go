@@ -13,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@0,400;0,700;1,400&display=swap">
 <meta name="apple-mobile-web-app-title" content="zämm go">
-<script>try{var t=localStorage.getItem('zg_theme');document.documentElement.dataset.theme=t==='modern'?'modern':'90er'}catch(e){}</script>
+<script>try{var t=localStorage.getItem('zg_theme');document.documentElement.dataset.theme=t==='modern'||t==='90er'?t:'20er'}catch(e){}</script>
 <style>
 :root{
   --navy:#000080; --teal:#008080; --gray:#c0c0c0; --dark:#808080; --paper:#fffbea;
@@ -146,7 +146,7 @@ footer{border-top:3px double var(--navy); text-align:center; padding:12px 8px 16
   body{padding:0 0 90px} #page{border-width:4px; box-shadow:none}
   .fibel{font-size:19px} .ev .fibel{font-size:17px}
 }
-[data-theme=modern] .d90{display:none !important}
+[data-theme=modern] .d90, [data-theme='20er'] .d90{display:none !important}
 
 /* ================= THEME: Langweilig (modern) ================= */
 [data-theme=modern]{
@@ -390,7 +390,7 @@ html[data-theme=modern]{background:var(--g-bg)}
 #vreni{position:fixed; right:6px; bottom:calc(34px + env(safe-area-inset-bottom)); z-index:24; display:flex; flex-direction:row-reverse; align-items:flex-end; pointer-events:none}
 .v-move{transform-origin:50% 70%}
 #vreni[hidden]{display:none}
-[data-theme=modern] #vreni{display:none}
+[data-theme=modern] #vreni, [data-theme='20er'] #vreni{display:none}
 .v-bike{flex:none; overflow:visible; transform:translateX(-120vw); filter:drop-shadow(3px 3px 0 rgba(0,0,0,.35))}
 #vreni.ride .v-bike{transform:translateX(0); transition:transform 2s cubic-bezier(.25,.7,.3,1)}
 #vreni.leave .v-bike{transform:translateX(120vw); transition:transform 1.2s cubic-bezier(.6,0,.9,.4)}
@@ -423,8 +423,8 @@ html[data-theme=modern]{background:var(--g-bg)}
 .v-bubble::before{content:""; position:absolute; right:-14px; bottom:18px; border:8px solid transparent; border-left:12px solid #000}
 .v-bubble::after{content:""; position:absolute; right:-9px; bottom:20px; border:6px solid transparent; border-left:9px solid #fffbd0}
 #vreni.talk .v-bubble{opacity:1; transform:scale(1); pointer-events:auto}
-html:not([data-theme=modern]) #plus{display:none}
-html:not([data-theme=modern]) body{padding-bottom:150px}
+[data-theme='90er'] #plus{display:none}
+[data-theme='90er'] body{padding-bottom:150px}
 #vreni.face .v-bike{pointer-events:auto; cursor:pointer}
 .v-tag{position:absolute; right:40px; bottom:100px; font:bold 12px var(--ui) !important; padding:3px 8px !important; min-height:0 !important; opacity:0; pointer-events:none; transform:rotate(-6deg); transition:opacity .3s}
 #vreni.face:not(.talk):not(.rolling) .v-tag{opacity:1; pointer-events:auto; animation:vtag 2.4s ease-in-out infinite}
@@ -517,7 +517,46 @@ html:not([data-theme=modern]) .wordart.wa-12 {background:repeating-linear-gradie
 [data-theme=modern] .dlg-in{all:unset; box-sizing:border-box; display:block; width:100%; margin-top:10px; padding:8px 12px; border-radius:10px; background:var(--g-fill); font:16px var(--m-font); color:var(--g-ink); text-align:left}
 [data-theme=modern] .dlg-msg .pre, [data-theme=modern] #dlgM{white-space:pre-wrap}
 
-.themes{display:grid; grid-template-columns:repeat(2,1fr); gap:6px; margin-top:4px}
+/* ================= THEME: 20er (Zettel) ================= */
+html[data-theme='20er'], [data-theme='20er'] body{background:#fff}
+[data-theme='20er'] body{padding:0 0 110px}
+[data-theme='20er'] #page{border:0; box-shadow:none; background:#fff; max-width:640px; position:relative}
+[data-theme='20er'] header{background:none; text-align:left; padding:14px 12px 4px}
+[data-theme='20er'] .wordart{margin:4px 0 0}
+[data-theme='20er'] .sports{display:none}
+[data-theme='20er'] .hello{border:0; padding:2px 14px 0; font-size:15px; color:#555}
+[data-theme='20er'] .hello-btns{position:absolute; top:16px; right:12px}
+[data-theme='20er'] .hello-btns .bt{display:none}
+[data-theme='20er'] .hello-btns .b95{font-size:16px; padding:4px 8px}
+[data-theme='20er'] main h2{display:none}
+[data-theme='20er'] main{padding:0 0 10px}
+[data-theme='20er'] hr.rb{display:none}
+[data-theme='20er'] #status{display:none}
+[data-theme='20er'] footer{border:0; color:#666; padding:14px 8px 18px}
+[data-theme='20er'] footer .lcd{font-size:13px; padding:1px 6px; border:0}
+[data-theme='20er'] .demo{margin:8px 14px 0}
+.day20{display:flex; align-items:center; gap:8px; margin:22px 14px 14px}
+.day20 .tape{font:bold 15px var(--fibel); background:rgba(255,235,120,.9); padding:3px 14px; transform:rotate(-2deg); box-shadow:0 1px 2px rgba(0,0,0,.2); clip-path:polygon(2% 0,98% 6%,100% 100%,0 94%)}
+.day20:nth-of-type(even) .tape{background:rgba(170,220,255,.9); transform:rotate(1.5deg)}
+.day20 hr{flex:1; border:0; border-top:2px dashed #bbb}
+.note20{position:relative; margin:0 16px 20px; padding:14px 12px 10px; font:16px/1.35 var(--fibel); box-shadow:2px 4px 8px rgba(0,0,0,.25); background:var(--nc); transform:rotate(var(--nr))}
+.note20.n-y{--nc:#fff59d; --nr:-1.2deg} .note20.n-b{--nc:#b3e5fc; --nr:1deg} .note20.n-p{--nc:#f8bbd0; --nr:-.6deg} .note20.n-g{--nc:#c5e1a5; --nr:.8deg}
+.note20 .pin{position:absolute; top:-8px; left:50%; width:16px; height:16px; border-radius:50%; background:radial-gradient(circle at 35% 35%,#ff8a80,#c62828); box-shadow:1px 2px 2px rgba(0,0,0,.4)}
+.note20 .info-i{top:10px; right:10px}
+.note20.flash{animation:flash20 1.4s 2} @keyframes flash20{50%{box-shadow:0 0 0 4px #ff0, 2px 4px 8px rgba(0,0,0,.25)}}
+.note20.pending{opacity:.7} .note20.pending .n-row{pointer-events:none; opacity:.5}
+.n-top{display:flex; gap:10px; align-items:flex-start; padding-right:26px}
+.n-emo{font-size:44px; line-height:1; filter:drop-shadow(1px 2px 0 rgba(0,0,0,.2)); font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif}
+.n-txt{flex:1; min-width:0}
+.n-when{font:bold 13px var(--ui); color:#a00; display:flex; gap:6px; align-items:center; flex-wrap:wrap}
+.n-t{font:bold 20px "Courier New",monospace; color:#000}
+.n-save{font:12px var(--ui); color:#555}
+.n-row{display:flex; gap:6px; margin-top:10px; align-items:center}
+[data-theme='20er'] #plus{width:64px; height:64px; background:#fff59d; border:0; box-shadow:2px 4px 8px rgba(0,0,0,.3); transform:rotate(-4deg); font:bold 34px/1 var(--fibel); color:#000}
+[data-theme='20er'] #plus small{font:bold 10px var(--ui)}
+[data-theme='20er'] #plus::before{content:""; position:absolute; top:-7px; left:50%; width:14px; height:14px; margin-left:-7px; border-radius:50%; background:radial-gradient(circle at 35% 35%,#ff8a80,#c62828); box-shadow:1px 2px 2px rgba(0,0,0,.4)}
+
+.themes{display:grid; grid-template-columns:repeat(3,1fr); gap:6px; margin-top:4px}
 .themes .b95{display:flex; flex-direction:column; align-items:center; gap:2px; font-size:13px; padding:8px 4px}
 .themes .b95 span{font-size:24px}
 #ovIntro img{display:block; width:100%; max-width:380px; max-height:42vh; object-fit:contain; margin:0 auto 6px; border:2px solid #000; background:#000}
@@ -535,7 +574,7 @@ html:not([data-theme=modern]) .wordart.wa-12 {background:repeating-linear-gradie
     <div class="sports">🚵 Bika · 🚴 Rennvelo · 🚲 Gravla · 🏃 Jogga · 🥾 Wandra · 🧗 Klettra · ⛷️ Schitoura</div>
   </header>
   <marquee class="d90" scrollamount="5">+++ Hoi zemma! +++ Kei zwölf WhatsApp-Gruppa meh +++ Iitraga wenn du gosch – wer will, kunnt mit +++ Kei Login, kei Schmarra +++ Lustenauer usdrücklich willkomma +++</marquee>
-  <div class="hello"><span id="hi">Hoi!</span><span class="hello-btns"><button class="b95 mini" id="appShare" data-hd="App teilen">📲 App teila</button><button class="b95 mini" id="setBtn">⚙️ Einstellungen</button></span></div>
+  <div class="hello"><span id="hi">Hoi!</span><span class="hello-btns"><button class="b95 mini" id="appShare" aria-label="App teilen">📲<span class="bt" data-hd=" App teilen"> App teila</span></button><button class="b95 mini" id="setBtn" aria-label="Einstellungen">⚙️<span class="bt"> Einstellungen</span></button></span></div>
   <div class="demo" id="demo" hidden data-hd="⚠️ <b>DEMO-MODUS</b> – Einträge werden nur auf diesem Gerät gespeichert. Für die echte Version brauchst du den Link aus der Gruppe.">⚠️ <b>DEMO-MODUS</b> – Iiträg landan nur uf dim eigna Gerät. Für die echte Version brucht's da Link us dr Gruppa.</div>
   <main>
     <h2 data-hd="Was steht an?">Was lauft? <span class="blink d90">✨</span></h2>
@@ -702,6 +741,13 @@ html:not([data-theme=modern]) .wordart.wa-12 {background:repeating-linear-gradie
       <fieldset class="fs"><legend>👤 Name</legend>
         <span id="setName"></span> <button class="b95 mini" id="setNameBtn">ändern</button>
       </fieldset>
+      <fieldset class="fs"><legend>🎨 Design</legend>
+        <div class="themes" id="themes">
+          <button class="b95" data-theme-set="20er"><span>📌</span>20er</button>
+          <button class="b95" data-theme-set="90er"><span>🌈</span>90er</button>
+          <button class="b95" data-theme-set="modern"><span>😐</span>Langweilig</button>
+        </div>
+      </fieldset>
       <fieldset class="fs"><legend>🔔 Benachrichtigungen</legend>
         <div class="info" id="pushInfo">…</div>
         <div class="opt-h">Neue Termine – bei welchen Sportarten?</div>
@@ -726,12 +772,6 @@ html:not([data-theme=modern]) .wordart.wa-12 {background:repeating-linear-gradie
           <button class="b95" id="pushOff" hidden>🔕 Deaktivieren</button>
         </div>
       </fieldset>
-      <fieldset class="fs"><legend>🎨 Design</legend>
-        <div class="themes" id="themes">
-          <button class="b95" data-theme-set="90er"><span>🌈</span>90er</button>
-          <button class="b95" data-theme-set="modern"><span>😐</span>Langweilig</button>
-        </div>
-      </fieldset>
       <div class="btns"><button class="b95" id="introBtn">❓ Anleitung</button><button class="b95 big" data-close>Fertig</button></div>
     </div>
   </div>
@@ -743,7 +783,7 @@ html:not([data-theme=modern]) .wordart.wa-12 {background:repeating-linear-gradie
    API_URL = Apps-Script-Web-App (…/exec). Leer → Demo-Modus (localStorage).
    ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbz4xf-IjvvDWh2qYNFIw7fqRttaO1khWAzOT44ZKT8AsNx1l9ad6CIJeIroiMzmIew/exec';
-const VERSION = '1.21';
+const VERSION = '1.22';
 // Begrüßungs-GIF im Intro (z. B. Giphy-Link „…/giphy.gif“). Leer = ohne GIF.
 const INTRO_GIF = '';
 
@@ -759,6 +799,8 @@ const DEMO = !API_URL || qs.has('demo');
 /* ---------- Wörterbuach ---------- */
 // Sprache: Dialekt, im Design „Langweilig“ Hochdeutsch
 const HD = () => document.documentElement.dataset.theme === 'modern';
+const is90 = () => document.documentElement.dataset.theme === '90er';
+const is20 = () => document.documentElement.dataset.theme === '20er';
 const T = (dia, hd) => HD() ? hd : dia;
 const WD_DIA = ['Sunntig','Mäntig','Zischtig','Mittwoch','Donnstig','Fritig','Samstig'];
 const WD_HD  = ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'];
@@ -1011,6 +1053,7 @@ function render() {
   const now = new Date(), me = myName();
   const evs = EVENTS.filter(e => endOf(e) > now).sort((a, b) => startOf(a) - startOf(b));
   if (HD()) return renderIOS(evs, me);
+  if (is20()) return render20(evs, me);
   if (!evs.length) {
     $('#list').innerHTML = `<div class="leerliste"><span class="e">🦗</span>${T('Do isch no nüt los.<br>Mach du da Afang!', 'Noch keine Termine.<br>Trag den ersten ein!')}<br><br><button class="b95 big" onclick="openNew()">${T('➕ I gang …', '+ Neuer Termin')}</button></div>`;
     return;
@@ -1487,6 +1530,34 @@ $('#cLog').addEventListener('click', ev => {
   const p = (PENDING[chatId] || []).find(x => x.tmp === el.dataset.tmp); if (p) chatSend(chatId, p);
 });
 
+/* ---------- 20er: Zettel ---------- */
+const NOTE_C = ['y', 'b', 'p', 'g'];
+function render20(evs, me) {
+  if (!evs.length) {
+    $('#list').innerHTML = `<div class="leerliste"><span class="e">🦗</span>Do isch no nüt los.<br>Mach du da Afang!<br><br><button class="b95 big" onclick="openNew()">➕ I gang …</button></div>`;
+    return;
+  }
+  let h = '', last = '', k = 0;
+  for (const e of evs) {
+    if (e.datum !== last) { h += `<div class="day20"><span class="tape">${esc(dayHeading(e.datum))}</span><hr></div>`; last = e.datum; }
+    const joined = imIn(e, me), id = esc(e.id), sp = sportOf(e), many = goersPlural(e), nChat = (e.chat || []).length, u = unread(e);
+    const dauer = e.dauer ? ' · ' + DAUER[e.dauer][0].replace(/^a /, '1 ').replace(/^an /, '') : '';
+    h += `<div class="note20 n-${NOTE_C[k++ % 4]}${e._pending ? ' pending' : ''}" id="e${id}"><span class="pin"></span>
+      ${e.info ? `<button class="info-i" data-a="info" data-id="${id}" aria-label="Zuesatzinfo">i</button>` : ''}
+      <div class="n-top"><span class="n-emo" aria-hidden="true">${sp.e}</span><div class="n-txt">
+        <div class="n-when"><span class="n-t">${e.zeit}</span>${esc(dauer)}${isNewEv(e) ? ' <span class="neu">NEU</span>' : ''}${e._pending ? ' <span class="n-save">⏳ wird gspeicheret</span>' : ''}</div>
+        <b>${esc(goersText(e))}</b> ${many ? 'gond' : 'goht'} <b>${esc(sp.t)}</b>.${e.treffpunkt ? '<br>📍 ' + esc(e.treffpunkt) + '.' : ''} ${T('Wer kunnt mit?', 'Wer kommt mit?')}${e.drink ? ' Nochher 🍺!' : ''}
+      </div></div>
+      <div class="n-row">
+        ${joined ? `<button class="b95 on" data-a="leave" data-id="${id}">✅ Dabei</button>` : `<button class="b95 big" data-a="join" data-id="${id}">🙋 I bin dabei!</button>`}
+        <button class="b95" data-a="chat" data-id="${id}">💬${nChat ? ' ' + nChat : ''}${u ? ' <span class="neu">NEU</span>' : ''}</button>
+        <span style="flex:1"></span><button class="b95" data-a="more" data-id="${id}" aria-label="Meh">⋯</button>
+      </div></div>`;
+  }
+  $('#list').innerHTML = h;
+  if (location.hash.startsWith('#e')) { const el = document.getElementById(location.hash.slice(1)); if (el && !el.dataset.done) { el.scrollIntoView({block: 'center'}); el.classList.add('flash'); el.dataset.done = 1; } }
+}
+
 /* ---------- Langweilig: iOS-Liste, Formular, Detail ---------- */
 const DUR_SHORT = {h05: '30 Min.', h1: '1 Std.', h15: '1,5 Std.', h2: '2 Std.', h3: '3 Std.', halb: 'halber Tag', ganz: 'ganzer Tag'};
 function sportName(e) { const s = SPORT[e.sport] || SPORT.anders; return e.sport === 'anders' ? (e.sportText || 'Aktivität') : s.lh; }
@@ -1714,7 +1785,7 @@ function hashChat() { if (location.hash.startsWith('#c')) { const id = location.
 window.addEventListener('hashchange', () => { if (location.hash.startsWith('#c')) return load(true).then(hashChat); load(true).then(() => { const el = document.getElementById(location.hash.slice(1)); if (el) { el.scrollIntoView({block: 'center'}); el.classList.add('flash'); } }); });
 
 /* ---------- Usseha & Intro ---------- */
-const THEME_COL = {'90er': '#000080', modern: '#175676'};
+const THEME_COL = {'20er': '#ffffff', '90er': '#000080', modern: '#175676'};
 function themeDraw() {
   const t = document.documentElement.dataset.theme || '90er';
   document.querySelectorAll('[data-theme-set]').forEach(b => b.classList.toggle('on', b.dataset.themeSet === t));
@@ -1724,7 +1795,7 @@ $('#themes').addEventListener('click', e => {
   const b = e.target.closest('[data-theme-set]'); if (!b) return;
   document.documentElement.dataset.theme = b.dataset.themeSet; localStorage.setItem('zg_theme', b.dataset.themeSet); themeDraw();
   applyLang(); hello(); render(); setDraw();
-  if (HD()) vreniHide(); else { const v = $('#vreni'); v.hidden = false; v.className = 'ride wheelie face'; }
+  if (!is90()) vreniHide(); else { const v = $('#vreni'); v.hidden = false; v.className = 'ride wheelie face'; }
   if (!HD()) { closeOv('#ovForm'); closeOv('#ovDetail'); } else if (!$('#ovNew').hidden) closeOv('#ovNew');
   if (draft && !$('#ovNew').hidden) { drawNew(); picker(); }
   pushSync().catch(() => {});
@@ -1803,7 +1874,7 @@ function vSay(mode) {
 function vQuiet() { clearTimeout(vTimer); $('#vreni').classList.remove('talk'); }
 async function vreniShow() {
   const v = $('#vreni');
-  if (HD() || !v.hidden) return;
+  if (!is90() || !v.hidden) return;
   v.className = ''; v.hidden = false;
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) v.className = 'ride wheelie face';
   else {
