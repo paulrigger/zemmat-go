@@ -34,7 +34,7 @@ a{color:#0000ee} a:visited{color:#551a8b}
   max-width:700px; margin:0 auto; background:var(--paper);
   border:6px ridge var(--gray); box-shadow:8px 8px 0 rgba(0,0,0,.45);
 }
-header{text-align:center; padding:14px 10px 4px; background:
+header{text-align:center; padding:calc(14px + env(safe-area-inset-top)) 10px 4px; background:
   repeating-linear-gradient(0deg,transparent 0 22px,rgba(0,0,128,.07) 22px 23px);}
 .wordart{
   display:inline-block; margin:6px 0 0; transform:rotate(-3deg) skewX(-6deg);
@@ -145,7 +145,7 @@ footer{border-top:3px double var(--navy); text-align:center; padding:12px 8px 16
 .badge{font:bold 10px/1 var(--ui); border:1px solid #000; display:inline-flex}
 .badge b{background:#000080; color:#fff; padding:3px 4px} .badge i{font-style:normal; background:#ffcc00; padding:3px 4px}
 @media (max-width:480px){
-  body{padding:0 0 90px} #page{border-width:4px; box-shadow:none}
+  body{padding:0 0 90px} #page{border-width:0 4px 4px; box-shadow:none}
   .fibel{font-size:19px} .ev .fibel{font-size:17px}
 }
 [data-theme=modern] .d90, [data-theme='20er'] .d90{display:none !important}
@@ -559,10 +559,9 @@ html[data-theme='20er'], [data-theme='20er'] body{background:#fff}
 [data-theme='20er'] #plus::before{content:""; position:absolute; top:-7px; left:50%; width:14px; height:14px; margin-left:-7px; border-radius:50%; background:radial-gradient(circle at 35% 35%,#ff8a80,#c62828); box-shadow:1px 2px 2px rgba(0,0,0,.4)}
 
 /* iPhone: bis ganz nach oben, Streifen unter der Statusleiste damit Uhrzeit lesbar bleibt */
-#safeTop{position:fixed; top:0; left:0; right:0; height:env(safe-area-inset-top); z-index:45; pointer-events:none; background:#000080}
-[data-theme='20er'] #safeTop{background:#1b1b1b; box-shadow:0 3px 0 0 transparent; border-bottom:3px solid; border-image:linear-gradient(90deg,#e53935,#fb8c00,#fdd835,#43a047,#1e88e5,#8e24aa) 1}
-[data-theme=modern] #safeTop{background:rgba(0,0,0,.28); -webkit-backdrop-filter:blur(20px) saturate(180%); backdrop-filter:blur(20px) saturate(180%)}
-@media (prefers-color-scheme:dark){[data-theme=modern] #safeTop{background:rgba(0,0,0,.45)}}
+#safeTop{position:fixed; top:0; left:0; right:0; height:calc(env(safe-area-inset-top) + 22px); z-index:45; pointer-events:none;
+  background:linear-gradient(180deg, rgba(0,0,0,.42) 0%, rgba(0,0,0,.30) 45%, rgba(0,0,0,0) 100%)}
+@supports not (top: env(safe-area-inset-top)){#safeTop{display:none}}
 .ov{padding-top:max(14px, calc(env(safe-area-inset-top) + 8px)) !important}
 [data-theme=modern] .ov{padding-top:calc(env(safe-area-inset-top) + 8px) !important}
 .upd{top:calc(8px + env(safe-area-inset-top))}
@@ -803,7 +802,7 @@ html[data-theme='20er'], [data-theme='20er'] body{background:#fff}
    API_URL = Apps-Script-Web-App (…/exec). Leer → Demo-Modus (localStorage).
    ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbz4xf-IjvvDWh2qYNFIw7fqRttaO1khWAzOT44ZKT8AsNx1l9ad6CIJeIroiMzmIew/exec';
-const VERSION = '1.23';
+const VERSION = '1.23.1';
 // Begrüßungs-GIF im Intro (z. B. Giphy-Link „…/giphy.gif“). Leer = ohne GIF.
 const INTRO_GIF = '';
 
