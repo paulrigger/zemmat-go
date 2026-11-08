@@ -210,9 +210,10 @@ footer{border-top:3px double var(--navy); text-align:center; padding:12px 8px 16
 [data-theme=modern] #status{display:none}
 [data-theme=modern] .ov{background:rgba(0,0,0,.35); -webkit-backdrop-filter:blur(4px); backdrop-filter:blur(4px); align-items:flex-end; padding:0}
 [data-theme=modern] .win{border:0; box-shadow:0 -4px 30px rgba(0,0,0,.25); border-radius:16px 16px 0 0; background:var(--m-page); color:var(--m-ink); padding:0 0 env(safe-area-inset-bottom); max-height:92vh; overflow-y:auto}
-[data-theme=modern] .tb{background:none; color:var(--m-ink); font:600 17px var(--m-font); padding:14px 12px 4px 16px}
-[data-theme=modern] .tb .x{background:var(--m-chip); border-radius:50%; width:30px; min-height:30px; color:var(--m-ink)}
+[data-theme=modern] .tb{background:none; color:var(--m-ink); font:600 17px var(--m-font); padding:18px 16px 6px 16px; align-items:center}
+[data-theme=modern] .tb .x{background:var(--g-fill); border:0; box-shadow:none; border-radius:50%; width:30px; height:30px; min-height:30px; flex:none; color:var(--g-sec); font:600 14px var(--m-font)}
 [data-theme=modern] .wb{padding:8px 16px 16px}
+[data-theme=modern] input[type=checkbox], [data-theme=modern] input[type=radio]{accent-color:var(--g-tint)}
 [data-theme=modern] .wb .hint{font:13px var(--m-font); color:var(--m-muted)}
 [data-theme=modern] .papier{background:var(--m-card); border:0; border-radius:14px; background-image:none}
 [data-theme=modern] .picker{background:var(--m-card); border:0; border-radius:14px}
@@ -288,9 +289,9 @@ html[data-theme=modern]{background:var(--g-bg)}
 .ios-btn.wide{display:block; width:100%; margin:16px 0 4px}
 .ios-btn.tinted{background:rgba(10,132,255,.14); color:var(--g-tint); box-shadow:none}
 .ios-btn:active{transform:scale(.98)}
-[data-theme=modern] #plus{border-radius:50%; width:62px; height:62px; color:var(--g-ink); background:var(--g-glass2);
+[data-theme=modern] #plus{border-radius:50%; width:62px; height:62px; color:#fff; background:var(--g-tint);
   -webkit-backdrop-filter:blur(20px) saturate(180%); backdrop-filter:blur(20px) saturate(180%);
-  box-shadow:inset 0 0 0 .5px var(--g-edge), inset 0 1px 0 rgba(255,255,255,.6), 0 10px 30px rgba(0,0,0,.18); font:300 34px/1 var(--m-font)}
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.35), 0 8px 24px rgba(10,132,255,.4); font:300 34px/1 var(--m-font)}
 /* Sheets */
 [data-theme=modern] .ov{background:rgba(0,0,0,.28)}
 .sheet{display:none}
@@ -864,7 +865,7 @@ html[data-theme='20er'], [data-theme='20er'] body{background:#fff}
    API_URL = Apps-Script-Web-App (…/exec). Leer → Demo-Modus (localStorage).
    ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbz4xf-IjvvDWh2qYNFIw7fqRttaO1khWAzOT44ZKT8AsNx1l9ad6CIJeIroiMzmIew/exec';
-const VERSION = '1.24.4';
+const VERSION = '1.24.5';
 // Begrüßungs-GIF im Intro (z. B. Giphy-Link „…/giphy.gif“). Leer = ohne GIF.
 const INTRO_GIF = '';
 
