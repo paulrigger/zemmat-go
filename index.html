@@ -92,7 +92,7 @@ button.satz{display:inline; padding:2px 6px; line-height:2.4; text-align:left}
 .ev .fibel{font-size:19px}
 .ev .bild{border-color:#ddd}
 .ev .eb{padding-top:10px}
-.neu.ecke{position:absolute; top:-10px; right:10px; transform:rotate(6deg); font-size:12px; padding:2px 7px; border:1px solid #000}
+.neu.ecke{position:absolute; top:-10px; right:46px; transform:rotate(6deg); font-size:12px; padding:2px 7px; border:1px solid #000}
 .neu{background:red; color:#ff0; font:bold 11px var(--ui); padding:1px 5px; margin-left:4px}
 .dabei{font:15px var(--fibel); padding:4px 12px 8px}
 .dabei b{color:#006400}
@@ -496,6 +496,27 @@ html:not([data-theme=modern]) .wordart.wa-12 {background:repeating-linear-gradie
 [data-theme=modern] .mm-rx button.mine{background:rgba(10,132,255,.2)}
 [data-theme=modern] .mm-del{font:17px var(--m-font); color:var(--g-red); background:var(--g-glass2); -webkit-backdrop-filter:blur(30px); backdrop-filter:blur(30px); border:0; border-radius:14px; padding:12px 16px; box-shadow:0 10px 30px rgba(0,0,0,.2), inset 0 0 0 .5px var(--g-edge)}
 
+/* Zusatzinfo „i“, ⋯-Menü, Begleitung */
+.info-i{position:absolute; top:6px; right:8px; width:26px; height:26px; border-radius:50%; border:2px solid #000080; background:#fff; color:#000080;
+  font:bold italic 16px/20px Georgia,"Times New Roman",serif; cursor:pointer; padding:0; box-shadow:2px 2px 0 #000080; z-index:1}
+.info-i:active{transform:translate(1px,1px); box-shadow:1px 1px 0 #000080}
+.ev .eb{padding-right:36px}
+.b95.more{white-space:nowrap}
+.act-menu{position:fixed; z-index:90; min-width:200px; background:var(--gray); border:2px solid; border-color:#fff #000 #000 #fff; box-shadow:3px 3px 0 rgba(0,0,0,.45); padding:2px; display:flex; flex-direction:column}
+.act-menu[hidden]{display:none}
+.act-menu button{all:unset; font:14px var(--ui); padding:9px 14px 9px 10px; cursor:pointer; white-space:nowrap}
+.act-menu button:hover, .act-menu button:focus{background:#000080; color:#fff}
+.act-menu button.danger{border-top:1px solid #808080; margin-top:2px}
+.dlg-in{display:block; width:100%; margin-top:10px}
+.ios-info{display:inline-flex; align-items:center; justify-content:center; width:19px; height:19px; border-radius:50%; border:1.5px solid var(--g-tint); color:var(--g-tint);
+  font:600 italic 12px/1 Georgia,serif; cursor:pointer; margin-left:2px}
+.frow.ta{padding:6px 12px}
+.frow textarea{all:unset; box-sizing:border-box; width:100%; min-height:64px; font:16px var(--m-font); color:var(--g-ink); white-space:pre-wrap}
+.frow textarea::placeholder{color:var(--g-sec); opacity:.7}
+.pre{white-space:pre-wrap; text-align:left}
+[data-theme=modern] .dlg-in{all:unset; box-sizing:border-box; display:block; width:100%; margin-top:10px; padding:8px 12px; border-radius:10px; background:var(--g-fill); font:16px var(--m-font); color:var(--g-ink); text-align:left}
+[data-theme=modern] .dlg-msg .pre, [data-theme=modern] #dlgM{white-space:pre-wrap}
+
 .themes{display:grid; grid-template-columns:repeat(2,1fr); gap:6px; margin-top:4px}
 .themes .b95{display:flex; flex-direction:column; align-items:center; gap:2px; font-size:13px; padding:8px 4px}
 .themes .b95 span{font-size:24px}
@@ -632,6 +653,10 @@ html:not([data-theme=modern]) .wordart.wa-12 {background:repeating-linear-gradie
         <label class="frow"><span>Treffpunkt</span><input id="fTreff" maxlength="60" list="treffList" placeholder="Optional"></label>
         <label class="frow"><span>Danach auf einen Drink</span><input type="checkbox" class="sw" id="fDrink"></label>
       </div>
+      <div class="grp">
+        <label class="frow"><span>Begleitung ohne App</span><input id="fGast" maxlength="40" placeholder="z. B. Familie, Lisa"></label>
+        <div class="frow ta"><textarea id="fInfo" maxlength="500" rows="3" placeholder="Zusatzinfo (optional) – z. B. Lampe mitnehmen, gemütliches Tempo"></textarea></div>
+      </div>
       <datalist id="treffList"></datalist>
       <p class="gfoot" id="fPreview"></p>
       <p class="gfoot err" id="fErr"></p>
@@ -643,7 +668,7 @@ html:not([data-theme=modern]) .wordart.wa-12 {background:repeating-linear-gradie
 <div class="ov dlg-ov" id="ovDlg" hidden>
   <div class="win dlg" role="alertdialog" aria-modal="true" aria-labelledby="dlgT" aria-describedby="dlgM">
     <div class="tb"><span id="dlgT">zämm go</span><button class="b95 x" data-dlg="0" aria-label="Zuamacha">✕</button></div>
-    <div class="dlg-body"><span class="dlg-ico" id="dlgI">⚠️</span><div class="dlg-msg" id="dlgM"></div></div>
+    <div class="dlg-body"><span class="dlg-ico" id="dlgI">⚠️</span><div class="dlg-msg"><div id="dlgM"></div><input class="t95 dlg-in" id="dlgIn" maxlength="40" hidden></div></div>
     <div class="dlg-btns"><button class="b95 big" data-dlg="1" id="dlgOk">Jo</button><button class="b95" data-dlg="0" id="dlgNo">Na</button></div>
   </div>
 </div>
@@ -659,6 +684,7 @@ html:not([data-theme=modern]) .wordart.wa-12 {background:repeating-linear-gradie
 </div>
 
 <div id="msgMenu" class="msg-menu" hidden role="menu"></div>
+<div id="actMenu" class="act-menu" hidden role="menu"></div>
 
 <!-- iOS: Detail -->
 <div class="ov" id="ovDetail" hidden>
@@ -717,7 +743,7 @@ html:not([data-theme=modern]) .wordart.wa-12 {background:repeating-linear-gradie
    API_URL = Apps-Script-Web-App (…/exec). Leer → Demo-Modus (localStorage).
    ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbz4xf-IjvvDWh2qYNFIw7fqRttaO1khWAzOT44ZKT8AsNx1l9ad6CIJeIroiMzmIew/exec';
-const VERSION = '1.20';
+const VERSION = '1.21';
 // Begrüßungs-GIF im Intro (z. B. Giphy-Link „…/giphy.gif“). Leer = ohne GIF.
 const INTRO_GIF = '';
 
@@ -804,10 +830,13 @@ function goers(ev) {
   (ev.dabei || []).forEach(add);
   return out;
 }
+function guestOf(ev, n) { const g = ev.gaeste || {}; const k = Object.keys(g).find(x => same(x, n)); return k ? g[k] : ''; }
+function setGuest(ev, n, gast) { const g = {}; Object.keys(ev.gaeste || {}).forEach(k => { if (!same(k, n)) g[k] = ev.gaeste[k]; }); if (gast) g[n] = gast; ev.gaeste = g; }
+const withGuest = (ev, n) => n + (guestOf(ev, n) ? ' (+ ' + guestOf(ev, n) + ')' : '');
 function joinNames(a) { return a.length < 2 ? (a[0] || '') : a.slice(0, -1).join(', ') + ' und ' + a[a.length - 1]; }
-function goersText(ev) { const g = goers(ev); if (!g.length) return T('Niemert', 'Niemand'); return (ev.wer && ev.wer.mode === 'mir' && !(ev.raus || []).length) ? joinNames([...g, 'Co.']) : joinNames(g); }
+function goersText(ev) { const g = goers(ev).map(n => withGuest(ev, n)); if (!g.length) return T('Niemert', 'Niemand'); return (ev.wer && ev.wer.mode === 'mir' && !(ev.raus || []).length) ? joinNames([...g, 'Co.']) : joinNames(g); }
 const imIn = (ev, me) => !!me && goers(ev).some(x => same(x, me));
-function goersPlural(ev) { return goers(ev).length > 1 || (ev.wer && ev.wer.mode === 'mir' && !(ev.raus || []).length); }
+function goersPlural(ev) { return goers(ev).length > 1 || goers(ev).some(n => guestOf(ev, n)) || (ev.wer && ev.wer.mode === 'mir' && !(ev.raus || []).length); }
 function startOf(ev) { const d = parseYmd(ev.datum); const [h, m] = ev.zeit.split(':').map(Number); d.setHours(h, m); return d; }
 function endOf(ev) { return new Date(startOf(ev).getTime() + ((DAUER[ev.dauer] || [0, 2])[1]) * 36e5); }
 
@@ -820,13 +849,14 @@ function bild(k, e, t, edit, x = {}) {
 function fibel(ev, edit) {
   const w = ev.wer || {mode: 'i'}, pl = plural(w), sp = sportOf(ev);
   const many = edit ? pl : goersPlural(ev);
-  const verb = edit ? (pl ? T('gond', 'gehen') : T('gang', 'gehe')) : (many ? T('gond', 'gehen') : T('goht', 'geht'));
-  const who = edit ? werText(w) : goersText(ev);
+  const verb = edit ? (pl || ev.gast ? T('gond', 'gehen') : T('gang', 'gehe')) : (many ? T('gond', 'gehen') : T('goht', 'geht'));
+  const who = edit ? werText(w) + (ev.gast ? ' + ' + ev.gast : '') : goersText(ev);
   let h = bild('wer', edit ? (w.mode === 'i' ? '🙋' : w.mode === 'mir' ? '👫' : '👥') : (many ? '👥' : '🙋'), who, edit) + ' ' + verb + ' '
         + bild('datum', '📅', dayLabel(ev.datum), edit) + ' um ' + bild('zeit', clock(ev.zeit), ev.zeit, edit);
   if (ev.dauer || edit) h += ' ' + bild('dauer', '⏳', ev.dauer ? 'für ' + dLabel(ev.dauer) : T('wia lang?', 'wie lange?'), edit, {leer: !ev.dauer});
   h += ' ' + bild('sport', sp.e, sp.t, edit) + '.';
   if (ev.treffpunkt || edit) h += ' Treffpunkt: ' + bild('treff', '📍', ev.treffpunkt || 'wo?', edit, {leer: !ev.treffpunkt}) + '.';
+  if (edit) h += ' ' + bild('info', 'ℹ️', ev.info ? (ev.info.length > 22 ? ev.info.slice(0, 20) + '…' : ev.info) : T('Zuesatzinfo?', 'Zusatzinfo?'), true, {leer: !ev.info});
   h += ' <b>' + T('Wer kunnt mit?', 'Wer kommt mit?') + '</b>';
   const dr = HD() ? 'Danach ' + (pl ? 'haben wir' : 'habe ich') + ' noch Zeit für einen ' : 'Nochher ' + (pl ? 'hond mir' : 'hon i') + ' o no Zit für an ';
   const glas = `<span class="bild"><span class="e" aria-hidden="true">🍺</span><span class="w">Drink</span></span>`;
@@ -866,7 +896,7 @@ const demo = {
       const t = today0(), id = () => Math.random().toString(36).slice(2, 10), now = new Date().toISOString();
       d = {total: 41, events: [
         {id: id(), erstellt: now, von: 'Paul', datum: ymd(addDays(t, 1)), zeit: '14:00', dauer: 'h1', sport: 'jogga', wer: {mode: 'i'}, treffpunkt: 'Rheinbrugg Lustenau', drink: false, dabei: ['Anna']},
-        {id: id(), erstellt: now, von: 'Mäx', datum: ymd(addDays(t, 1)), zeit: '18:00', dauer: '', sport: 'mtb', wer: {mode: 'names', names: ['Mäx', 'Lisi']}, treffpunkt: 'Karren Talstation', drink: true, dabei: [],
+        {id: id(), erstellt: now, von: 'Mäx', datum: ymd(addDays(t, 1)), zeit: '18:00', dauer: '', sport: 'mtb', wer: {mode: 'names', names: ['Mäx', 'Lisi']}, treffpunkt: 'Karren Talstation', drink: true, dabei: [], info: 'Lampa nid vergessa – runter goht\'s im Dunkla.\nTempo: gmüatlich.', gaeste: {'Mäx': 'Familie'},
          chat: [{n: 'Lisi', t: 'Hot öpper a Lämpli für d\'Abfahrt?', z: now}, {n: 'Mäx', t: 'I nimm zwoa mit 🔦', z: now}]},
         {id: id(), erstellt: '2026-01-01T00:00:00Z', von: 'Bernd', datum: ymd(addDays(t, 3)), zeit: '07:00', dauer: 'ganz', sport: 'schitour', wer: {mode: 'mir'}, treffpunkt: 'Parkplatz Bödele', drink: true, dabei: ['Paul', 'Vroni', 'Simon']}
       ]};
@@ -880,9 +910,11 @@ const demo = {
     await new Promise(r => setTimeout(r, 150));
     const d = this.load(), find = () => { const e = d.events.find(x => x.id === p.id); if (!e) throw new Error('Termin nüm gfunda'); return e; };
     if (action === 'list') return {ok: true, events: d.events, total: d.total};
-    if (action === 'create') { const e = {...p.event, id: Math.random().toString(36).slice(2, 10), erstellt: new Date().toISOString(), dabei: []}; d.events.push(e); d.total++; this.save(d); return {ok: true, event: e}; }
+    if (action === 'create') { const e = {...p.event, id: Math.random().toString(36).slice(2, 10), erstellt: new Date().toISOString(), dabei: [], raus: [], gaeste: p.event.gast ? {[p.event.von]: p.event.gast} : {}}; delete e.gast; d.events.push(e); d.total++; this.save(d); return {ok: true, event: e}; }
+    if (action === 'guest') { const e = find(); applyJoin(e, p.name, true, p.gast || ''); this.save(d); return {ok: true, event: e}; }
     if (action === 'join' || action === 'leave') {
       const e = find(), w = e.wer || {}, base = (w.mode === 'names' && (w.names || []).length ? w.names : [e.von]);
+      if (action === 'leave') setGuest(e, p.name, '');
       e.dabei = (e.dabei || []).filter(n => !same(n, p.name)); e.raus = (e.raus || []).filter(n => !same(n, p.name));
       if (action === 'join') { if (!base.some(n => same(n, p.name))) e.dabei.push(p.name); }
       else if (base.some(n => same(n, p.name))) e.raus.push(p.name);
@@ -895,7 +927,7 @@ const demo = {
       else { m.r = m.r || {}; const l = (m.r[p.emoji] || []).filter(x => !same(x, p.name)); if (l.length === (m.r[p.emoji] || []).length) l.push(p.name); if (l.length) m.r[p.emoji] = l; else delete m.r[p.emoji]; }
       this.save(d); return {ok: true, chat: e.chat};
     }
-    if (action === 'update') { const e = find(); ['datum', 'zeit', 'dauer', 'sport', 'sportText', 'wer', 'treffpunkt', 'drink'].forEach(k => e[k] = p.event[k]); this.save(d); return {ok: true, event: e}; }
+    if (action === 'update') { const e = find(); ['datum', 'zeit', 'dauer', 'sport', 'sportText', 'wer', 'treffpunkt', 'drink', 'info'].forEach(k => e[k] = p.event[k] ?? ''); if (p.event.gast !== undefined) setGuest(e, e.von, p.event.gast); this.save(d); return {ok: true, event: e}; }
     if (action === 'cancel') { const e = find(); d.events = d.events.filter(x => x !== e); this.save(d); return {ok: true}; }
     throw new Error('Unbekannte Aktion');
   }
@@ -923,11 +955,19 @@ function ask(msg, o = {}) {
     $('#dlgT').textContent = o.title || (HD() ? 'zämm go' : 'zämm go – Achtung!');
     $('#dlgI').textContent = o.icon || '⚠️';
     $('#dlgM').innerHTML = esc(msg).replace(/\n/g, '<br>');
+    if (!o._keepInput) $('#dlgIn').hidden = true;
     $('#dlgOk').textContent = o.ok || T('Jo', 'OK');
     const no = o.no === undefined ? T('Na', 'Abbrechen') : o.no;
     $('#dlgNo').hidden = no === null; if (no !== null) $('#dlgNo').textContent = no;
     openOv('#ovDlg'); setTimeout(() => $('#dlgOk').focus(), 30);
   });
+}
+/** askText(text, wert, opts) → Promise<string|null> */
+async function askText(msg, val, o = {}) {
+  const inp = $('#dlgIn'); inp.hidden = false; inp.value = val || ''; inp.placeholder = o.placeholder || '';
+  const p = ask(msg, {icon: '✏️', ...o, _keepInput: true}); setTimeout(() => inp.focus(), 60);
+  const ok = await p; inp.hidden = true;
+  return ok ? inp.value : null;
 }
 const tell = (msg, o = {}) => ask(msg, {icon: '❌', title: T('Hoppla!', 'Fehler'), ok: 'OK', no: null, ...o});
 function dlgDone(v) { if ($('#ovDlg').hidden) return; const r = dlgRes; dlgRes = null; closeOv('#ovDlg'); if (r) r(v); }
@@ -981,15 +1021,13 @@ function render() {
     const joined = imIn(e, me);
     const isNew = isNewEv(e);
     h += `<div class="ev${e._pending ? ' pending' : ''}" id="e${esc(e.id)}">${e._pending ? '<span class="neu ecke saving">⏳ wird gspeicheret …</span>' : ''}${isNew ? '<span class="neu blink ecke">NEU!</span>' : ''}
+      ${e.info ? `<button class="info-i" data-a="info" data-id="${esc(e.id)}" title="Zuesatzinfo" aria-label="Zuesatzinfo aazeiga">i</button>` : ''}
       <div class="eb fibel">${fibel(e, false)}</div>
       <div class="act">
         ${joined
           ? `<button class="b95 on" data-a="leave" data-id="${esc(e.id)}">${T('✅ I bin dabei · doch ned?', '✓ Dabei · absagen')}</button>`
           : `<button class="b95 big" data-a="join" data-id="${esc(e.id)}">${T('🙋 I bin dabei!', 'Ich bin dabei')}</button>`}
-        <button class="b95" data-a="chat" data-id="${esc(e.id)}">💬 Schwätza${chatBadge(e)}</button>
-        <button class="b95" data-a="wa" data-id="${esc(e.id)}">${T('📣 Teila', 'Teilen')}</button>
-        <button class="b95" data-a="ics" data-id="${esc(e.id)}">${T('📆 Kalender', 'Kalender')}</button>
-        <button class="b95" data-a="edit" data-id="${esc(e.id)}">✏️ Ändra</button><button class="b95" data-a="cancel" data-id="${esc(e.id)}">${T('🗑️ Absaga', 'Absagen')}</button>
+        <button class="b95 more" data-a="more" data-id="${esc(e.id)}" aria-label="Meh Optiona">⋯ Meh${(e.chat || []).length ? ' · 💬' + (e.chat || []).length : ''}${unread(e) ? ' <span class="neu blink">NEU</span>' : ''}</button>
       </div></div>`;
   }
   $('#list').innerHTML = h;
@@ -997,17 +1035,17 @@ function render() {
 }
 
 $('#list').addEventListener('click', ev => {
-  const r = ev.target.closest('[data-open]'); if (r) return openDetail(r.dataset.open);
-  const b = ev.target.closest('button[data-a]'); if (!b) return;
+  const b = ev.target.closest('[data-a]');
+  if (!b) { const r = ev.target.closest('[data-open]'); if (r) openDetail(r.dataset.open); return; }
   const e = EVENTS.find(x => x.id === b.dataset.id); if (!e) return;
   doAct(b.dataset.a, e, b);
 });
 /** An-/Abmelden lokal anwenden (gleiche Regeln wie der Server) */
-function applyJoin(e, name, add) {
+function applyJoin(e, name, add, gast) {
   const w = e.wer || {}, base = (w.mode === 'names' && (w.names || []).length ? w.names : [e.von]);
   e.dabei = (e.dabei || []).filter(n => !same(n, name)); e.raus = (e.raus || []).filter(n => !same(n, name));
-  if (add) { if (!base.some(n => same(n, name))) e.dabei.push(name); }
-  else if (base.some(n => same(n, name))) e.raus.push(name);
+  if (add) { if (!base.some(n => same(n, name))) e.dabei.push(name); if (gast !== undefined) setGuest(e, name, gast); }
+  else { if (base.some(n => same(n, name))) e.raus.push(name); setGuest(e, name, ''); }
 }
 const snap = e => JSON.parse(JSON.stringify(e));
 function afterChange(e, removed) {
@@ -1031,7 +1069,10 @@ async function bg(apply, call, ok, undo, okMsg) {
 }
 
 async function doAct(a, e, b) {
+  if (a === 'more' && !$('#actMenu').hidden && $('#actMenu').dataset.id === e.id) return closeActMenu();
   if (a === 'chat') return openChat(e.id);
+  if (a === 'info') return tell(e.info, {icon: 'ℹ️', title: T('Info.txt – ', 'Zusatzinfo – ') + sportName(e), ok: 'OK'});
+  if (a === 'more') return openActMenu(e, b);
   if (a === 'edit') return HD() ? openForm(e) : openEdit(e);
   if (a === 'wa') return share(e);
   if (a === 'ics') return ics(e);
@@ -1047,6 +1088,17 @@ async function doAct(a, e, b) {
       if (!await ask('Würklich absaga?\n\n' + was + (same(e.von, name) ? '' : '\n(iitraga vo ' + e.von + ')'), {icon: '😢', title: 'Absaga.exe'})) return;
       if (!await ask('Ganz sicher?\nDenn isch dä Termin für alli weg und die andra kriagand Bscheid.', {icon: '🤔', title: 'Absaga.exe – Letschte Warnung', ok: 'Jo, weg damit', no: 'Na, doch ned'})) return;
     }
+  }
+  if (a === 'guest') {
+    const cur = guestOf(e, name);
+    const g = await askText(T('Wen nimmsch mit, wo d\'App ned hot?\n(leer = niemert)', 'Wen bringst du mit, der die App nicht hat?\n(leer = niemand)'), cur,
+      {icon: '👫', title: T('Begleitung', 'Begleitung'), ok: T('Passt', 'Speichern'), placeholder: T('Familie, Lisa, 2 Kollega …', 'Familie, Lisa, 2 Freunde …')});
+    if (g === null) return;
+    const gast = g.replace(/[<>]/g, '').trim().slice(0, 40), before = snap(e);
+    return bg(() => { applyJoin(e, name, true, gast); afterChange(e); },
+      () => store.call('guest', {id: e.id, name, gast}),
+      j => { if (j.event) Object.assign(e, j.event); afterChange(e); },
+      () => { Object.assign(e, before); afterChange(e); }, T('Gspeicheret ✔', 'Gespeichert'));
   }
   if (e._pending) return tell(T('Dä Termin wird no gspeicheret – a Sekündli.', 'Der Termin wird noch gespeichert – einen Moment.'), {icon: '⏳', title: 'zämm go'});
   const before = snap(e), idx = EVENTS.indexOf(e);
@@ -1131,19 +1183,19 @@ document.addEventListener('keydown', e => { if (e.key !== 'Escape') return; if (
 
 /* ---------- Neuer Termin: Lückentext ---------- */
 let draft = null, sel = null, editId = null;
-const EDIT_KEYS = ['datum', 'zeit', 'dauer', 'sport', 'sportText', 'treffpunkt', 'drink'];
+const EDIT_KEYS = ['datum', 'zeit', 'dauer', 'sport', 'sportText', 'treffpunkt', 'drink', 'info'];
 function openEdit(e) {
   editId = e.id; sel = null;
   draft = {wer: JSON.parse(JSON.stringify(e.wer || {mode: 'i', names: []}))};
   EDIT_KEYS.forEach(k => draft[k] = e[k] ?? '');
-  draft.drink = !!e.drink;
+  draft.drink = !!e.drink; draft.gast = guestOf(e, e.von);
   $('#newErr').textContent = ''; $('#tNew').textContent = '✏️ Ändra.txt – Was isch anders?'; $('#send').textContent = '💾 Speichra!';
   drawNew(); $('#pk').hidden = true; openOv('#ovNew');
 }
 function freshDraft() {
   let last = {}; try { last = JSON.parse(localStorage.getItem('zg_last')) || {}; } catch (e) {}
   return {wer: {mode: 'i', names: []}, datum: ymd(addDays(today0(), 1)), zeit: '18:00', dauer: '',
-          sport: SPORT[last.sport] ? last.sport : 'mtb', sportText: last.sportText || '', treffpunkt: '', drink: true};
+          sport: SPORT[last.sport] ? last.sport : 'mtb', sportText: last.sportText || '', treffpunkt: '', drink: true, info: '', gast: ''};
 }
 async function openNew() {
   const n = myName() || await askName(); if (!n) return;
@@ -1173,7 +1225,14 @@ function picker() {
     h = `<p class="ttl">${T('Wer goht?', 'Wer geht?')}</p><div class="opts">
       ${opt(T('🙋 I', '🙋 Ich'), w.mode === 'i', 'data-set="wer" data-v="i"')}${opt(T('👫 Mir', '👫 Wir'), w.mode === 'mir', 'data-set="wer" data-v="mir"')}</div>
       <div class="row">👥 ${T('Mit Nama:', 'Mit Namen:')} <input class="t95" id="pkNames" value="${esc(names)}" placeholder="Paul, Anna" style="flex:1;min-width:150px">
-      <button type="button" class="b95" data-set="names">OK</button></div>`;
+      <button type="button" class="b95" data-set="names">OK</button></div>
+      <div class="row">👫 ${T('Plus Begleitung ohne App:', 'Plus Begleitung ohne App:')} <input class="t95" id="pkGast" maxlength="40" value="${esc(draft.gast || '')}" placeholder="${T('Familie, Lisa, 2 Kollega …', 'Familie, Lisa, 2 Freunde …')}" style="flex:1;min-width:150px">
+      <button type="button" class="b95" data-set="gast">OK</button></div>`;
+  }
+  if (sel === 'info') {
+    h = `<p class="ttl">${T('Zuesatzinfo (für alli sichtbar)', 'Zusatzinfo (für alle sichtbar)')}</p>
+      <textarea class="t95" id="pkInfo" maxlength="500" rows="4" style="width:100%;resize:vertical" placeholder="${T('z. B. Lampa mitnehma, Tempo gmüatlich, Parkplatz bim …', 'z. B. Lampe mitnehmen, gemütliches Tempo, Parkplatz bei …')}">${esc(draft.info || '')}</textarea>
+      <div class="row"><button type="button" class="b95" data-set="infoIn">OK</button>${draft.info ? '<button type="button" class="b95" data-set="infoDel">✕ ' + T('weg', 'entfernen') + '</button>' : ''}</div>`;
   }
   if (sel === 'datum') {
     const t = today0();
@@ -1224,6 +1283,9 @@ $('#pk').addEventListener('click', e => {
   if (s === 'anders') { const t = $('#pkSport').value.trim(); if (!t) return; draft.sport = 'anders'; draft.sportText = t.slice(0, 40); }
   if (s === 'treff') draft.treffpunkt = v || '';
   if (s === 'treffIn') draft.treffpunkt = $('#pkTreff').value.trim().slice(0, 60);
+  if (s === 'gast') draft.gast = $('#pkGast').value.replace(/[<>]/g, '').trim().slice(0, 40);
+  if (s === 'infoIn') draft.info = $('#pkInfo').value.replace(/[<>]/g, '').trim().slice(0, 500);
+  if (s === 'infoDel') draft.info = '';
   done();
 });
 
@@ -1240,7 +1302,7 @@ $('#send').onclick = async () => {
 
 /** Gemeinsam für 90er + Langweilig: neuer Termin sofort sichtbar, Speichern im Hintergrund */
 function saveNew(d, name, reopen) {
-  const tmp = {...d, id: 'tmp' + Date.now(), von: name, erstellt: new Date().toISOString(), dabei: [], raus: [], chat: [], _pending: true};
+  const tmp = {...d, id: 'tmp' + Date.now(), von: name, erstellt: new Date().toISOString(), dabei: [], raus: [], chat: [], gaeste: d.gast ? {[name]: d.gast} : {}, _pending: true};
   localStorage.setItem('zg_last', JSON.stringify({sport: d.sport, sportText: d.sportText}));
   if (d.treffpunkt) { let h = []; try { h = JSON.parse(localStorage.getItem('zg_treff')) || []; } catch (e) {} h = [d.treffpunkt, ...h.filter(t => t !== d.treffpunkt)].slice(0, 6); localStorage.setItem('zg_treff', JSON.stringify(h)); }
   bg(() => {
@@ -1260,7 +1322,7 @@ function saveNew(d, name, reopen) {
 function saveEdit(id, d, name, reopen) {
   const e = EVENTS.find(x => x.id === id); if (!e) return;
   const before = snap(e);
-  bg(() => { Object.assign(e, d); afterChange(e); const el = document.getElementById('e' + id); if (el) { el.scrollIntoView({block: 'center', behavior: 'smooth'}); el.classList.add('flash'); } },
+  bg(() => { Object.assign(e, d); if (d.gast !== undefined) setGuest(e, e.von, d.gast); afterChange(e); const el = document.getElementById('e' + id); if (el) { el.scrollIntoView({block: 'center', behavior: 'smooth'}); el.classList.add('flash'); } },
     () => store.call('update', {id, name, event: d}),
     j => { Object.assign(e, j.event); afterChange(e); status(T('Gspeicheret ✔', 'Gespeichert')); },
     () => { Object.assign(e, before); afterChange(e); return reopen; },
@@ -1336,6 +1398,33 @@ $('#cForm').addEventListener('submit', ev => {
   $('#cText').value = ''; $('#cText').focus();
   chatSend(e.id, p);
 });
+/* ⋯-Menü pro Termin (90er) */
+function openActMenu(e, btn) {
+  const me = myName(), joined = imIn(e, me), m = $('#actMenu'), u = unread(e);
+  const items = [
+    ['chat', '💬 Schwätza' + ((e.chat || []).length ? ' (' + e.chat.length + ')' : '') + (u ? ' – ' + u + ' NEU' : '')],
+    joined ? ['guest', '👫 Begleitung' + (guestOf(e, me) ? ': ' + guestOf(e, me) : ' mitnehma …')] : null,
+    e.info ? ['info', 'ℹ️ Zuesatzinfo'] : null,
+    ['wa', '📣 Teila'], ['ics', '📆 In Kalender'], ['edit', '✏️ Ändra'], ['cancel', '🗑️ Absaga']
+  ].filter(Boolean);
+  m.innerHTML = items.map(([a, t]) => `<button type="button" role="menuitem" data-am="${a}"${a === 'cancel' ? ' class="danger"' : ''}>${esc(t)}</button>`).join('');
+  m.dataset.id = e.id; m.hidden = false;
+  const b = btn.getBoundingClientRect(), mh = m.offsetHeight, mw = m.offsetWidth;
+  let top = b.bottom + 2; if (top + mh > innerHeight - 10) top = b.top - mh - 2;
+  m.style.top = Math.max(8, top) + 'px'; m.style.left = Math.max(8, Math.min(innerWidth - mw - 8, b.left)) + 'px';
+  btn.classList.add('on'); actBtn = btn; actY = scrollY;
+}
+let actBtn = null;
+function closeActMenu() { $('#actMenu').hidden = true; if (actBtn) actBtn.classList.remove('on'); actBtn = null; }
+$('#actMenu').addEventListener('click', ev => {
+  const it = ev.target.closest('[data-am]'); if (!it) return;
+  const e = EVENTS.find(x => x.id === $('#actMenu').dataset.id), btn = actBtn;
+  closeActMenu(); if (e) doAct(it.dataset.am, e, btn || it);
+});
+document.addEventListener('pointerdown', ev => { if (!$('#actMenu').hidden && !ev.target.closest('#actMenu, [data-a=more]')) closeActMenu(); }, true);
+let actY = 0;
+window.addEventListener('scroll', () => { if (!$('#actMenu').hidden && Math.abs(scrollY - actY) > 40) closeActMenu(); }, {passive: true});
+
 /* Reaktionen & Löschen */
 const RX = ['👍', '❤️', '😂', '😮', '😢', '🙏', '🔥'];
 function rxHtml(m) {
@@ -1421,7 +1510,7 @@ function renderIOS(evs, me) {
     h += `<div class="ios-item s-${esc(e.sport)}${e._pending ? ' pending' : ''}" id="e${id}">
       <button class="ios-row" data-open="${id}">
         <span class="ios-time"><b>${e.zeit}</b><small>${e.dauer ? DUR_SHORT[e.dauer] : ''}</small></span>
-        <span class="ios-main"><span class="ios-title">${esc(sportName(e))}${isNew ? '<i class="ios-new">Neu</i>' : ''}${e.drink ? '<i class="ios-tag">Drink</i>' : ''}</span>
+        <span class="ios-main"><span class="ios-title">${esc(sportName(e))}${e.info ? '<i class="ios-info" data-a="info" data-id="' + id + '" role="button" aria-label="Zusatzinfo">i</i>' : ''}${isNew ? '<i class="ios-new">Neu</i>' : ''}${e.drink ? '<i class="ios-tag">Drink</i>' : ''}</span>
           <span class="ios-sub">${e._pending ? 'Wird gespeichert … · ' : ''}${sub}</span></span>
       </button>
       <div class="ios-acts">
@@ -1444,12 +1533,14 @@ function drawDetail(e) {
     ['Wann', esc(dayHeading(e.datum)) + '<br>' + e.zeit + (e.dauer ? ' – ' + endT + ' <small>(' + DUR_SHORT[e.dauer] + ')</small>' : ' Uhr')],
     ['Wer', esc(goersText(e))],
     e.treffpunkt ? ['Treffpunkt', esc(e.treffpunkt)] : null,
+    e.info ? ['Info', '<span class="pre">' + esc(e.info) + '</span>'] : null,
     ['Danach', e.drink ? 'Zeit für einen Drink' : '–'],
     ['Angelegt von', esc(e.von)]
   ].filter(Boolean);
   $('#dBody').innerHTML = `<div class="d-hero s-${esc(e.sport)}"><h2 id="dTitle">${esc(sportName(e))}</h2><p>${goers(e).length} ${goers(e).length === 1 ? 'Person' : 'Personen'}</p></div>
     <div class="grp">${rows.map(r => `<div class="frow"><span>${r[0]}</span><span class="v">${r[1]}</span></div>`).join('')}</div>
     <button class="ios-btn wide${joined ? ' tinted' : ''}" data-d="${joined ? 'leave' : 'join'}">${joined ? 'Teilnahme zurückziehen' : 'Ich bin dabei'}</button>
+    ${joined ? `<button class="ios-btn wide tinted" data-d="guest">${guestOf(e, me) ? 'Begleitung: ' + esc(guestOf(e, me)) + ' – ändern' : 'Begleitung ohne App hinzufügen'}</button>` : ''}
     <div class="grp">
       <button class="frow link" data-d="chat"><span>Nachrichten</span><span class="v">${(e.chat || []).length || ''}${unread(e) ? ' <i class="ios-dot"></i>' : ''} ›</span></button>
       <button class="frow link" data-d="wa">Teilen</button>
@@ -1476,6 +1567,7 @@ function openForm(ev) {
   const w = d.wer || {mode: 'i', names: []};
   fWer = w.mode || 'i'; $('#fNames').value = w.mode === 'names' ? (w.names || []).join(', ') : '';
   $('#fTreff').value = d.treffpunkt || ''; $('#fDrink').checked = !!d.drink; $('#fErr').textContent = '';
+  $('#fInfo').value = d.info || ''; $('#fGast').value = ev && ev.id ? guestOf(ev, ev.von) : (d.gast || '');
   let hist = []; try { hist = JSON.parse(localStorage.getItem('zg_treff')) || []; } catch (e) {}
   $('#treffList').innerHTML = hist.map(t => `<option value="${esc(t)}">`).join('');
   formSync(); openOv('#ovForm');
@@ -1488,7 +1580,8 @@ function formDraft() {
   }
   const sport = $('#fSport').value;
   return {wer, datum: $('#fDate').value, zeit: $('#fTime').value, dauer: $('#fDauer').value, sport,
-          sportText: sport === 'anders' ? $('#fSportText').value.trim().slice(0, 40) : '', treffpunkt: $('#fTreff').value.trim().slice(0, 60), drink: $('#fDrink').checked};
+          sportText: sport === 'anders' ? $('#fSportText').value.trim().slice(0, 40) : '', treffpunkt: $('#fTreff').value.trim().slice(0, 60), drink: $('#fDrink').checked,
+          info: $('#fInfo').value.replace(/[<>]/g, '').trim().slice(0, 500), gast: $('#fGast').value.replace(/[<>]/g, '').trim().slice(0, 40)};
 }
 function formSync() {
   $('#fSportTextRow').hidden = $('#fSport').value !== 'anders';

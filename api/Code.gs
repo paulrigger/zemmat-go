@@ -1,5 +1,5 @@
 /**
- * zämm go – API v1.8 (Google Apps Script, gebunden an ein Google Sheet)
+ * zämm go – API v1.9 (Google Apps Script, gebunden an ein Google Sheet)
  *
  * Einrichtung:
  *   1. Neues Google Sheet → Erweiterungen → Apps Script → diesen Code einfügen
@@ -18,6 +18,7 @@
  *                   {action:"test", k, endpoint}          -> { ok, result }  Test-Popup an dieses Gerät
  *                   {action:"update", k, id, name, event:{…}} -> { ok, event }  (jede:r)
  *                   {action:"chat", k, id, name, text}    -> { ok, chat:[…] }  Chat-Nachricht zu einem Termin
+ *                   {action:"guest", k, id, name, gast}   -> { ok, event }  Begleitung ohne App setzen ('' = keine)
  *                   {action:"chatDel", k, id, mid, name}  -> { ok, chat }  eigene Nachricht löschen
  *                   {action:"react", k, id, mid, name, emoji} -> { ok, chat }  Reaktion an/aus
  * Jeder Termin in list hat chat:[{i, n, t, z, r}] (Id, Name, Text, Zeit, Reaktionen {emoji:[Namen]}).
@@ -30,10 +31,10 @@
  *   PUSH_SECRET  gleiches Secret wie im Worker (SECRET)
  *   APP_URL      optional, Standard https://paulrigger.github.io/zemmat-go/
  */
-const VERSION = '1.8';
+const VERSION = '1.9';
 const TZ = 'Europe/Vienna';
 const SHEET = 'Events';
-const COLS = ['id', 'erstellt', 'von', 'datum', 'zeit', 'dauer', 'sport', 'sportText', 'wer', 'treffpunkt', 'drink', 'dabei', 'status', 'raus'];  // raus = Ersteller:in/Genannte, die sich abgemeldet haben
+const COLS = ['id', 'erstellt', 'von', 'datum', 'zeit', 'dauer', 'sport', 'sportText', 'wer', 'treffpunkt', 'drink', 'dabei', 'status', 'raus', 'info', 'gaeste'];  // info = Zusatzinfo, gaeste = JSON {Name: Begleitung ohne App}  // raus = Ersteller:in/Genannte, die sich abgemeldet haben
 const SPORTS = ['mtb', 'rennrad', 'gravel', 'jogga', 'wandra', 'klettra', 'schitour', 'langlauf', 'schwimma', 'anders'];
 const DAUER = ['', 'h05', 'h1', 'h15', 'h2', 'h3', 'halb', 'ganz'];
 const MAX_OPEN = 300;
@@ -144,6 +145,7 @@ function run_(p) {
         delete r.changed;
         return r;
       }
+      case 'guest': return locked_(() => join_(p.id, p.name, true, String(p.gast || '')));
       case 'cancel': {
         const r = locked_(() => cancel_(p.id, p.name));
         if (r.ok) { try { notifyCancel_(r.event, name_(p.name)); } catch (x) { console.error('Push Absage: ' + x); } delete r.event; }
@@ -184,6 +186,8 @@ function toEvent_(r) {
   o.wer = w === 'i' || w === 'mir' ? { mode: w, names: [] } : { mode: 'names', names: w.split(',').map(s => s.trim()).filter(String) };
   o.status = String(o.status || '');
   o.raus = String(o.raus || '').split(',').map(s => s.trim()).filter(String);
+  o.info = String(o.info || '');
+  try { o.gaeste = o.gaeste ? JSON.parse(o.gaeste) : {}; } catch (e) { o.gaeste = {}; }
   return o;
 }
 function today_(offset) { return Utilities.formatDate(new Date(Date.now() + (offset || 0) * 864e5), TZ, 'yyyy-MM-dd'); }
@@ -215,8 +219,18 @@ function fields_(e) {
     wer = n.length ? n.join(', ') : 'i';
   }
   return { datum: e.datum, zeit: e.zeit, dauer, sport: e.sport, sportText: e.sport === 'anders' ? text_(e.sportText, 40) : '',
-           wer, treffpunkt: text_(e.treffpunkt, 60), drink: e.drink ? 'ja' : '' };
+           wer, treffpunkt: text_(e.treffpunkt, 60), drink: e.drink ? 'ja' : '', info: info_(e.info) };
 }
+/** Zusatzinfo: Zeilenumbrüche erlaubt, max. 500 Zeichen */
+function info_(s) { return String(s || '').replace(/[<>]/g, '').replace(/\r/g, '').replace(/[ \t]+/g, ' ').replace(/\n{3,}/g, '\n\n').trim().slice(0, 500); }
+function gast_(s) { return text_(s, 40); }
+function gaesteSet_(g, name, gast) {
+  const out = {};
+  Object.keys(g || {}).forEach(k => { if (k.toLowerCase() !== String(name).toLowerCase()) out[k] = g[k]; });
+  if (gast) out[name] = gast;
+  return out;
+}
+const gaesteStr_ = g => Object.keys(g).length ? JSON.stringify(g) : '';
 
 function create_(e) {
   const von = name_(e.von);
@@ -229,7 +243,7 @@ function create_(e) {
   const ev = Object.assign({
     id: Utilities.getUuid().replace(/-/g, '').slice(0, 8),
     erstellt: Utilities.formatDate(new Date(), TZ, "yyyy-MM-dd'T'HH:mm:ssXXX"),
-    von, dabei: '', status: ''
+    von, dabei: '', status: '', raus: '', gaeste: gaesteStr_(gaesteSet_({}, von, gast_(e.gast)))
   }, f);
   const r = sh.getLastRow() + 1;
   sh.getRange(r, 1, 1, COLS.length).setNumberFormat('@').setValues([COLS.map(c => ev[c])]);
@@ -243,7 +257,7 @@ function find_(id) {
   return { sh, hit };
 }
 
-function join_(id, name, add) {
+function join_(id, name, add, gast) {
   const n = name_(name);
   if (!n) throw new Error('Nama fehlt');
   const { sh, hit } = find_(id);
@@ -258,8 +272,12 @@ function join_(id, name, add) {
   if (list.length > 50) throw new Error('Z\'viel Lüt 😅');
   sh.getRange(hit.row, COLS.indexOf('dabei') + 1).setValue(list.join(', '));
   sh.getRange(hit.row, COLS.indexOf('raus') + 1).setNumberFormat('@').setValue(raus.join(', '));
+  // Begleitung: beim Abmelden weg, beim Anmelden nur ändern, wenn mitgeschickt
+  const keep = Object.keys(ev.gaeste).filter(k => k.toLowerCase() === lc).map(k => ev.gaeste[k])[0] || '';
+  const g = gaesteSet_(ev.gaeste, n, add ? (gast === undefined ? keep : gast_(gast)) : '');
+  sh.getRange(hit.row, COLS.indexOf('gaeste') + 1).setNumberFormat('@').setValue(gaesteStr_(g));
   const changed = list.join() !== ev.dabei.join() || raus.join() !== ev.raus.join();
-  ev.dabei = list; ev.raus = raus;
+  ev.dabei = list; ev.raus = raus; ev.gaeste = g;
   return { ok: true, event: ev, changed };
 }
 
@@ -434,6 +452,7 @@ function update_(id, name, e) {
   const fmt = c => c === 'zeit' ? 'HH:mm' : c === 'datum' ? 'yyyy-MM-dd' : "yyyy-MM-dd'T'HH:mm:ssXXX";
   const raw = row.getValues()[0].map((v, j) => v instanceof Date ? str_(v, fmt(COLS[j])) : v);
   Object.keys(f).forEach(k => { raw[COLS.indexOf(k)] = f[k]; });
+  if (e.gast !== undefined) raw[COLS.indexOf('gaeste')] = gaesteStr_(gaesteSet_(hit.ev.gaeste, hit.ev.von, gast_(e.gast)));
   row.setNumberFormat('@').setValues([raw]);
   const ev = toEvent_(row.getValues()[0]);
   ev.chat = chatMap_()[ev.id] || [];
@@ -527,7 +546,7 @@ function notifyJoin_(ev, by, add) {
   pushLang_(subs, lang => {
     const de = lang === 'de';
     return {
-      title: add ? '🙋 ' + by + (de ? ' ist dabei' : ' isch dabei') : '🚶 ' + by + (de ? ' ist nicht mehr dabei' : ' isch nüm dabei'),
+      title: add ? '🙋 ' + by + guestTxt_(ev, by) + (de ? ' ist dabei' : ' isch dabei') : '🚶 ' + by + (de ? ' ist nicht mehr dabei' : ' isch nüm dabei'),
       body: sportShort_(ev, lang) + (de ? ' – jetzt ' + n + (n === 1 ? ' Person' : ' Personen') : ' – jetzt ' + n + (n === 1 ? ' Person' : ' Lüt')),
       url: app + '#e' + ev.id, tag: 'zg-join-' + ev.id
     };
@@ -559,4 +578,9 @@ function react_(id, mid, name, emoji) {
   if (list.length) r[emoji] = list; else delete r[emoji];
   sh.getRange(row, 6).setNumberFormat('@').setValue(Object.keys(r).length ? JSON.stringify(r) : '');
   return { ok: true, chat: chatMap_()[String(id)] || [] };
+}
+
+function guestTxt_(ev, n) {
+  const k = Object.keys(ev.gaeste || {}).filter(x => x.toLowerCase() === String(n).toLowerCase())[0];
+  return k ? ' (+ ' + ev.gaeste[k] + ')' : '';
 }
